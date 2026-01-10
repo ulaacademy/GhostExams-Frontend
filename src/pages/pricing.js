@@ -71,7 +71,13 @@ const Pricing = () => {
 
       {/* 🎓 لماذا منصة الشبح للمعلمين؟ */}
       <section className="bg-gray-900 py-24 px-6">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-yellow-400 text-center mb-14 pt-10">
+        {/* العنوان الكبير */}
+        <h1 className="text-4xl md:text-6xl font-extrabold text-orange-500 text-center mt-6 mb-6">
+          أول موقع للمعلمين لانشاء امتحانات تفاعلية وبنوك اسئلة للطلاب
+        </h1>
+
+        {/* العنوان الأصغر */}
+        <h2 className="text-2xl md:text-4xl font-extrabold text-blue-400 text-center mb-14">
           🔥 ليش منصة الشبح هي الخيار الأقوى لكل معلم؟
         </h2>
 
