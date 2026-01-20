@@ -369,7 +369,7 @@ const StudentSubscription = ({ embedded = false }) => {
                     className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   >
                     <option value="cash">
-                      تحويل كليك إلى SOCIALANJI - بنك الاتحاد باسم سعيد شاهين
+                      تحويل مبلغ الاشتراك كليك إلى GHOSTEXAMS - بنك الاتحاد
                     </option>
                   </select>
                 </div>

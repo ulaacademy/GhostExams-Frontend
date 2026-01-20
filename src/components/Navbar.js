@@ -73,15 +73,8 @@ export default function Navbar() {
           صفحة المعلمين 📌
         </Link>
 
-        <Link
-          href="/ourteachers"
-          className="hover:text-gray-300 cursor-pointer"
-        >
-          معلمونا 👩‍🏫
-        </Link>
-
         <Link href="/chat/" className="hover:text-gray-300 cursor-pointer">
-          مساعدك الذكي 📊
+          معلم Ai الذكي 🤖
         </Link>
 
         {/* Authentication Links */}
@@ -105,24 +98,6 @@ export default function Navbar() {
             {/* Student Dashboard Links - Only for authenticated students */}
             {isStudent && (
               <>
-                <Link
-                  href={getDashboardUrl("/dashboard/exams")}
-                  className="hover:text-gray-300 cursor-pointer"
-                >
-                  امتحانات الطلاب 📋
-                </Link>
-                <Link
-                  href={getDashboardUrl("/dashboard/settings")}
-                  className="hover:text-gray-300 cursor-pointer"
-                >
-                  اخبار طلاب ⚙️
-                </Link>
-                <Link
-                  href={getDashboardUrl("/dashboard/simulation")}
-                  className="hover:text-gray-300 cursor-pointer"
-                >
-                  محاكاة الامتحانات الوزارية 📝
-                </Link>
                 <Link
                   href={getDashboardUrl("/dashboard/studentDashboard")}
                   className="hover:text-gray-300 cursor-pointer"
