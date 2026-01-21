@@ -245,10 +245,10 @@ const Home = () => {
                       <p>
                         نوع المعلم:{" "}
                         {plan.teacherType === "platform"
-                          ? "معلم منصة"
+                          ? "معلم أساسي"
                           : plan.teacherType === "ghost"
-                          ? "معلم الشبح"
-                          : "معلم منصة / معلم الشبح"}
+                            ? "معلم Ai"
+                            : "معلم أساسي أو  معلم Ai"}
                       </p>
                     )}
 
@@ -270,10 +270,10 @@ const Home = () => {
                     {plan.durationUnit === "days"
                       ? "يوم"
                       : plan.durationUnit === "months"
-                      ? "شهر"
-                      : plan.durationUnit === "years"
-                      ? "سنة"
-                      : plan.durationUnit}
+                        ? "شهر"
+                        : plan.durationUnit === "years"
+                          ? "سنة"
+                          : plan.durationUnit}
                   </p>
 
                   {/* زر الاشتراك */}

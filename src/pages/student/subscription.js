@@ -265,10 +265,10 @@ const StudentSubscription = ({ embedded = false }) => {
                           <li>
                             نوع المعلم:{" "}
                             {plan.teacherType === "platform"
-                              ? "معلم منصة"
+                              ? "معلم أساسي"
                               : plan.teacherType === "ghost"
-                                ? "معلم الشبح"
-                                : "معلم منصة / معلم الشبح"}
+                                ? "معلم Ai"
+                                : "معلم أساسي / معلم Ai "}
                           </li>
                         )}
 
