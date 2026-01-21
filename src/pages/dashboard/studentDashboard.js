@@ -135,7 +135,7 @@ export default function StudentDashboard() {
 
     try {
       const res = await axios.get(
-        `${EXAM_API_BASE}/exams/custom-exams/${examId}`
+        `${EXAM_API_BASE}/exams/custom-exams/${examId}`,
       );
       const exam = res?.data?.exam || null;
       examCacheRef.current.set(examId, exam);
@@ -172,7 +172,7 @@ export default function StudentDashboard() {
 
       const { correct, total, percent } = normalizeScoreAndTotal(
         result,
-        fallbackExamObj
+        fallbackExamObj,
       );
 
       return {
@@ -185,7 +185,7 @@ export default function StudentDashboard() {
         _date: result?.date || result?.createdAt || result?.updatedAt || null,
       };
     },
-    [fetchExamDetails]
+    [fetchExamDetails],
   );
 
   const loadDashboardData = useCallback(async () => {
@@ -230,7 +230,7 @@ export default function StudentDashboard() {
         lastFour.length > 0
           ? Math.round(
               lastFour.reduce((sum, r) => sum + (Number(r?._percent) || 0), 0) /
-                lastFour.length
+                lastFour.length,
             )
           : 0;
       setPerformanceAverage(avg);
@@ -242,7 +242,7 @@ export default function StudentDashboard() {
       // ✅ امتحانات المعلمين (القائمة المتاحة)
       const examsFromTeachers = await fetchTeacherCustomExams();
       setTeacherExams(
-        Array.isArray(examsFromTeachers) ? examsFromTeachers : []
+        Array.isArray(examsFromTeachers) ? examsFromTeachers : [],
       );
     } catch (err) {
       console.error("❌ خطأ أثناء تحميل البيانات:", err);
@@ -364,8 +364,9 @@ export default function StudentDashboard() {
               </div>
 
               <div className="mt-2 text-center text-lg font-bold">
-                حسابك مجاني يسمح فقط بتجربة امتحانات المعلم الافتراضي. للحصول
-                على المزيد من الامتحانات، فعّل حسابك من هنا ✅
+                ✅ هذا حسابك المجاني لتجربة امتحانات المعلمين. 🔺للحصول على
+                المزيد من الامتحانات، وبنوك الاسئلة فعّل حسابك من هنا 👇او تواصل
+                معنا على واتس اب 👈 0798777781 👉
               </div>
 
               <div className="mt-4 flex justify-center">
@@ -559,7 +560,7 @@ export default function StudentDashboard() {
                                 <button
                                   onClick={() =>
                                     router.push(
-                                      `/dashboard/exams/custom/${exam?._examId}`
+                                      `/dashboard/exams/custom/${exam?._examId}`,
                                     )
                                   }
                                   className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
@@ -641,8 +642,8 @@ export default function StudentDashboard() {
                   {performanceAverage < 50
                     ? "⚠️ مستواك يحتاج إلى مراجعة، حاول التركيز على نقاط ضعفك."
                     : performanceAverage < 80
-                    ? "✅ أنت على الطريق الصحيح، استمر بالمذاكرة المنتظمة."
-                    : "🎉 أداء ممتاز! حافظ على هذا المستوى الرائع 👏"}
+                      ? "✅ أنت على الطريق الصحيح، استمر بالمذاكرة المنتظمة."
+                      : "🎉 أداء ممتاز! حافظ على هذا المستوى الرائع 👏"}
                 </p>
 
                 <ResponsiveContainer width="100%" height={300}>

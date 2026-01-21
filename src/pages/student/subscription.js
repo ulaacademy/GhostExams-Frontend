@@ -65,7 +65,7 @@ const StudentSubscription = ({ embedded = false }) => {
         endDate: endDate.toISOString().split("T")[0],
       }));
     },
-    [subscriptionData.startDate]
+    [subscriptionData.startDate],
   );
 
   useEffect(() => {
@@ -150,7 +150,7 @@ const StudentSubscription = ({ embedded = false }) => {
         // ✅ حوّل للداشبورد مع باراميتر pending + اسم الخطة
         const planName = encodeURIComponent(selectedPlan?.name || "الخطة");
         router.push(
-          `/dashboard/studentDashboard?status=pending&plan=${planName}`
+          `/dashboard/studentDashboard?status=pending&plan=${planName}`,
         );
 
         // (اختياري) تنظيف
@@ -179,7 +179,7 @@ const StudentSubscription = ({ embedded = false }) => {
       if (error?.response?.status === 409) {
         const planName = encodeURIComponent(selectedPlan?.name || "الخطة");
         router.push(
-          `/dashboard/studentDashboard?status=pending&plan=${planName}`
+          `/dashboard/studentDashboard?status=pending&plan=${planName}`,
         );
       }
     } finally {
@@ -194,7 +194,7 @@ const StudentSubscription = ({ embedded = false }) => {
       <div dir="rtl" className={embedded ? "p-0" : "p-6 text-right pt-24"}>
         <div className="container mx-auto max-w-6xl">
           <h1 className="text-4xl font-bold text-center mb-8 text-yellow-400">
-            اختر خطة الطالب المناسبة 🎯
+            اختر خطة الطالب المناسبة 🎯 او تواصل على 0798777781 للمساعدة
           </h1>
 
           {/* ✅ عرض خطط الطلاب */}
@@ -267,8 +267,8 @@ const StudentSubscription = ({ embedded = false }) => {
                             {plan.teacherType === "platform"
                               ? "معلم منصة"
                               : plan.teacherType === "ghost"
-                              ? "معلم الشبح"
-                              : "معلم منصة / معلم الشبح"}
+                                ? "معلم الشبح"
+                                : "معلم منصة / معلم الشبح"}
                           </li>
                         )}
 
@@ -278,10 +278,10 @@ const StudentSubscription = ({ embedded = false }) => {
                             {plan.durationUnit === "days"
                               ? "يوم"
                               : plan.durationUnit === "months"
-                              ? "شهر"
-                              : plan.durationUnit === "years"
-                              ? "سنة"
-                              : plan.durationUnit || "days"}
+                                ? "شهر"
+                                : plan.durationUnit === "years"
+                                  ? "سنة"
+                                  : plan.durationUnit || "days"}
                           </li>
                         )}
 
