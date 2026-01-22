@@ -8,6 +8,7 @@ import {
   fetchTeacherCustomExamsWithResults,
   fetchExamStudentsCount,
   createShareLink,
+  fetchUserProfile,
 
   // ✅ NEW: Teacher Custom Exams CRUD + Questions + Active
   updateTeacherCustomExam,
@@ -19,10 +20,61 @@ import {
 } from "@/services/api";
 import { showToast } from "@/components/Toast";
 
+// ✅ 1) هون حط دوال التطبيع (Normalize) - فوق الكمبوننت مباشرة
+const norm = (v = "") =>
+  String(v)
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .replace(/[أإآ]/g, "ا")
+    .replace(/ة/g, "ه")
+    .replace(/[^\p{L}\p{N}\s]/gu, "");
+
+const normTerm = (t = "") => {
+  const x = norm(t);
+  if (["الاول", "اول", "الفصل الاول", "1", "first", "term1"].includes(x))
+    return "t1";
+  if (["الثاني", "ثاني", "الفصل الثاني", "2", "second", "term2"].includes(x))
+    return "t2";
+  return x;
+};
+
+const normSubject = (s = "") => {
+  const x = norm(s);
+  if (
+    [
+      "english",
+      "انجليزي",
+      "لغه انجليزيه",
+      "لغة انجليزية",
+      "الانجليزي",
+      "en",
+    ].includes(x)
+  )
+    return "english";
+  if (["arabic", "عربي", "لغه عربيه", "لغة عربية"].includes(x)) return "arabic";
+  if (["تاريخ", "تاريخ الاردن", "history", "jo history"].includes(x))
+    return "history";
+  if (["تربيه اسلاميه", "اسلاميه", "دين", "islamic", "islam"].includes(x))
+    return "islamic";
+  return x;
+};
+
+const normGrade = (g = "") => {
+  const x = norm(g);
+  if (["عاشر", "10", "tenth", "2010"].includes(x)) return "10";
+  if (["حادي عشر", "11", "eleventh", "2009", "توجيهي 2009"].includes(x))
+    return "11";
+  if (["توجيهي", "12", "2008", "توجيهي 2008", "twelfth"].includes(x))
+    return "12";
+  return x;
+};
+
 export default function TeacherExamsPage() {
   const [teacherExams, setTeacherExams] = useState([]);
   const [filteredExams, setFilteredExams] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [teacherName, setTeacherName] = useState("");
 
   const [gradeFilter, setGradeFilter] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
@@ -31,6 +83,16 @@ export default function TeacherExamsPage() {
   useEffect(() => {
     const fetchExams = async () => {
       try {
+        // ✅ 1) هون بالزبط ضيف الكود
+        const profile = await fetchUserProfile();
+        setTeacherName(
+          profile?.name ||
+            profile?.fullName ||
+            profile?.user?.name ||
+            profile?.user?.fullName ||
+            "",
+        );
+
         console.log("📡 بدء جلب امتحانات المعلم...");
         const exams = await fetchTeacherCustomExamsWithResults();
         console.log("✅ تم جلب الامتحانات:", exams);
@@ -52,15 +114,25 @@ export default function TeacherExamsPage() {
   }, []);
 
   // ✅ فلترة الامتحانات حسب القيم
+  // ✅ فلترة الامتحانات حسب القيم (Normalized)
   useEffect(() => {
     let filtered = teacherExams;
 
-    if (gradeFilter)
-      filtered = filtered.filter((exam) => exam.grade === gradeFilter);
-    if (subjectFilter)
-      filtered = filtered.filter((exam) => exam.subject === subjectFilter);
-    if (termFilter)
-      filtered = filtered.filter((exam) => exam.term === termFilter);
+    if (gradeFilter) {
+      filtered = filtered.filter(
+        (exam) => normGrade(exam.grade) === gradeFilter,
+      );
+    }
+
+    if (subjectFilter) {
+      filtered = filtered.filter(
+        (exam) => normSubject(exam.subject) === subjectFilter,
+      );
+    }
+
+    if (termFilter) {
+      filtered = filtered.filter((exam) => normTerm(exam.term) === termFilter);
+    }
 
     setFilteredExams(filtered);
   }, [gradeFilter, subjectFilter, termFilter, teacherExams]);
@@ -77,8 +149,8 @@ export default function TeacherExamsPage() {
 
     setTeacherExams((prev) =>
       prev.map((e) =>
-        e._id === updatedExam._id ? { ...e, ...updatedExam } : e
-      )
+        e._id === updatedExam._id ? { ...e, ...updatedExam } : e,
+      ),
     );
   };
 
@@ -154,7 +226,7 @@ export default function TeacherExamsPage() {
     // ✅ Questions local state
     const initialQuestions = useMemo(
       () => localExam.questions || [],
-      [localExam.questions]
+      [localExam.questions],
     );
     const [questions, setQuestions] = useState(initialQuestions);
 
@@ -198,7 +270,7 @@ export default function TeacherExamsPage() {
         setTogglingActive(true);
         const updated = await setTeacherCustomExamActive(
           localExam._id,
-          !isActive
+          !isActive,
         );
 
         if (updated) {
@@ -206,7 +278,7 @@ export default function TeacherExamsPage() {
           onUpdated?.(updated);
           showToast(
             updated.isActive ? "✅ تم تفعيل الامتحان" : "✅ تم إخفاء الامتحان",
-            "success"
+            "success",
           );
         }
       } catch (error) {
@@ -266,14 +338,14 @@ export default function TeacherExamsPage() {
         ) {
           showToast(
             "❌ بيانات السؤال ناقصة (نص + خيارين + إجابة صحيحة)",
-            "error"
+            "error",
           );
           return;
         }
 
         const updated = await addQuestionToTeacherCustomExam(
           localExam._id,
-          payload
+          payload,
         );
         if (updated) {
           setLocalExam((prev) => ({ ...prev, ...updated }));
@@ -302,7 +374,7 @@ export default function TeacherExamsPage() {
         const updated = await updateQuestionInTeacherCustomExam(
           localExam._id,
           questionId,
-          patch
+          patch,
         );
         if (updated) {
           setLocalExam((prev) => ({ ...prev, ...updated }));
@@ -327,7 +399,7 @@ export default function TeacherExamsPage() {
         setSavingQuestions(true);
         const updated = await deleteQuestionFromTeacherCustomExam(
           localExam._id,
-          questionId
+          questionId,
         );
         if (updated) {
           setLocalExam((prev) => ({ ...prev, ...updated }));
@@ -361,7 +433,8 @@ export default function TeacherExamsPage() {
 
     return (
       <>
-        <div  dir="rtl"
+        <div
+          dir="rtl"
           className={`border p-4 rounded shadow transition ${
             isActive
               ? "bg-blue-50 hover:bg-blue-100"
@@ -854,43 +927,49 @@ export default function TeacherExamsPage() {
           </div>
         </div>
 
-        <h1 className="text-2xl font-bold text-blue-700 mb-6">
-          📚 جميع امتحانات المعلم
+        <h1
+          dir="rtl"
+          className="text-2xl font-bold text-blue-700 mb-6 text-right"
+        >
+          📚 جميع امتحانات المعلم {teacherName ? `- ${teacherName}` : ""}
         </h1>
 
         {/* ✅ الفلاتر + زر مسح الفلاتر */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          {/* ✅ Grade */}
           <select
             className="border p-2 rounded"
             value={gradeFilter}
             onChange={(e) => setGradeFilter(e.target.value)}
           >
             <option value="">كل الصفوف</option>
-            <option value="عاشر">عاشر</option>
-            <option value="حادي عشر">حادي عشر</option>
-            <option value="توجيهي">توجيهي</option>
+            <option value="10">عاشر 2010</option>
+            <option value="11">توجيهي 2009</option>
+            <option value="12">توجيهي 2008</option>
           </select>
 
+          {/* ✅ Subject */}
           <select
             className="border p-2 rounded"
             value={subjectFilter}
             onChange={(e) => setSubjectFilter(e.target.value)}
           >
             <option value="">كل المواد</option>
-            <option value="رياضيات">رياضيات</option>
-            <option value="فيزياء">فيزياء</option>
-            <option value="كيمياء">كيمياء</option>
-            <option value="أحياء">أحياء</option>
+            <option value="english">لغة انجليزية</option>
+            <option value="arabic">لغة عربية</option>
+            <option value="history">تاريخ الأردن</option>
+            <option value="islamic">تربية اسلامية</option>
           </select>
 
+          {/* ✅ Term */}
           <select
             className="border p-2 rounded"
             value={termFilter}
             onChange={(e) => setTermFilter(e.target.value)}
           >
             <option value="">كل الفصول</option>
-            <option value="الأول">الفصل الأول</option>
-            <option value="الثاني">الفصل الثاني</option>
+            <option value="t1">الفصل الأول</option>
+            <option value="t2">الفصل الثاني</option>
           </select>
 
           <button
