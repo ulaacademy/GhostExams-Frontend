@@ -146,7 +146,7 @@ export default function SharedContentPage() {
   const { share, sharedBy, content } = shareData;
 
   return (
-    <div className="min-h-screen bg-gray-100" dir="rtl">
+    <div className="min-h-screen bg-gray-100">
       <Navbar />
       <div className="max-w-4xl mx-auto p-6 pt-32">
         {/* ✅ Header */}
