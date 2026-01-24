@@ -109,7 +109,10 @@ export default function SharedContentPage() {
     return (
       <div className="min-h-screen bg-gray-100">
         <Navbar />
-        <div className="flex items-center justify-center min-h-[60vh]">
+        <div
+          className="flex items-center justify-center min-h-[60vh]"
+          dir="rtl"
+        >
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
             <p className="text-gray-600 text-lg">
@@ -148,7 +151,7 @@ export default function SharedContentPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
-      <div className="max-w-4xl mx-auto p-6 pt-32">
+      <div className="max-w-4xl mx-auto p-6 pt-32" dir="rtl">
         {/* ✅ Header */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
           <div className="flex items-center gap-3 mb-4">
