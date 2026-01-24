@@ -128,20 +128,6 @@ export default function Navbar() {
         {!isAuthenticated && (
           <>
             <span
-              onClick={(e) => handleDashboardClick(e, "/dashboard/exams")}
-              className="hover:text-gray-300 cursor-pointer opacity-75"
-              title="يجب تسجيل الدخول"
-            >
-              امتحانات طلاب 📋
-            </span>
-            <span
-              onClick={(e) => handleDashboardClick(e, "/dashboard/settings")}
-              className="hover:text-gray-300 cursor-pointer opacity-75"
-              title="يجب تسجيل الدخول"
-            >
-              اخبار طلاب ⚙️
-            </span>
-            <span
               onClick={(e) => handleDashboardClick(e, "/dashboard/simulation")}
               className="hover:text-gray-300 cursor-pointer opacity-75"
               title="يجب تسجيل الدخول"
