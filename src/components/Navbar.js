@@ -77,6 +77,13 @@ export default function Navbar() {
           الذكي Ai معلم 🤖
         </Link>
 
+        <Link
+          href="/calculator/"
+          className="hover:text-gray-300 cursor-pointer"
+        >
+          حاسبة المعدل 🎛️
+        </Link>
+
         {/* Authentication Links */}
         {!isAuthenticated ? (
           <>
