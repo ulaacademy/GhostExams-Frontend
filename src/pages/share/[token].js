@@ -107,7 +107,7 @@ export default function SharedContentPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100" dir="rtl">
+      <div className="min-h-screen bg-gray-100">
         <Navbar />
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
@@ -146,7 +146,7 @@ export default function SharedContentPage() {
   const { share, sharedBy, content } = shareData;
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100" dir="rtl">
       <Navbar />
       <div className="max-w-4xl mx-auto p-6 pt-32">
         {/* ✅ Header */}
