@@ -74,7 +74,7 @@ export default function Navbar() {
         </Link>
 
         <Link href="/chat/" className="hover:text-gray-300 cursor-pointer">
-          الذكي Ai معلم 🤖
+          الذكي Ai شات 🤖
         </Link>
 
         <Link
