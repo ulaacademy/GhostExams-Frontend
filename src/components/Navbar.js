@@ -54,8 +54,8 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-gray-800 text-white p-4 fixed w-full top-0 left-0 z-50 shadow-md">
-      <div className="container mx-auto flex justify-center items-center space-x-8 flex-wrap">
+    <nav className="bg-gray-800 text-white p-4 fixed w-full top-0 left-0 z-50 shadow-md h-[72px]">
+      <div className="container mx-auto flex justify-center items-center space-x-8 flex-nowrap overflow-x-auto">
         {/* Logo */}
         <Link
           href="/"

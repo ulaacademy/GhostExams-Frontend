@@ -25,7 +25,10 @@ export default function SharedContentPage() {
         setShareData(data);
       } catch (err) {
         console.error("❌ فشل في تحميل المحتوى المشترك:", err);
-        setError(err.response?.data?.message || "❌ رابط المشاركة غير صحيح أو منتهي الصلاحية");
+        setError(
+          err.response?.data?.message ||
+            "❌ رابط المشاركة غير صحيح أو منتهي الصلاحية",
+        );
       } finally {
         setLoading(false);
       }
@@ -36,7 +39,11 @@ export default function SharedContentPage() {
 
   // Handle Start Exam button click
   const handleStartExam = async () => {
-    if (!shareData || shareData.share.shareType !== "exam" || !shareData.content) {
+    if (
+      !shareData ||
+      shareData.share.shareType !== "exam" ||
+      !shareData.content
+    ) {
       return;
     }
 
@@ -55,8 +62,8 @@ export default function SharedContentPage() {
         pathname: "/auth/Login",
         query: {
           redirect: returnUrl,
-          message: "يجب تسجيل الدخول لبدء الامتحان"
-        }
+          message: "يجب تسجيل الدخول لبدء الامتحان",
+        },
       });
       return;
     }
@@ -70,18 +77,18 @@ export default function SharedContentPage() {
     try {
       setCheckingSubscription(true);
       const subscriptionResult = await checkStudentSubscription(token);
-      
+
       if (!subscriptionResult.isSubscribed) {
         // Get teacherId from result or content
         const resultTeacherId = subscriptionResult.teacher?._id || teacherId;
-        
+
         // Redirect to teachers page with message
         router.push({
           pathname: "/ourteachers",
           query: {
             teacherId: resultTeacherId,
-            message: "يجب الاشتراك مع المعلم للوصول إلى هذا الامتحان"
-          }
+            message: "يجب الاشتراك مع المعلم للوصول إلى هذا الامتحان",
+          },
         });
         return;
       }
@@ -90,7 +97,9 @@ export default function SharedContentPage() {
       router.push(`/dashboard/exams/custom/${examId}`);
     } catch (err) {
       console.error("❌ فشل في التحقق من الاشتراك:", err);
-      setError(err.response?.data?.message || "❌ حدث خطأ أثناء التحقق من الاشتراك");
+      setError(
+        err.response?.data?.message || "❌ حدث خطأ أثناء التحقق من الاشتراك",
+      );
     } finally {
       setCheckingSubscription(false);
     }
@@ -103,7 +112,9 @@ export default function SharedContentPage() {
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 text-lg">⏳ جاري تحميل المحتوى المشترك...</p>
+            <p className="text-gray-600 text-lg">
+              ⏳ جاري تحميل المحتوى المشترك...
+            </p>
           </div>
         </div>
       </div>
@@ -137,7 +148,7 @@ export default function SharedContentPage() {
   return (
     <div className="min-h-screen bg-gray-100" dir="rtl">
       <Navbar />
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="max-w-4xl mx-auto p-6 pt-32">
         {/* ✅ Header */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
           <div className="flex items-center gap-3 mb-4">
@@ -150,10 +161,16 @@ export default function SharedContentPage() {
             </div>
           </div>
           <div className="flex gap-4 text-sm text-gray-600">
-            <span>📅 تاريخ المشاركة: {new Date(share.createdAt).toLocaleDateString("ar-SA")}</span>
+            <span>
+              📅 تاريخ المشاركة:{" "}
+              {new Date(share.createdAt).toLocaleDateString("ar-SA")}
+            </span>
             <span>👁️ عدد المشاهدات: {share.accessCount}</span>
             {share.expiresAt && (
-              <span>⏰ ينتهي في: {new Date(share.expiresAt).toLocaleDateString("ar-SA")}</span>
+              <span>
+                ⏰ ينتهي في:{" "}
+                {new Date(share.expiresAt).toLocaleDateString("ar-SA")}
+              </span>
             )}
           </div>
         </div>
@@ -184,27 +201,44 @@ export default function SharedContentPage() {
               </div>
               <div className="p-4 bg-purple-50 rounded-lg">
                 <p className="text-gray-600 text-sm mb-1">🕒 المدة</p>
-                <p className="font-semibold text-lg">{content.duration} دقيقة</p>
+                <p className="font-semibold text-lg">
+                  {content.duration} دقيقة
+                </p>
               </div>
             </div>
 
             {content.teacherId && (
               <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
                 <p className="text-sm text-gray-600 mb-2">👩‍🏫 المعلم:</p>
-                <p className="font-semibold text-lg">{content.teacherId.name}</p>
-                {content.teacherId.subjects && content.teacherId.subjects.length > 0 && (
-                  <p className="text-sm text-gray-600 mt-2">
-                    المواد: {content.teacherId.subjects.join("، ")}
-                  </p>
-                )}
+                <p className="font-semibold text-lg">
+                  {content.teacherId.name}
+                </p>
+                {content.teacherId.subjects &&
+                  content.teacherId.subjects.length > 0 && (
+                    <p className="text-sm text-gray-600 mt-2">
+                      المواد: {content.teacherId.subjects.join("، ")}
+                    </p>
+                  )}
               </div>
             )}
 
             <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-              <h3 className="text-lg font-semibold mb-2">📋 معلومات الامتحان</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                📋 معلومات الامتحان
+              </h3>
               <ul className="space-y-2 text-gray-700">
-                <li>• عدد الأسئلة: <span className="font-semibold">{content.questions?.length || 0} سؤال</span></li>
-                <li>• مدة الامتحان: <span className="font-semibold">{content.duration} دقيقة</span></li>
+                <li>
+                  • عدد الأسئلة:{" "}
+                  <span className="font-semibold">
+                    {content.questions?.length || 0} سؤال
+                  </span>
+                </li>
+                <li>
+                  • مدة الامتحان:{" "}
+                  <span className="font-semibold">
+                    {content.duration} دقيقة
+                  </span>
+                </li>
                 <li>• يجب أن تكون مشتركاً مع المعلم لبدء الامتحان</li>
               </ul>
             </div>
@@ -261,7 +295,9 @@ export default function SharedContentPage() {
 
             {content.subjects && content.subjects.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-2">📚 المواد التي يدرسها:</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  📚 المواد التي يدرسها:
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   {content.subjects.map((subject, idx) => (
                     <span
@@ -345,4 +381,3 @@ export default function SharedContentPage() {
     </div>
   );
 }
-
