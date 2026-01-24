@@ -180,7 +180,7 @@ export default function SharedContentPage() {
 
         {/* ✅ Exam Content - Introduction Screen */}
         {share.shareType === "exam" && content && (
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="bg-white rounded-xl shadow-lg p-6" dir="rtl">
             <div className="text-center mb-6">
               <div className="text-6xl mb-4">📘</div>
               <h2 className="text-3xl font-bold text-blue-700 mb-2">
