@@ -162,7 +162,7 @@ export default function Navbar() {
             onClick={() => setMobileOpen(true)}
             aria-label="Open menu"
           >
-            ☰
+            القائمة☰
           </button>
         </div>
       </div>

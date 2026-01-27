@@ -169,7 +169,7 @@ const DashboardNavbar = ({ children, student = {} }) => {
                 className="text-white text-2xl font-bold"
                 aria-label="Open sidebar"
               >
-                ☰
+                القائمة ☰
               </button>
 
               <Link href="/dashboard/studentDashboard" className="inline-block">
