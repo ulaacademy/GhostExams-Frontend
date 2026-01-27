@@ -158,9 +158,11 @@ const DashboardNavbar = ({ children, student = {} }) => {
       <div className="flex-1 flex flex-col">
         <nav className="bg-blue-600 p-4 shadow-lg">
           <div className="container mx-auto flex flex-col gap-4 md:flex-row md:justify-between md:items-center">
-            <h1 className="text-white text-lg font-bold">
-              📌 لوحة تحكم الطالب
-            </h1>
+            <Link href="/dashboard/studentDashboard" className="inline-block">
+              <h1 className="text-white text-lg font-bold cursor-pointer hover:opacity-90">
+                📌 لوحة تحكم الطالب
+              </h1>
+            </Link>
             <ul className="flex flex-wrap gap-4 md:gap-6">
               {NAV_ITEMS.map((item) => {
                 const isActive = router.pathname.startsWith(item.href);

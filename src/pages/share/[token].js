@@ -266,7 +266,7 @@ export default function SharedContentPage() {
               </button>
               <Link href="/ourteachers">
                 <button className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition w-full">
-                  👩‍🏫 تصفح المعلمين
+                  اسعار البكجات من هنا 
                 </button>
               </Link>
             </div>
