@@ -11,6 +11,9 @@ export default function Navbar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isStudent, setIsStudent] = useState(false);
 
+  // ✅ NEW: mobile menu
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   useEffect(() => {
     // Check authentication status
     const checkAuth = () => {
@@ -28,6 +31,13 @@ export default function Navbar() {
     const interval = setInterval(checkAuth, 1000);
     return () => clearInterval(interval);
   }, [user, token]);
+
+  // ✅ NEW: Close mobile menu on route change
+  useEffect(() => {
+    const handleRouteChange = () => setMobileOpen(false);
+    router.events?.on("routeChangeStart", handleRouteChange);
+    return () => router.events?.off("routeChangeStart", handleRouteChange);
+  }, [router.events]);
 
   // Handle dashboard link clicks for unauthenticated users
   const handleDashboardClick = (e, href) => {
@@ -53,90 +63,228 @@ export default function Navbar() {
     return basePath;
   };
 
+  // ✅ NEW: helper to close menu
+  const closeMobile = () => setMobileOpen(false);
+
   return (
-    <nav className="bg-gray-800 text-white p-4 fixed w-full top-0 left-0 z-50 shadow-md h-[72px]">
-      <div className="container mx-auto flex justify-center items-center space-x-8 flex-nowrap overflow-x-auto">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="text-2xl font-bold text-yellow-400 hover:text-yellow-300 cursor-pointer"
-        >
-          GHOST EXAMS
-        </Link>
+    <nav className="bg-gray-800 text-white fixed w-full top-0 left-0 z-50 shadow-md">
+      <div className="h-[72px] px-4">
+        <div className="container mx-auto h-full flex items-center justify-between">
+          {/* ✅ Logo */}
+          <Link
+            href="/"
+            className="text-xl md:text-2xl font-bold text-yellow-400 hover:text-yellow-300 cursor-pointer whitespace-nowrap"
+          >
+            GHOST EXAMS
+          </Link>
 
-        {/* Public Links - Always Visible */}
-        <Link href="/" className="hover:text-gray-300 cursor-pointer">
-          صفحة الطلاب
-        </Link>
+          {/* ✅ Desktop Menu (md+) */}
+          <div className="hidden md:flex items-center gap-6">
+            {/* Public Links - Always Visible */}
+            <Link href="/" className="hover:text-gray-300 cursor-pointer">
+              صفحة الطلاب
+            </Link>
 
-        <Link href="/pricing" className="hover:text-gray-300 cursor-pointer">
-          صفحة المعلمين 📌
-        </Link>
-
-        <Link href="/chat/" className="hover:text-gray-300 cursor-pointer">
-          الذكي Ai شات 🤖
-        </Link>
-
-        <Link
-          href="/calculator/"
-          className="hover:text-gray-300 cursor-pointer"
-        >
-          حاسبة المعدل 🎛️
-        </Link>
-
-        {/* Authentication Links */}
-        {!isAuthenticated ? (
-          <>
             <Link
-              href="/auth/Login"
+              href="/pricing"
               className="hover:text-gray-300 cursor-pointer"
             >
-              الدخول 🔁
+              صفحة المعلمين 📌
             </Link>
+
+            <Link href="/chat/" className="hover:text-gray-300 cursor-pointer">
+              الذكي Ai شات 🤖
+            </Link>
+
             <Link
-              href="/auth/Register"
+              href="/calculator/"
               className="hover:text-gray-300 cursor-pointer"
             >
-              مستخدم جديد 👇
+              حاسبة المعدل 🎛️
             </Link>
-          </>
-        ) : (
-          <>
-            {/* Student Dashboard Links - Only for authenticated students */}
-            {isStudent && (
+
+            {/* Authentication Links */}
+            {!isAuthenticated ? (
               <>
                 <Link
-                  href={getDashboardUrl("/dashboard/studentDashboard")}
+                  href="/auth/Login"
                   className="hover:text-gray-300 cursor-pointer"
                 >
-                  لوحة التحكم 🎛️
+                  الدخول 🔁
                 </Link>
+                <Link
+                  href="/auth/Register"
+                  className="hover:text-gray-300 cursor-pointer"
+                >
+                  مستخدم جديد 👇
+                </Link>
+              </>
+            ) : (
+              <>
+                {/* Student Dashboard Links - Only for authenticated students */}
+                {isStudent && (
+                  <Link
+                    href={getDashboardUrl("/dashboard/studentDashboard")}
+                    className="hover:text-gray-300 cursor-pointer"
+                  >
+                    لوحة التحكم 🎛️
+                  </Link>
+                )}
+
+                {/* Logout Button */}
+                <button
+                  onClick={logout}
+                  className="hover:text-gray-300 cursor-pointer"
+                >
+                  تسجيل الخروج 🚪
+                </button>
               </>
             )}
 
-            {/* Logout Button */}
-            <button
-              onClick={logout}
-              className="hover:text-gray-300 cursor-pointer"
-            >
-              تسجيل الخروج 🚪
-            </button>
-          </>
-        )}
+            {/* Dashboard Links for Unauthenticated Users - Redirect to Login */}
+            {!isAuthenticated && (
+              <span
+                onClick={(e) =>
+                  handleDashboardClick(e, "/dashboard/simulation")
+                }
+                className="hover:text-gray-300 cursor-pointer opacity-75"
+                title="يجب تسجيل الدخول"
+              >
+                محاكاة الامتحانات الوزارية 📝
+              </span>
+            )}
+          </div>
 
-        {/* Dashboard Links for Unauthenticated Users - Redirect to Login */}
-        {!isAuthenticated && (
-          <>
-            <span
-              onClick={(e) => handleDashboardClick(e, "/dashboard/simulation")}
-              className="hover:text-gray-300 cursor-pointer opacity-75"
-              title="يجب تسجيل الدخول"
-            >
-              محاكاة الامتحانات الوزارية 📝
-            </span>
-          </>
-        )}
+          {/* ✅ Mobile Button (below md) */}
+          <button
+            type="button"
+            className="md:hidden text-2xl font-bold"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open menu"
+          >
+            ☰
+          </button>
+        </div>
       </div>
+
+      {/* ✅ Mobile Drawer */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-50">
+          {/* Overlay */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setMobileOpen(false)}
+          />
+
+          {/* Drawer */}
+          <div className="absolute right-0 top-0 h-full w-80 max-w-[85%] bg-gray-900 text-white shadow-xl">
+            <div className="h-[72px] px-4 flex items-center justify-between border-b border-white/10">
+              <span className="font-bold text-yellow-400">القائمة</span>
+              <button
+                type="button"
+                className="text-2xl"
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close menu"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-4 space-y-2 overflow-y-auto h-[calc(100%-72px)]">
+              {/* Public Links */}
+              <Link
+                href="/"
+                onClick={closeMobile}
+                className="block px-3 py-2 rounded hover:bg-white/10"
+              >
+                صفحة الطلاب
+              </Link>
+
+              <Link
+                href="/pricing"
+                onClick={closeMobile}
+                className="block px-3 py-2 rounded hover:bg-white/10"
+              >
+                صفحة المعلمين 📌
+              </Link>
+
+              <Link
+                href="/chat/"
+                onClick={closeMobile}
+                className="block px-3 py-2 rounded hover:bg-white/10"
+              >
+                الذكي Ai شات 🤖
+              </Link>
+
+              <Link
+                href="/calculator/"
+                onClick={closeMobile}
+                className="block px-3 py-2 rounded hover:bg-white/10"
+              >
+                حاسبة المعدل 🎛️
+              </Link>
+
+              <div className="my-3 border-t border-white/10" />
+
+              {/* Auth Links */}
+              {!isAuthenticated ? (
+                <>
+                  <Link
+                    href="/auth/Login"
+                    onClick={closeMobile}
+                    className="block px-3 py-2 rounded hover:bg-white/10"
+                  >
+                    الدخول 🔁
+                  </Link>
+                  <Link
+                    href="/auth/Register"
+                    onClick={closeMobile}
+                    className="block px-3 py-2 rounded hover:bg-white/10"
+                  >
+                    مستخدم جديد 👇
+                  </Link>
+                </>
+              ) : (
+                <>
+                  {isStudent && (
+                    <Link
+                      href={getDashboardUrl("/dashboard/studentDashboard")}
+                      onClick={closeMobile}
+                      className="block px-3 py-2 rounded hover:bg-white/10"
+                    >
+                      لوحة التحكم 🎛️
+                    </Link>
+                  )}
+
+                  <button
+                    onClick={() => {
+                      closeMobile();
+                      logout();
+                    }}
+                    className="w-full text-right block px-3 py-2 rounded hover:bg-white/10"
+                  >
+                    تسجيل الخروج 🚪
+                  </button>
+                </>
+              )}
+
+              {/* Unauthenticated dashboard link */}
+              {!isAuthenticated && (
+                <button
+                  onClick={(e) => {
+                    handleDashboardClick(e, "/dashboard/simulation");
+                    closeMobile();
+                  }}
+                  className="w-full text-right block px-3 py-2 rounded hover:bg-white/10 opacity-90"
+                  title="يجب تسجيل الدخول"
+                >
+                  محاكاة الامتحانات الوزارية 📝
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
