@@ -13,7 +13,7 @@ import { useAuth } from "@/context/AuthContext";
 import DashboardNavbar from "@/components/DashboardNavbar";
 import { showToast } from "@/components/Toast";
 
-const QUESTION_TIME_SECONDS = 30;
+const QUESTION_TIME_SECONDS = 60;
 
 /* ===========================
    ✅ Language Direction Helper
@@ -106,7 +106,7 @@ export default function CustomTeacherExamPage() {
   const [timeSpent, setTimeSpent] = useState({});
 
   const [questionTimeLeft, setQuestionTimeLeft] = useState(
-    QUESTION_TIME_SECONDS
+    QUESTION_TIME_SECONDS,
   );
 
   const [submitted, setSubmitted] = useState(false);
@@ -195,7 +195,7 @@ export default function CustomTeacherExamPage() {
       if (!questionOrder?.length) return pos;
       return questionOrder[pos];
     },
-    [questionOrder]
+    [questionOrder],
   );
 
   const currentOriginalIndex = useMemo(() => {
@@ -211,7 +211,7 @@ export default function CustomTeacherExamPage() {
   // ====== counters ======
   const attemptedCount = useMemo(
     () => Object.keys(questionStatus).length,
-    [questionStatus]
+    [questionStatus],
   );
 
   const correctCount = useMemo(() => {
@@ -244,7 +244,7 @@ export default function CustomTeacherExamPage() {
 
   const noAnswerCount = useMemo(() => {
     return Object.values(questionStatus).filter(
-      (st) => st === "timeout" || st === "skipped"
+      (st) => st === "timeout" || st === "skipped",
     ).length;
   }, [questionStatus]);
 
@@ -373,7 +373,7 @@ export default function CustomTeacherExamPage() {
       const indices = Array.from({ length: n }).map((_, i) => i);
       const defaultOrder = deterministicShuffle(
         indices,
-        `${examId}_${sid}_${sessionId}_QORDER`
+        `${examId}_${sid}_${sessionId}_QORDER`,
       );
 
       const finalOrder =
@@ -388,7 +388,7 @@ export default function CustomTeacherExamPage() {
         const opts = exam.questions?.[qIdx]?.options || [];
         optMap[pos] = deterministicShuffle(
           opts,
-          `${examId}_${sid}_${sessionId}_OPT_${qIdx}`
+          `${examId}_${sid}_${sessionId}_OPT_${qIdx}`,
         );
       }
 
@@ -448,7 +448,7 @@ export default function CustomTeacherExamPage() {
         showToast("✅ تم تجهيز محاولة جديدة بترتيب مختلف", "success");
       }
     },
-    [user?.userId, examId]
+    [user?.userId, examId],
   );
 
   // ====== Fetch exam ======
@@ -460,7 +460,7 @@ export default function CustomTeacherExamPage() {
         setLoading(true);
 
         const response = await axios.get(
-          `https://ge-api.ghostexams.com/api/exams/custom-exams/${examId}`
+          `https://ge-api.ghostexams.com/api/exams/custom-exams/${examId}`,
         );
 
         const exam = response.data.exam;
@@ -547,7 +547,7 @@ export default function CustomTeacherExamPage() {
       answers,
       questionStatus,
       timeSpent,
-    ]
+    ],
   );
 
   // ====== Retry Exam (ONLY after finish) ======
@@ -587,7 +587,7 @@ export default function CustomTeacherExamPage() {
       showToast("⏳ انتهى وقت السؤال (لم تتم الإجابة)", "warning");
       setTimeout(() => pushAutosave({ lastEvent: "timeout", pos }), 0);
     },
-    [pushAutosave]
+    [pushAutosave],
   );
 
   // ====== Timer ======
@@ -709,7 +709,7 @@ export default function CustomTeacherExamPage() {
 
       showToast(
         isCorrect ? "✅ إجابة صحيحة" : "❌ إجابة خاطئة",
-        isCorrect ? "success" : "error"
+        isCorrect ? "success" : "error",
       );
 
       pushAutosave({ lastEvent: "answered", pos });
@@ -721,7 +721,7 @@ export default function CustomTeacherExamPage() {
       questionTimeLeft,
       pushAutosave,
       getOriginalQuestionIndex,
-    ]
+    ],
   );
 
   const toggleExamMode = useCallback(async () => {
@@ -978,7 +978,7 @@ export default function CustomTeacherExamPage() {
                           type="button"
                           disabled={pos !== currentQuestionIndex}
                           className={`w-10 h-10 rounded-lg font-semibold text-sm transition-all ${sidebarBtnClass(
-                            pos
+                            pos,
                           )} ${
                             pos !== currentQuestionIndex
                               ? "opacity-90 cursor-not-allowed"
@@ -1062,7 +1062,7 @@ export default function CustomTeacherExamPage() {
                           ⏰ {formatTime(questionTimeLeft)}
                         </div>
                         <p className="text-sm text-gray-600">
-                          وقت السؤال (30 ثانية)
+                          وقت السؤال (60 ثانية)
                         </p>
                       </div>
                     )}
@@ -1074,10 +1074,10 @@ export default function CustomTeacherExamPage() {
                           {currentQuestion.difficulty === "easy"
                             ? "سهل"
                             : currentQuestion.difficulty === "medium"
-                            ? "متوسط"
-                            : currentQuestion.difficulty === "hard"
-                            ? "صعب"
-                            : currentQuestion.difficulty}
+                              ? "متوسط"
+                              : currentQuestion.difficulty === "hard"
+                                ? "صعب"
+                                : currentQuestion.difficulty}
                         </span>
                       </div>
                     )}
@@ -1195,7 +1195,7 @@ export default function CustomTeacherExamPage() {
                                   <span
                                     className="font-bold text-green-700"
                                     dir={getTextDir(
-                                      currentFeedback.correctAnswer
+                                      currentFeedback.correctAnswer,
                                     )}
                                   >
                                     {currentFeedback.correctAnswer}
@@ -1262,7 +1262,7 @@ export default function CustomTeacherExamPage() {
 
                   {!currentStatus && (
                     <p className="text-sm text-gray-500 mt-4">
-                      ⏱️ تذكير: بعد 30 ثانية سيُعتبر السؤال بدون إجابة. (لن
+                      ⏱️ تذكير: بعد 60 ثانية سيُعتبر السؤال بدون إجابة. (لن
                       تنتقل تلقائيًا، لكن سيُقفل السؤال ويصبح برتقالي)
                     </p>
                   )}
@@ -1435,21 +1435,21 @@ function ReviewModal({
     st === "correct"
       ? "✅ صح"
       : st === "wrong"
-      ? "❌ غلط"
-      : st === "timeout"
-      ? "⏳ انتهى الوقت"
-      : st === "skipped"
-      ? "⏭️ تم التخطي"
-      : "⬜ غير مجاب";
+        ? "❌ غلط"
+        : st === "timeout"
+          ? "⏳ انتهى الوقت"
+          : st === "skipped"
+            ? "⏭️ تم التخطي"
+            : "⬜ غير مجاب";
 
   const boxClass = (st) =>
     st === "correct"
       ? "bg-green-50 border-green-300"
       : st === "wrong"
-      ? "bg-red-50 border-red-300"
-      : st === "timeout" || st === "skipped"
-      ? "bg-orange-50 border-orange-300"
-      : "bg-gray-50 border-gray-200";
+        ? "bg-red-50 border-red-300"
+        : st === "timeout" || st === "skipped"
+          ? "bg-orange-50 border-orange-300"
+          : "bg-gray-50 border-gray-200";
 
   const getQ = (pos) => {
     const qIdx = questionOrder?.length ? questionOrder[pos] : pos;
