@@ -5,13 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthContext";
 
+// ✅ Top Navbar (بدون الامتحانات)
 const NAV_ITEMS = [
-  { href: "/dashboard/exams/teacher", label: "🏫 امتحانات المعلمين" },
-  { href: "/dashboard/exams/school", label: "📚 امتحانات المدرسة" },
-  { href: "/dashboard/exams/grades/BooksGrades", label: "📖 امتحانات الكتب" },
-  { href: "/dashboard/exams/ai", label: "🤖 امتحانات الذكاء الاصطناعي" },
-  { href: "/dashboard/simulation", label: "🏛️ امتحانات الوزارية Simulation" },
-  { href: "/ourteachers", label: "👩‍🏫 معلمونا" },
+  { href: "/dashboard/subscribed-teachers", label: "🤝 المعلمون المشترك معهم" },
+  { href: "/ourteachers", label: "👩‍🏫 معلمو المنصة" },
 ];
 
 const SIDEBAR_ITEMS = [
@@ -20,14 +17,11 @@ const SIDEBAR_ITEMS = [
     label: "لوحة التحكم",
     icon: "📌",
   },
-
-  // ✅ جديد: الحزم والاشتراك (ثاني خيار تحت لوحة التحكم)
   {
     href: "/dashboard/student/subscription",
     label: "الحزم والاشتراك",
     icon: "📦",
   },
-
   {
     href: "/dashboard/subscribed-teachers",
     label: "المعلمون المشترك معهم",
@@ -37,36 +31,6 @@ const SIDEBAR_ITEMS = [
     href: "/ourteachers",
     label: "معلمو المنصة",
     icon: "👩‍🏫",
-  },
-  {
-    href: "/dashboard/exams/teacher",
-    label: "امتحانات المعلمين",
-    icon: "🏫",
-  },
-  {
-    href: "/dashboard/exams/school",
-    label: "امتحانات المدرسة",
-    icon: "🏫",
-  },
-  {
-    href: "/dashboard/exams/grades/BooksGrades",
-    label: "امتحانات الكتب",
-    icon: "📖",
-  },
-  {
-    href: "/dashboard/exams/ai",
-    label: "امتحانات الذكاء الاصطناعي",
-    icon: "🤖",
-  },
-  {
-    href: "/dashboard/simulation",
-    label: "امتحانات الوزارية Simulation",
-    icon: "🏛️",
-  },
-  {
-    href: "/dashboard/exams/ghost",
-    label: "امتحانات Ghost Examinations",
-    icon: "👻",
   },
   {
     label: "الشات الذكي",
@@ -79,17 +43,14 @@ const DashboardNavbar = ({ children, student = {} }) => {
   const { logout, user, token } = useAuth();
   const { name = "الطالب", email = "" } = student;
 
-  // ✅ NEW: Mobile sidebar state (بدون حذف أي سطر من كودك)
   const [mobileSidebarOpen, setMobileSidebarOpen] = React.useState(false);
 
-  // Check if user is authenticated
   const isAuthenticated = !!(user && (token || localStorage.getItem("token")));
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-      {/* ✅ ثابت: خلي السايدبار بطول الشاشة */}
+      {/* ✅ Desktop Sidebar */}
       <aside className="hidden md:flex md:w-64 bg-white border-r border-gray-200 shadow-sm h-screen sticky top-0">
-        {/* ✅ خلي المحتوى flex-col بطول كامل */}
         <div className="flex flex-col h-full w-full p-6">
           <div className="mb-6">
             <p className="text-sm text-gray-500">مرحباً بك</p>
@@ -101,7 +62,6 @@ const DashboardNavbar = ({ children, student = {} }) => {
             )}
           </div>
 
-          {/* ✅ مهم: خلي القائمة هي اللي تعمل Scroll */}
           <nav className="flex-1 overflow-y-auto pr-1">
             <ul className="space-y-2">
               {SIDEBAR_ITEMS.map((item) => {
@@ -143,7 +103,6 @@ const DashboardNavbar = ({ children, student = {} }) => {
             </ul>
           </nav>
 
-          {/* ✅ ثابت تحت: زر الخروج ما عاد يختفي */}
           {isAuthenticated && (
             <div className="pt-4 mt-4 border-t border-gray-200">
               <button
@@ -159,9 +118,10 @@ const DashboardNavbar = ({ children, student = {} }) => {
       </aside>
 
       <div className="flex-1 flex flex-col">
+        {/* ✅ Top Navbar */}
         <nav className="bg-blue-600 p-4 shadow-lg">
           <div className="container mx-auto flex flex-col gap-4 md:flex-row md:justify-between md:items-center">
-            {/* ✅ NEW: Mobile menu button */}
+            {/* ✅ Mobile */}
             <div className="flex items-center justify-between md:hidden">
               <button
                 type="button"
@@ -179,7 +139,7 @@ const DashboardNavbar = ({ children, student = {} }) => {
               </Link>
             </div>
 
-            {/* ✅ KEEP: your original title block (shows on md+) */}
+            {/* ✅ Desktop title */}
             <Link
               href="/dashboard/studentDashboard"
               className="inline-block hidden md:inline-block"
@@ -211,7 +171,7 @@ const DashboardNavbar = ({ children, student = {} }) => {
           </div>
         </nav>
 
-        {/* ✅ NEW: Mobile Sidebar Drawer */}
+        {/* ✅ Mobile Sidebar Drawer */}
         {mobileSidebarOpen && (
           <div className="fixed inset-0 z-50 md:hidden">
             <div
