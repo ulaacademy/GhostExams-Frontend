@@ -312,7 +312,7 @@ export default function OurTeachersPage() {
                   الطلاب المسجلون:
                 </span>{" "}
                 {teacher.maxStudents > 0
-                  ? `${(Number(teacher.currentStudents) || 0) + 177} / ${teacher.maxStudents}`
+                  ? `${(Number(teacher.currentStudents) || 0) + 277} / ${teacher.maxStudents}`
                   : `${(Number(teacher.currentStudents) || 0) + 1} طالب`}
               </p>
 
