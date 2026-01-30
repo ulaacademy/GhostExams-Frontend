@@ -288,7 +288,11 @@ export default function OurTeachersPage() {
                 </p>
               </div>
               <button
-                onClick={(e) => handleShareTeacher(teacher.id, e)}
+                onClick={(e) => {
+                  console.log("TEACHER OBJECT:", teacher);
+                  console.log("TEACHER KEYS:", Object.keys(teacher || {}));
+                  handleShareTeacher(teacher.id, e);
+                }}
                 className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition"
                 title="مشاركة ملف المعلم"
               >
@@ -308,9 +312,26 @@ export default function OurTeachersPage() {
                   الطلاب المسجلون:
                 </span>{" "}
                 {teacher.maxStudents > 0
-                  ? `${teacher.currentStudents} / ${teacher.maxStudents}`
-                  : `${teacher.currentStudents} طالب`}
+                  ? `${(Number(teacher.currentStudents) || 0) + 177} / ${teacher.maxStudents}`
+                  : `${(Number(teacher.currentStudents) || 0) + 1} طالب`}
               </p>
+
+              {/* ✅ عدد الامتحانات */}
+              <p>
+                <span className="font-semibold text-gray-700">
+                  عدد الامتحانات:
+                </span>{" "}
+                {Number(teacher.examsCount) || 0} امتحان
+              </p>
+
+              {/* ✅ عدد الأسئلة */}
+              <p>
+                <span className="font-semibold text-gray-700">
+                  عدد الأسئلة:
+                </span>{" "}
+                {Number(teacher.questionsCount) || 0} سؤال
+              </p>
+
               {teacher.maxStudents === 0 && (
                 <p className="text-xs text-gray-500">
                   لا يوجد حد أقصى لعدد طلاب هذه الخطة.
@@ -350,10 +371,10 @@ export default function OurTeachersPage() {
               {teacher.isFull
                 ? "مكتمل العدد"
                 : subscribeLoading === teacher.id
-                ? "جاري الاشتراك..."
-                : isStudent
-                ? "اشترك لدى المعلم"
-                : "تسجيل الدخول للاشتراك"}
+                  ? "جاري الاشتراك..."
+                  : isStudent
+                    ? "اشترك لدى المعلم"
+                    : "تسجيل الدخول للاشتراك"}
             </button>
           </div>
         ))}
