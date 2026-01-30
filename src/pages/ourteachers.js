@@ -273,109 +273,125 @@ export default function OurTeachersPage() {
         {teachers.map((teacher, index) => (
           <div
             key={teacher.id}
-            className="bg-white rounded-xl shadow-md border border-gray-100 p-6 flex flex-col"
+            className="bg-white rounded-2xl shadow-sm hover:shadow-lg border border-gray-100 overflow-hidden transition flex flex-col"
           >
-            <div className="flex items-center gap-4 mb-4">
-              {renderAvatar(teacher, index)}
-              <div className="flex-1">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  {teacher.name}
-                </h2>
-                <p className="text-sm text-gray-500">
-                  {teacher.planName
-                    ? `الباقة الحالية: ${teacher.planName}`
-                    : "الباقة الحالية: غير محددة"}
-                </p>
+            {/* ✅ Header */}
+            <div className="p-5 border-b border-gray-100">
+              <div className="flex items-center gap-4">
+                <div className="shrink-0">{renderAvatar(teacher, index)}</div>
+
+                <div className="min-w-0 flex-1">
+                  {/* ✅ الاسم سطر واحد */}
+                  <h2 className="text-base sm:text-lg font-bold text-gray-900 truncate">
+                    {teacher.name}
+                  </h2>
+
+                  <p className="text-xs sm:text-sm text-gray-500 truncate">
+                    {teacher.planName
+                      ? `الباقة الحالية: ${teacher.planName}`
+                      : "الباقة الحالية: غير محددة"}
+                  </p>
+
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-100">
+                      🧪 {Number(teacher.examsCount) || 0} امتحان
+                    </span>
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-50 text-purple-700 border border-purple-100">
+                      📚 {Number(teacher.questionsCount) || 0} سؤال
+                    </span>
+                  </div>
+                </div>
               </div>
+            </div>
+
+            {/* ✅ Body */}
+            <div className="p-5 flex-1">
+              <div className="space-y-3 text-sm text-gray-700">
+                <div className="flex items-start justify-between gap-3">
+                  <span className="font-semibold text-gray-500 shrink-0">
+                    المواد:
+                  </span>
+                  <span className="text-gray-800 text-right">
+                    {teacher.subjects?.length
+                      ? teacher.subjects.join("، ")
+                      : "غير متاحة"}
+                  </span>
+                </div>
+
+                <div className="flex items-start justify-between gap-3">
+                  <span className="font-semibold text-gray-500 shrink-0">
+                    الطلاب المسجلون:
+                  </span>
+                  <span className="text-gray-800 text-right">
+                    {teacher.maxStudents > 0
+                      ? `${(Number(teacher.currentStudents) || 0) + 277} / ${teacher.maxStudents}`
+                      : `${(Number(teacher.currentStudents) || 0) + 1} طالب`}
+                  </span>
+                </div>
+
+                {teacher.maxStudents === 0 && (
+                  <p className="text-xs text-gray-500">
+                    لا يوجد حد أقصى لعدد طلاب هذه الخطة.
+                  </p>
+                )}
+
+                {teacher.bio && (
+                  <p className="text-xs text-gray-500 leading-relaxed">
+                    {teacher.bio}
+                  </p>
+                )}
+              </div>
+
+              {teacher.isFull && (
+                <div className="mt-4 text-sm text-red-700 border border-red-200 bg-red-50 rounded-xl p-3">
+                  You cannot subscribe to this teacher because they have reached
+                  the maximum number of students allowed. The teacher needs to
+                  upgrade their plan.
+                </div>
+              )}
+            </div>
+
+            {/* ✅ Footer (زر الاشتراك + زر المشاركة تحت) */}
+            <div className="p-5 pt-0">
+              <button
+                type="button"
+                onClick={() => handleSubscribe(teacher)}
+                disabled={
+                  subscribeLoading === teacher.id ||
+                  teacher.isFull ||
+                  (!isStudent && Boolean(user))
+                }
+                className={`w-full rounded-xl py-2.5 font-semibold transition ${
+                  teacher.isFull
+                    ? "bg-gray-200 text-gray-600 cursor-not-allowed"
+                    : "bg-blue-600 text-white hover:bg-blue-700"
+                } ${
+                  subscribeLoading === teacher.id
+                    ? "opacity-75 cursor-wait"
+                    : ""
+                }`}
+              >
+                {teacher.isFull
+                  ? "مكتمل العدد"
+                  : subscribeLoading === teacher.id
+                    ? "جاري الاشتراك..."
+                    : isStudent
+                      ? "اشترك لدى المعلم"
+                      : "تسجيل الدخول للاشتراك"}
+              </button>
+
               <button
                 onClick={(e) => {
                   console.log("TEACHER OBJECT:", teacher);
                   console.log("TEACHER KEYS:", Object.keys(teacher || {}));
                   handleShareTeacher(teacher.id, e);
                 }}
-                className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition"
+                className="mt-3 w-full px-4 py-2 rounded-xl border border-gray-200 text-gray-700 bg-white hover:bg-gray-50 transition text-sm font-semibold"
                 title="مشاركة ملف المعلم"
               >
-                🔗 مشاركة
+                🔗 مشاركة ملف المعلم
               </button>
             </div>
-
-            <div className="text-sm text-gray-600 space-y-2 flex-1">
-              <p>
-                <span className="font-semibold text-gray-700">المواد:</span>{" "}
-                {teacher.subjects?.length
-                  ? teacher.subjects.join("، ")
-                  : "غير متاحة"}
-              </p>
-              <p>
-                <span className="font-semibold text-gray-700">
-                  الطلاب المسجلون:
-                </span>{" "}
-                {teacher.maxStudents > 0
-                  ? `${(Number(teacher.currentStudents) || 0) + 277} / ${teacher.maxStudents}`
-                  : `${(Number(teacher.currentStudents) || 0) + 1} طالب`}
-              </p>
-
-              {/* ✅ عدد الامتحانات */}
-              <p>
-                <span className="font-semibold text-gray-700">
-                  عدد الامتحانات:
-                </span>{" "}
-                {Number(teacher.examsCount) || 0} امتحان
-              </p>
-
-              {/* ✅ عدد الأسئلة */}
-              <p>
-                <span className="font-semibold text-gray-700">
-                  عدد الأسئلة:
-                </span>{" "}
-                {Number(teacher.questionsCount) || 0} سؤال
-              </p>
-
-              {teacher.maxStudents === 0 && (
-                <p className="text-xs text-gray-500">
-                  لا يوجد حد أقصى لعدد طلاب هذه الخطة.
-                </p>
-              )}
-              {teacher.bio && (
-                <p className="text-xs text-gray-500 leading-relaxed">
-                  {teacher.bio}
-                </p>
-              )}
-            </div>
-
-            {teacher.isFull && (
-              <div className="mt-4 text-sm text-red-600 border border-red-200 bg-red-50 rounded-lg p-3">
-                You cannot subscribe to this teacher because they have reached
-                the maximum number of students allowed. The teacher needs to
-                upgrade their plan.
-              </div>
-            )}
-
-            <button
-              type="button"
-              onClick={() => handleSubscribe(teacher)}
-              disabled={
-                subscribeLoading === teacher.id ||
-                teacher.isFull ||
-                (!isStudent && Boolean(user))
-              }
-              className={`mt-4 w-full rounded-lg py-2 font-semibold transition ${
-                teacher.isFull
-                  ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                  : "bg-blue-600 text-white hover:bg-blue-700"
-              } ${
-                subscribeLoading === teacher.id ? "opacity-75 cursor-wait" : ""
-              }`}
-            >
-              {teacher.isFull
-                ? "مكتمل العدد"
-                : subscribeLoading === teacher.id
-                  ? "جاري الاشتراك..."
-                  : isStudent
-                    ? "اشترك لدى المعلم"
-                    : "تسجيل الدخول للاشتراك"}
-            </button>
           </div>
         ))}
       </div>
@@ -385,6 +401,7 @@ export default function OurTeachersPage() {
   // ✅ Main content component (reusable for both layouts)
   const MainContent = () => (
     <main
+        dir="rtl"
       className={`pt-8 pb-16 px-4 sm:px-6 lg:px-12 max-w-6xl mx-auto ${
         isAuthenticated ? "" : "mt-20"
       }`}

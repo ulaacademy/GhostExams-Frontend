@@ -15,7 +15,7 @@ const createApiError = (message, status = 400) => {
 };
 if (!process.env.NEXT_PUBLIC_API_URL) {
   console.warn(
-    "⚠️ NEXT_PUBLIC_API_URL غير مضبوط. يتم الإفتراضي إلى https://ge-api.ghostexams.com/api. اضبط المتغير في ملف .env.local لتجنب أخطاء الاتصال."
+    "⚠️ NEXT_PUBLIC_API_URL غير مضبوط. يتم الإفتراضي إلى https://ge-api.ghostexams.com/api. اضبط المتغير في ملف .env.local لتجنب أخطاء الاتصال.",
   );
 }
 
@@ -34,7 +34,7 @@ if (isBrowser) {
     },
     (error) => {
       return Promise.reject(error);
-    }
+    },
   );
 
   // ✅ إعداد axios interceptor لمعالجة الأخطاء تلقائياً
@@ -96,7 +96,7 @@ if (isBrowser) {
       }
 
       return Promise.reject(error);
-    }
+    },
   );
 }
 
@@ -141,7 +141,7 @@ export const fetchAllExams = () => fetchData(`${API_URL}/exams`);
 // ✅ رفع ملف Excel واستيراد الأسئلة إلى قاعدة البيانات
 export const uploadExcelQuestions = async (
   { file, examTitle, grade, term, subject, unit, difficultyLevel },
-  token
+  token,
 ) => {
   if (!file) {
     const error = new Error("يرجى اختيار ملف Excel أولاً");
@@ -207,14 +207,14 @@ export const fetchGhostExamById = async (examId) => {
   try {
     // Let axios interceptor handle token automatically
     const response = await axios.get(
-      `${API_URL}/exams/get-exam/ghost/${examId}`
+      `${API_URL}/exams/get-exam/ghost/${examId}`,
     );
     return response.data;
   } catch (error) {
     // Error is handled by axios interceptor (Toast + redirect if 401)
     console.error(
       "❌ خطأ في جلب امتحان Ghost:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
@@ -228,7 +228,7 @@ export const fetchActivePlans = async () => {
   } catch (error) {
     console.error(
       "❌ خطأ في جلب الخطط النشطة:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return { success: false, data: [] };
   }
@@ -242,7 +242,7 @@ export const fetchPlanById = async (planId) => {
   } catch (error) {
     console.error(
       "❌ خطأ في جلب الخطة:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return { success: false, data: null };
   }
@@ -260,7 +260,7 @@ export const fetchActiveStudentPlans = async () => {
   } catch (error) {
     console.error(
       "❌ خطأ في جلب خطط الطلاب النشطة:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return { success: false, data: [] };
   }
@@ -274,7 +274,7 @@ export const fetchAllStudentPlans = async () => {
   } catch (error) {
     console.error(
       "❌ خطأ في جلب جميع خطط الطلاب:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return { success: false, data: [] };
   }
@@ -288,7 +288,7 @@ export const fetchStudentPlanById = async (planId) => {
   } catch (error) {
     console.error(
       "❌ خطأ في جلب خطة الطالب:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return { success: false, data: null };
   }
@@ -305,7 +305,7 @@ export const fetchStudentSimulations = async (studentId) => {
       `${API_URL}/exam-generation/get-student-simulations`,
       {
         params: { studentId },
-      }
+      },
     );
     return response.data?.simulations || [];
   } catch (error) {
@@ -315,7 +315,7 @@ export const fetchStudentSimulations = async (studentId) => {
 
     console.error(
       "❌ خطأ في جلب محاكاة الطالب:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
@@ -326,13 +326,13 @@ export const createTeacherSubscription = async (subscriptionData) => {
   try {
     const response = await axios.post(
       `${API_URL}/subscriptions`,
-      subscriptionData
+      subscriptionData,
     );
     return response.data;
   } catch (error) {
     console.error(
       "❌ خطأ في إنشاء الاشتراك:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
@@ -342,13 +342,13 @@ export const createTeacherSubscription = async (subscriptionData) => {
 export const fetchTeacherSubscriptions = async (teacherId) => {
   try {
     const response = await axios.get(
-      `${API_URL}/subscriptions/teacher/${teacherId}`
+      `${API_URL}/subscriptions/teacher/${teacherId}`,
     );
     return response.data;
   } catch (error) {
     console.error(
       "❌ خطأ في جلب اشتراكات المعلم:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return { success: false, data: [] };
   }
@@ -358,13 +358,13 @@ export const fetchTeacherSubscriptions = async (teacherId) => {
 export const fetchActiveSubscription = async (teacherId) => {
   try {
     const response = await axios.get(
-      `${API_URL}/subscriptions/teacher/${teacherId}/active`
+      `${API_URL}/subscriptions/teacher/${teacherId}/active`,
     );
     return response.data;
   } catch (error) {
     console.error(
       "❌ خطأ في جلب الاشتراك النشط:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return null;
   }
@@ -375,7 +375,7 @@ export const createStudentSubscription = async (subscriptionData) => {
   try {
     const response = await axios.post(
       `${API_URL}/student-subscriptions`,
-      subscriptionData
+      subscriptionData,
     );
     return response.data;
   } catch (error) {
@@ -394,7 +394,7 @@ export const createStudentSubscription = async (subscriptionData) => {
 export const fetchStudentSubscriptions = async (studentId) => {
   try {
     const response = await axios.get(
-      `${API_URL}/subscriptions/student/${studentId}`
+      `${API_URL}/subscriptions/student/${studentId}`,
     );
     return response.data;
   } catch (error) {
@@ -405,7 +405,7 @@ export const fetchStudentSubscriptions = async (studentId) => {
 
     console.error(
       "❌ خطأ في جلب اشتراكات الطالب:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return { success: false, data: [] };
   }
@@ -415,7 +415,7 @@ export const fetchStudentSubscriptions = async (studentId) => {
 export const fetchActiveStudentSubscription = async (studentId) => {
   try {
     const response = await axios.get(
-      `${API_URL}/subscriptions/student/${studentId}/active`
+      `${API_URL}/subscriptions/student/${studentId}/active`,
     );
     return response.data;
   } catch (error) {
@@ -424,7 +424,7 @@ export const fetchActiveStudentSubscription = async (studentId) => {
 
     console.error(
       "❌ خطأ في جلب الاشتراك النشط للطالب:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return null;
   }
@@ -449,7 +449,7 @@ export const fetchExamQuestions = async (
   term,
   subject,
   userId,
-  examType // ✅ تحديد نوع الامتحان
+  examType, // ✅ تحديد نوع الامتحان
 ) => {
   console.log(`📡 طلب جلب الامتحان ID: ${examId}, النوع: ${examType}`);
 
@@ -468,7 +468,7 @@ export const fetchExamQuestions = async (
       response = await axios.get(apiEndpoint);
     } else {
       console.log(
-        `📡 جلب الامتحان بناءً على الفلترة: ${subject}, ${grade}, ${term}`
+        `📡 جلب الامتحان بناءً على الفلترة: ${subject}, ${grade}, ${term}`,
       );
       response = await axios.get(`${API_URL}/questions/get-exam-questions`, {
         params: { grade, term, subject, userId, examType },
@@ -486,7 +486,7 @@ export const fetchExamQuestions = async (
   } catch (error) {
     console.error(
       "❌ خطأ في جلب بيانات الامتحان:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return null;
   }
@@ -501,7 +501,7 @@ export const fetchMixedExamQuestions = async (examId, userId) => {
       `${API_URL}/exams/get-exam/mixed/${examId}`,
       {
         params: { userId },
-      }
+      },
     );
 
     if (!response.data || !response.data.exam) {
@@ -514,7 +514,7 @@ export const fetchMixedExamQuestions = async (examId, userId) => {
   } catch (error) {
     console.error(
       "❌ خطأ في جلب بيانات الامتحان المختلط:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return null;
   }
@@ -539,7 +539,7 @@ export const submitStudentAnswer = async (
   questionId,
   selectedAnswer,
   examType,
-  correctAnswer = null // ✅ إضافة correctAnswer كـ parameter اختياري
+  correctAnswer = null, // ✅ إضافة correctAnswer كـ parameter اختياري
 ) => {
   try {
     console.log("📡 إرسال إجابة الطالب...");
@@ -571,7 +571,7 @@ export const submitStudentAnswer = async (
     ];
     if (!examType || !validExamTypes.includes(examType)) {
       console.warn(
-        "⚠️ نوع الامتحان غير صحيح، سيتم تعيينه بناءً على `examData.source`."
+        "⚠️ نوع الامتحان غير صحيح، سيتم تعيينه بناءً على `examData.source`.",
       );
       examType = "ghost"; // ✅ افتراضي لـ Ghost Exams إذا لم يتم تحديده
     }
@@ -628,7 +628,7 @@ export const submitStudentAnswer = async (
     console.log("✅ البيانات المسترجعة من الخادم:", response.data);
     console.log(
       "🔵 الإجابة الصحيحة المسترجعة من الخادم:",
-      response.data.correctAnswer
+      response.data.correctAnswer,
     );
 
     // ✅ **تعريف `correctAnswer` وتنظيفه من النص الزائد**
@@ -649,7 +649,7 @@ export const submitStudentAnswer = async (
         ? correctAnswersMapping[correctAnswer] &&
           Array.isArray(correctAnswersMapping[correctAnswer]) &&
           correctAnswersMapping[correctAnswer].includes(
-            normalizeText(selectedAnswer)
+            normalizeText(selectedAnswer),
           )
         : normalizeText(selectedAnswer) === normalizeText(correctAnswer);
 
@@ -663,7 +663,7 @@ export const submitStudentAnswer = async (
       console.log(
         isCorrect
           ? `✅ تمت إضافة +1 إلى السكور`
-          : "❌ لم يتم إضافة أي نقاط، الإجابة خاطئة."
+          : "❌ لم يتم إضافة أي نقاط، الإجابة خاطئة.",
       );
       console.log("✅ تم تحديث الـ score قبل الإرسال:", requestData.score);
     }
@@ -718,7 +718,7 @@ export const likeQuestion = async (questionId) => {
   } catch (error) {
     console.error(
       "❌ خطأ في تسجيل الإعجاب بالسؤال:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return { likes: 0 }; // **في حالة الخطأ، إرجاع 0 بدلاً من undefined**
   }
@@ -730,7 +730,7 @@ export const listenToQuestion = async (questionText) => {
     const response = await axios.post(
       `${API_URL}/tts`,
       { text: questionText },
-      { responseType: "blob" }
+      { responseType: "blob" },
     );
 
     if (response.data) {
@@ -741,7 +741,7 @@ export const listenToQuestion = async (questionText) => {
   } catch (error) {
     console.error(
       "❌ خطأ في تشغيل الصوت:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
   }
 };
@@ -758,7 +758,7 @@ export const generateTeacherExam = async (grade, term, subject, userId) => {
 
     const response = await axios.post(
       `${API_URL}/exams/generate-teacher-exam`,
-      { grade, term, subject, userId }
+      { grade, term, subject, userId },
     );
 
     console.log("✅ استجابة السيرفر:", response.data);
@@ -766,7 +766,7 @@ export const generateTeacherExam = async (grade, term, subject, userId) => {
   } catch (error) {
     console.error(
       "❌ خطأ أثناء إنشاء الامتحان:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return null;
   }
@@ -794,7 +794,7 @@ export const generateSchoolExam = async (grade, term, subject, userId) => {
   } catch (error) {
     console.error(
       "❌ خطأ أثناء إنشاء الامتحان:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return null;
   }
@@ -822,7 +822,7 @@ export const generateBooksExam = async (grade, term, subject, userId) => {
   } catch (error) {
     console.error(
       "❌ خطأ أثناء إنشاء الامتحان:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return null;
   }
@@ -901,7 +901,7 @@ export const fetchUserId = async () => {
         "⚠️ فشل جلب الملف الشخصي:",
         response.status,
         response.statusText,
-        errorBody
+        errorBody,
       );
       return null;
     }
@@ -943,7 +943,7 @@ export const fetchUserProfile = async () => {
         "⚠️ فشل جلب الملف الشخصي:",
         response.status,
         response.statusText,
-        errorBody
+        errorBody,
       );
       return null;
     }
@@ -973,7 +973,7 @@ export const logoutUser = async () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     // ✅ حذف التوكن من localStorage
@@ -984,7 +984,7 @@ export const logoutUser = async () => {
   } catch (error) {
     console.error(
       "❌ خطأ في تسجيل الخروج:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     // ✅ حتى لو فشل الطلب، احذف التوكن من localStorage
     localStorage.removeItem("token");
@@ -1011,7 +1011,7 @@ const buildZeroLatestResult = (userId) => ({
 export const fetchLatestExamResult = async (userId) => {
   try {
     const response = await axios.get(
-      `${API_URL}/exams/latest-result/${userId}`
+      `${API_URL}/exams/latest-result/${userId}`,
     );
 
     // إذا رجع 200 بس ما في latestResult
@@ -1056,13 +1056,13 @@ export const fetchStudentPerformance = async (userId) => {
   try {
     console.log("📡 طلب بيانات الأداء لـ:", userId); // ✅ للتأكد من أن userId يتم تمريره
     const response = await axios.get(
-      `${API_URL}/student-performance/get-student-performance?userId=${userId}`
+      `${API_URL}/student-performance/get-student-performance?userId=${userId}`,
     );
     return response.data;
   } catch (error) {
     console.error(
       "❌ خطأ في جلب بيانات الأداء:",
-      error.response?.data || error
+      error.response?.data || error,
     );
     return null;
   }
@@ -1079,7 +1079,7 @@ export const generateMixedExam = async (grade, term, subject, userId) => {
 
     const response = await axios.post(
       `${API_URL}/exams/generate-mixed-exam`, // 🔹 التأكد من استخدام الرابط الصحيح
-      { grade, term, subject, userId }
+      { grade, term, subject, userId },
     );
 
     console.log("✅ استجابة السيرفر:", response.data);
@@ -1087,7 +1087,7 @@ export const generateMixedExam = async (grade, term, subject, userId) => {
   } catch (error) {
     console.error(
       "❌ خطأ أثناء إنشاء الامتحان المختلط:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return null;
   }
@@ -1113,7 +1113,7 @@ export const generateMinistryExam = async (grade, term, subject, userId) => {
         subject,
         userId,
         examType: "ministry", // ✅ إضافة examType لضمان تخزين الامتحان بشكل صحيح
-      }
+      },
     );
 
     console.log("✅ استجابة API:", response.data);
@@ -1130,7 +1130,7 @@ export const createTeacherExam = async (examData) => {
     // If no token, backend returns 401 and interceptor handles it
     const response = await axios.post(
       `${API_URL}/exams/custom-exams/create`,
-      examData
+      examData,
     );
     return response.data;
   } catch (error) {
@@ -1182,7 +1182,7 @@ export const fetchTeacherStudentsPerformance = async (authToken) => {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
-      }
+      },
     );
     if (!response.ok) {
       throw new Error("❌ فشل في تحميل بيانات الطلاب");
@@ -1200,11 +1200,11 @@ export const fetchTeacherCustomExamsWithResults = async () => {
     // Let axios interceptor handle token automatically
     console.log(
       "📡 جلب امتحانات المعلم من:",
-      `${API_URL}/teacher/custom-exams/with-results`
+      `${API_URL}/teacher/custom-exams/with-results`,
     );
 
     const response = await axios.get(
-      `${API_URL}/teacher/custom-exams/with-results`
+      `${API_URL}/teacher/custom-exams/with-results`,
     );
 
     console.log("✅ استجابة API:", response.data);
@@ -1233,7 +1233,7 @@ export const submitTeacherExamResult = async (resultData) => {
   try {
     const response = await axios.post(
       `${API_URL}/teacher-exam-results/submit`,
-      resultData
+      resultData,
     );
     return response.data;
   } catch (error) {
@@ -1259,7 +1259,7 @@ export const fetchExamStudentsCount = async (examId) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     return response.data.count;
   } catch (error) {
@@ -1299,7 +1299,7 @@ export const fetchAllTeacherStudentsPerformance = async (params = {}) => {
     }
 
     const response = await axios.get(
-      `${API_URL}/teacher-dashboard/students-performance?${queryParams.toString()}`
+      `${API_URL}/teacher-dashboard/students-performance?${queryParams.toString()}`,
     );
 
     return response.data;
@@ -1312,13 +1312,13 @@ export const fetchAllTeacherStudentsPerformance = async (params = {}) => {
 export const fetchActiveTeachersWithPlans = async () => {
   try {
     const response = await axios.get(
-      `${API_URL}/teacher-students/all-teachers`
+      `${API_URL}/teacher-students/all-teachers`,
     );
     return response.data?.teachers ?? [];
   } catch (error) {
     console.error(
       "❌ خطأ في جلب قائمة المعلمين النشطين:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return [];
   }
@@ -1345,7 +1345,7 @@ export const subscribeToTeacher = async ({
   } catch (error) {
     console.error(
       "❌ خطأ في الاشتراك بالمعلم:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw (
       error.response?.data || {
@@ -1393,7 +1393,7 @@ export const createShareLink = async (shareData) => {
   } catch (error) {
     console.error(
       "❌ خطأ في إنشاء رابط المشاركة:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
@@ -1407,7 +1407,7 @@ export const viewSharedContent = async (token) => {
   } catch (error) {
     console.error(
       "❌ خطأ في عرض المحتوى المشترك:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
@@ -1418,13 +1418,13 @@ export const checkStudentSubscription = async (shareToken) => {
   try {
     // Let axios interceptor handle token automatically
     const response = await axios.get(
-      `${API_URL}/share/${shareToken}/check-subscription`
+      `${API_URL}/share/${shareToken}/check-subscription`,
     );
     return response.data;
   } catch (error) {
     console.error(
       "❌ خطأ في التحقق من الاشتراك:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
@@ -1440,7 +1440,7 @@ export const getMyShares = async () => {
   } catch (error) {
     console.error(
       "❌ خطأ في جلب روابط المشاركة:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
@@ -1456,7 +1456,7 @@ export const revokeShare = async (token) => {
   } catch (error) {
     console.error(
       "❌ خطأ في إلغاء رابط المشاركة:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
@@ -1475,7 +1475,7 @@ export const fetchSubscribedTeachers = async () => {
     // Just log for debugging
     console.error(
       "❌ خطأ في جلب المعلمين المشترك معهم:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
@@ -1486,14 +1486,14 @@ export const fetchTeacherExamsByStudent = async (teacherId) => {
   try {
     // Let axios interceptor handle token automatically
     const response = await axios.get(
-      `${API_URL}/student/teacher/${teacherId}/exams`
+      `${API_URL}/student/teacher/${teacherId}/exams`,
     );
 
     return response.data;
   } catch (error) {
     console.error(
       "❌ خطأ في جلب امتحانات المعلم:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
@@ -1563,14 +1563,14 @@ export const fetchTeacherCustomExamById = async (examId) => {
 export const updateTeacherCustomExam = async (examId, payload) => {
   const res = await axios.patch(
     `${API_URL}/exams/custom-exams/${examId}`,
-    payload
+    payload,
   );
   return res.data?.exam || res.data;
 };
 export const setTeacherCustomExamActive = async (examId, isActive) => {
   const res = await axios.patch(
     `${API_URL}/exams/custom-exams/${examId}/active`,
-    { isActive }
+    { isActive },
   );
   return res.data?.exam || res.data;
 };
@@ -1578,11 +1578,11 @@ export const setTeacherCustomExamActive = async (examId, isActive) => {
 export const updateTeacherCustomExamQuestion = async (
   examId,
   questionId,
-  payload
+  payload,
 ) => {
   const res = await axios.put(
     `${API_URL}/exams/custom-exams/${examId}/questions/${questionId}`,
-    payload
+    payload,
   );
   return res.data;
 };
@@ -1594,27 +1594,27 @@ export const deleteTeacherCustomExam = async (examId) => {
 export const addQuestionToTeacherCustomExam = async (examId, payload) => {
   const res = await axios.post(
     `${API_URL}/exams/custom-exams/${examId}/questions`,
-    payload
+    payload,
   );
   return res.data?.exam || res.data;
 };
 export const updateQuestionInTeacherCustomExam = async (
   examId,
   questionId,
-  payload
+  payload,
 ) => {
   const res = await axios.patch(
     `${API_URL}/exams/custom-exams/${examId}/questions/${questionId}`,
-    payload
+    payload,
   );
   return res.data?.exam || res.data;
 };
 export const deleteQuestionFromTeacherCustomExam = async (
   examId,
-  questionId
+  questionId,
 ) => {
   const res = await axios.delete(
-    `${API_URL}/exams/custom-exams/${examId}/questions/${questionId}`
+    `${API_URL}/exams/custom-exams/${examId}/questions/${questionId}`,
   );
   return res.data?.exam || res.data;
 };

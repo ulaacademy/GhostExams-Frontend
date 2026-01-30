@@ -82,7 +82,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-6">
             {/* Public Links - Always Visible */}
             <Link href="/" className="hover:text-gray-300 cursor-pointer">
-              صفحة الطلاب
+              صفحة الطلاب 📌
             </Link>
 
             <Link
@@ -90,6 +90,13 @@ export default function Navbar() {
               className="hover:text-gray-300 cursor-pointer"
             >
               صفحة المعلمين 📌
+            </Link>
+
+            <Link
+              href="/ourteachers/"
+              className="hover:text-gray-300 cursor-pointer"
+            >
+              معلمونا 👩‍🏫
             </Link>
 
             <Link href="/chat/" className="hover:text-gray-300 cursor-pointer">
