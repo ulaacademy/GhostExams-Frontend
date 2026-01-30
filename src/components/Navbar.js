@@ -216,6 +216,13 @@ export default function Navbar() {
               </Link>
 
               <Link
+                href="/ourteachers/"
+                className="hover:text-gray-300 cursor-pointer"
+              >
+                معلمونا 👩‍🏫
+              </Link>
+
+              <Link
                 href="/chat/"
                 onClick={closeMobile}
                 className="block px-3 py-2 rounded hover:bg-white/10"
