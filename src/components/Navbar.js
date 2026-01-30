@@ -217,7 +217,8 @@ export default function Navbar() {
 
               <Link
                 href="/ourteachers/"
-                className="hover:text-gray-300 cursor-pointer"
+                onClick={closeMobile}
+                className="block px-3 py-2 rounded hover:bg-white/10"
               >
                 معلمونا 👩‍🏫
               </Link>
