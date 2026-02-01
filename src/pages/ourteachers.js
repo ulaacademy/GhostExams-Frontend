@@ -324,7 +324,7 @@ export default function OurTeachersPage() {
                   </span>
                   <span className="text-gray-800 text-right">
                     {teacher.maxStudents > 0
-                      ? `${(Number(teacher.currentStudents) || 0) + 277} / ${teacher.maxStudents}`
+                      ? `${(Number(teacher.currentStudents) || 0) + 292} / ${teacher.maxStudents}`
                       : `${(Number(teacher.currentStudents) || 0) + 1} طالب`}
                   </span>
                 </div>
@@ -401,7 +401,7 @@ export default function OurTeachersPage() {
   // ✅ Main content component (reusable for both layouts)
   const MainContent = () => (
     <main
-        dir="rtl"
+      dir="rtl"
       className={`pt-8 pb-16 px-4 sm:px-6 lg:px-12 max-w-6xl mx-auto ${
         isAuthenticated ? "" : "mt-20"
       }`}

@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 
 // ✅ Top Navbar (بدون الامتحانات)
 const NAV_ITEMS = [
-  { href: "/dashboard/subscribed-teachers", label: "🤝 المعلمون المشترك معهم" },
+  { href: "/dashboard/subscribed-teachers", label: "المعلمون🤝 والامتحانات" },
   { href: "/ourteachers", label: "👩‍🏫 معلمو المنصة" },
 ];
 
@@ -24,7 +24,7 @@ const SIDEBAR_ITEMS = [
   },
   {
     href: "/dashboard/subscribed-teachers",
-    label: "المعلمون المشترك معهم",
+    label: "  المعلمون والامتحانات",
     icon: "🤝",
   },
   {
