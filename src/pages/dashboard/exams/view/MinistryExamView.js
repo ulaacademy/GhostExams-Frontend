@@ -6,8 +6,6 @@ import { fetchExamQuestions } from "@/services/api";
 import { submitStudentAnswer } from "@/services/api";
 import Head from "next/head";
 
-
-
 export default function MinistryExamView({ selectedSubject, selectedGrade }) {
   const router = useRouter();
   const { examId, userId, examType } = router.query;
@@ -104,7 +102,7 @@ export default function MinistryExamView({ selectedSubject, selectedGrade }) {
     console.log("📌 فهرس السؤال الحالي:", currentQuestionIndex);
     console.log(
       "📌 مصدر السؤال:",
-      examType === "ministry" ? "ministryexams" : "questions"
+      examType === "ministry" ? "ministryexams" : "questions",
     );
     console.log("🔵 الإجابة المختارة:", selectedAnswer);
 
@@ -124,7 +122,7 @@ export default function MinistryExamView({ selectedSubject, selectedGrade }) {
         userId,
         currentQuestion._id,
         selectedAnswer,
-        examType // ✅ تحديد نوع الامتحان
+        examType, // ✅ تحديد نوع الامتحان
       );
 
       console.log("✅ النتيجة المسترجعة من السيرفر:", result);
@@ -142,7 +140,7 @@ export default function MinistryExamView({ selectedSubject, selectedGrade }) {
       console.log(
         "🔎 هل القيم متطابقة؟",
         selectedAnswer.trim().toLowerCase() ===
-          correctAnswer.trim().toLowerCase()
+          correctAnswer.trim().toLowerCase(),
       );
 
       console.log("🔍 هل الإجابة صحيحة؟", isCorrect);
@@ -175,7 +173,7 @@ export default function MinistryExamView({ selectedSubject, selectedGrade }) {
 
       // ✅ **حساب السكور النهائي بناءً على الإجابات الصحيحة**
       const score = Object.values(studentAnswers).filter(
-        (answer) => answer.isCorrect
+        (answer) => answer.isCorrect,
       ).length;
       const totalQuestions = exam.questions.length;
 
@@ -199,7 +197,7 @@ export default function MinistryExamView({ selectedSubject, selectedGrade }) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       console.log("📡 انتظار استجابة السيرفر...");
@@ -211,7 +209,7 @@ export default function MinistryExamView({ selectedSubject, selectedGrade }) {
       } else {
         console.error(
           "❌ فشل في حفظ النتيجة، تحقق من الرد:",
-          await response.text()
+          await response.text(),
         );
       }
     } catch (error) {
@@ -220,105 +218,112 @@ export default function MinistryExamView({ selectedSubject, selectedGrade }) {
   };
 
   return (
-
     <>
-    <Head>
-      <title>امتحان تفاعلي وزاري | منصة علا</title>
-      <meta name="description" content="حل امتحانات وزارية تفاعلية مباشرة مع مساعد ذكي، تحليل نتائج فوري وأسئلة مخصصة لطلاب التوجيهي 2007 و2008 و2009." />
-      <meta name="keywords" content="توجيهي, امتحان وزاري, توجيهي الأردن, امتحان فيزياء, امتحان عربي, امتحانات سابقة, منصة علا التعليمية, امتحان وزاري لجميع المواد" />
-    </Head>
-    <div className="min-h-screen flex flex-col items-center p-6 bg-gray-100">
-      {exam ? (
-        isExamFinished ? (
-          <h1 className="text-2xl font-bold text-green-600">
-            ✅ انتهى الامتحان! نتيجتك: {score} / {exam.questions.length}
-          </h1>
+      <Head>
+        <title>امتحان تفاعلي وزاري | منصة الشبح </title>
+        <meta
+          name="description"
+          content="حل امتحانات وزارية تفاعلية مباشرة مع مساعد ذكي، تحليل نتائج فوري وأسئلة مخصصة لطلاب التوجيهي 2007 و2008 و2009."
+        />
+        <meta
+          name="keywords"
+          content="توجيهي, امتحان وزاري, توجيهي الأردن, امتحان فيزياء, امتحان عربي, امتحانات سابقة, منصة الشبح التعليمية, امتحان وزاري لجميع المواد"
+        />
+      </Head>
+      <div className="min-h-screen flex flex-col items-center p-6 bg-gray-100">
+        {exam ? (
+          isExamFinished ? (
+            <h1 className="text-2xl font-bold text-green-600">
+              ✅ انتهى الامتحان! نتيجتك: {score} / {exam.questions.length}
+            </h1>
+          ) : (
+            <div className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-lg text-center">
+              <div className="w-full flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg font-semibold text-lg shadow-md">
+                <span>
+                  📘 المادة: {selectedSubject || exam?.subject || "غير محددة"}
+                </span>
+                <span>
+                  🎓 الصف: {selectedGrade || exam?.grade || "غير محدد"}
+                </span>
+              </div>
+
+              <div className="mt-3 text-2xl font-bold text-white bg-orange-600 p-3 rounded-lg shadow-lg">
+                ⏳ الوقت المتبقي:{" "}
+                <span className="text-blue-200">{timer} ثانية</span>
+              </div>
+
+              {exam?.questions?.[currentQuestionIndex]?.image_url ? (
+                <Image
+                  src={exam.questions[currentQuestionIndex].image_url}
+                  alt={`السؤال ${currentQuestionIndex + 1}`}
+                  width={800}
+                  height={600}
+                  priority
+                  className="mb-4 border border-gray-300 rounded-lg shadow-md"
+                />
+              ) : (
+                <p className="text-red-500 font-semibold">
+                  ⚠️ لا توجد صورة لهذا السؤال
+                </p>
+              )}
+
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                {["B", "A", "D", "C"].map((option) => (
+                  <button
+                    key={option}
+                    className={`p-4 rounded-lg font-semibold text-lg border-2 transition-all ${
+                      selectedAnswer === option
+                        ? selectedAnswer ===
+                          exam.questions[currentQuestionIndex].correct_answer
+                          ? "bg-green-500 text-white border-green-700 shadow-md"
+                          : "bg-red-500 text-white border-red-700 shadow-md"
+                        : "bg-orange-500 text-white border-orange-700 hover:bg-orange-600 shadow-md"
+                    }`}
+                    onClick={() => handleAnswerSelection(option)}
+                    disabled={selectedAnswer !== null}
+                  >
+                    {arabicOptions[option]}
+                  </button>
+                ))}
+              </div>
+
+              {currentQuestionIndex + 1 === exam.questions.length ? (
+                <>
+                  <button
+                    onClick={handleFinishExam}
+                    className="mt-6 w-full px-6 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition-all duration-300"
+                  >
+                    📊 انتهت الأسئلة، احصل على نتيجتك
+                  </button>
+                  <button
+                    onClick={() => router.push("/subscription")}
+                    className="mt-4 w-full px-6 py-3 bg-orange-600 text-white font-bold rounded-xl shadow-lg hover:bg-orange-700 transition-all duration-300"
+                  >
+                    🛒 هل تريد المزيد من الأسئلة؟
+                  </button>
+                </>
+              ) : (
+                <button
+                  className="mt-6 px-12 py-4 text-lg bg-blue-700 text-white font-bold rounded-lg hover:bg-blue-800 transition-all w-full shadow-lg"
+                  onClick={async () => {
+                    if (selectedAnswer) {
+                      await handleSubmitAnswer(); // ✅ تأكيد الإجابة قبل الانتقال
+                    }
+                    handleNextQuestion(); // ✅ الانتقال للسؤال التالي بعد التأكيد
+                  }}
+                  disabled={selectedAnswer === null}
+                >
+                  ✅ تأكيد الإجابة & ➡️ السؤال التالي
+                </button>
+              )}
+            </div>
+          )
         ) : (
-          <div className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-lg text-center">
-            <div className="w-full flex justify-between items-center bg-blue-900 text-white p-4 rounded-t-lg font-semibold text-lg shadow-md">
-              <span>
-                📘 المادة: {selectedSubject || exam?.subject || "غير محددة"}
-              </span>
-              <span>🎓 الصف: {selectedGrade || exam?.grade || "غير محدد"}</span>
-            </div>
-
-            <div className="mt-3 text-2xl font-bold text-white bg-orange-600 p-3 rounded-lg shadow-lg">
-              ⏳ الوقت المتبقي:{" "}
-              <span className="text-blue-200">{timer} ثانية</span>
-            </div>
-
-            {exam?.questions?.[currentQuestionIndex]?.image_url ? (
-              <Image
-                src={exam.questions[currentQuestionIndex].image_url}
-                alt={`السؤال ${currentQuestionIndex + 1}`}
-                width={800}
-                height={600}
-                priority
-                className="mb-4 border border-gray-300 rounded-lg shadow-md"
-              />
-            ) : (
-              <p className="text-red-500 font-semibold">
-                ⚠️ لا توجد صورة لهذا السؤال
-              </p>
-            )}
-
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              {["B", "A", "D", "C"].map((option) => (
-                <button
-                  key={option}
-                  className={`p-4 rounded-lg font-semibold text-lg border-2 transition-all ${
-                    selectedAnswer === option
-                      ? selectedAnswer ===
-                        exam.questions[currentQuestionIndex].correct_answer
-                        ? "bg-green-500 text-white border-green-700 shadow-md"
-                        : "bg-red-500 text-white border-red-700 shadow-md"
-                      : "bg-orange-500 text-white border-orange-700 hover:bg-orange-600 shadow-md"
-                  }`}
-                  onClick={() => handleAnswerSelection(option)}
-                  disabled={selectedAnswer !== null}
-                >
-                  {arabicOptions[option]}
-                </button>
-              ))}
-            </div>
-
-            {currentQuestionIndex + 1 === exam.questions.length ? (
-              <>
-                <button
-                  onClick={handleFinishExam}
-                  className="mt-6 w-full px-6 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition-all duration-300"
-                >
-                  📊 انتهت الأسئلة، احصل على نتيجتك
-                </button>
-                <button
-                  onClick={() => router.push("/subscription")}
-                  className="mt-4 w-full px-6 py-3 bg-orange-600 text-white font-bold rounded-xl shadow-lg hover:bg-orange-700 transition-all duration-300"
-                >
-                  🛒 هل تريد المزيد من الأسئلة؟
-                </button>
-              </>
-            ) : (
-              <button
-                className="mt-6 px-12 py-4 text-lg bg-blue-700 text-white font-bold rounded-lg hover:bg-blue-800 transition-all w-full shadow-lg"
-                onClick={async () => {
-                  if (selectedAnswer) {
-                    await handleSubmitAnswer(); // ✅ تأكيد الإجابة قبل الانتقال
-                  }
-                  handleNextQuestion(); // ✅ الانتقال للسؤال التالي بعد التأكيد
-                }}
-                disabled={selectedAnswer === null}
-              >
-                ✅ تأكيد الإجابة & ➡️ السؤال التالي
-              </button>
-            )}
-          </div>
-        )
-      ) : (
-        <h1 className="text-2xl font-bold text-gray-800">
-          📡 جاري تحميل الامتحان...
-        </h1>
-      )}
-    </div>
+          <h1 className="text-2xl font-bold text-gray-800">
+            📡 جاري تحميل الامتحان...
+          </h1>
+        )}
+      </div>
     </>
   );
 }
