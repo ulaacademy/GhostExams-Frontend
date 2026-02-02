@@ -59,13 +59,13 @@ const ChatPage = () => {
         {/* ✅ العنوان الرئيسي بحركات حلوة */}
         <h1 className="text-3xl md:text-5xl font-extrabold mb-3 text-yellow-400 text-center leading-relaxed max-w-3xl heroFloat heroGlow shineWrap">
           <span className="inline-block animate-pulse">أنا الشبح 👻</span>{" "}
-          <span className="inline-block softBounce">معلمك الذكي 🤖</span>{" "}
+          <span className="inline-block softBounce">أول معلم Ai ذكي 🤖</span>{" "}
           <span className="inline-block">جربني!!</span>
         </h1>
 
         {/* ✅ سطر توضيحي أصغر باللون الأخضر الفاتح */}
         <p className="text-base md:text-lg text-green-300 text-center max-w-3xl leading-relaxed mb-3">
-          أول معلم ذكي 🤖 بساعدك على التفوق في امتحانات التوجيهي بأسلوب حديث
+          أول معلم Ai ذكي 🤖 بساعدك على التفوق في امتحانات التوجيهي بأسلوب حديث
           وتفاعلي.
         </p>
 
@@ -73,7 +73,7 @@ const ChatPage = () => {
         <p className="text-sm md:text-base text-gray-200 text-center max-w-3xl leading-relaxed mb-6">
           بساعدك تحل وتحلل الأسئلة باستخدام الذكاء الاصطناعي —{" "}
           <span className="inline-block font-bold text-yellow-300 animate-pulse">
-            أول معلم ذكي 🤖
+            🤖 أول معلم Ai ذكي 🤖
           </span>
         </p>
 
