@@ -1618,3 +1618,22 @@ export const deleteQuestionFromTeacherCustomExam = async (
   );
   return res.data?.exam || res.data;
 };
+
+
+// frontend/src/services/api.js
+// ✅ جلب الامتحانات العامة (SEO / قبل الاشتراك) حسب المادة + الفصل + الجيل
+export const fetchPublicExams = async ({ subject, term, grade }) => {
+  try {
+    const response = await axios.get(`${API_URL}/public/exams`, {
+      params: { subject, term, grade },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ خطأ في جلب الامتحانات العامة:",
+      error.response?.data || error.message,
+    );
+    throw error;
+  }
+};

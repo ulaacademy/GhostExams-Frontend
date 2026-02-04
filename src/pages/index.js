@@ -1,7 +1,8 @@
 "use client";
-// 📁 المسار المناسب: frontend/src/pages/index.js
+// 📁 المسار: frontend/src/pages/index.js
 
 import React, { useState, useEffect } from "react";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
@@ -15,10 +16,59 @@ const Home = () => {
   const { token } = useAuth() || {};
   const router = useRouter();
 
+  // ✅ SEO (Home)
+  const siteUrl = "https://ghostexams.com";
+  const canonicalUrl = `${siteUrl}/`;
+
+  // ✅ OG Image (ضع الصورة هنا: frontend/public/og/home.jpg)
+  const ogImage = `${siteUrl}/og/home.jpg`;
+
+  const seoTitle =
+    "امتحانات توجيهي الأردن 2009 | امتحانات إلكترونية + بنك أسئلة عربي/إنجليزي/دين/تاريخ الأردن - GhostExams";
+
+  const seoDescription =
+    "GhostExams منصة امتحانات إلكترونية وبنك أسئلة توجيهي الأردن 2009: امتحانات وزارية ومحاكاة نمط الوزارة بدقة، بنك أسئلة عربي وإنجليزي وتربية إسلامية وتاريخ الأردن، وتتبع مستوى الطالب وتحليل نقاط القوة والضعف.";
+
+  // (ملاحظة: meta keywords مش عامل قوي بجوجل، بس بنتركها كاحتياط)
+  const seoKeywords =
+    "امتحانات توجيهي 2009, امتحانات توجيهي الأردن, امتحانات إلكترونية توجيهي, بنك أسئلة توجيهي, بنك أسئلة عربي توجيهي, بنك أسئلة إنجليزي توجيهي, بنك أسئلة تربية إسلامية توجيهي, بنك أسئلة تاريخ الأردن توجيهي, محاكاة الوزارة, نمط الوزارة, امتحانات وزارية الأردن, GhostExams";
+
+  // ✅ روابط المواد (Hub)
+  const subjects = [
+    {
+      name: "اللغة العربية 2009",
+      slug: "/tawjihi-2009/arabic",
+      description: "امتحانات وبنك أسئلة عربي توجيهي 2009 (فصل أول/ فصل ثاني).",
+      badge: "عربي 2009",
+      emoji: "📚",
+    },
+    {
+      name: "اللغة الإنجليزية 2009",
+      slug: "/tawjihi-2009/english",
+      description:
+        "امتحانات وبنك أسئلة إنجليزي توجيهي 2009 (فصل أول/ فصل ثاني).",
+      badge: "إنجليزي 2009",
+      emoji: "🇬🇧",
+    },
+    {
+      name: "التربية الإسلامية 2009",
+      slug: "/tawjihi-2009/islamic",
+      description: "امتحانات وبنك أسئلة دين توجيهي 2009 (فصل أول/ فصل ثاني).",
+      badge: "دين 2009",
+      emoji: "🕌",
+    },
+    {
+      name: "تاريخ الأردن 2009",
+      slug: "/tawjihi-2009/jordan-history",
+      description:
+        "امتحانات وبنك أسئلة تاريخ الأردن توجيهي 2009 (فصل أول/ فصل ثاني).",
+      badge: "تاريخ 2009",
+      emoji: "🇯🇴",
+    },
+  ];
+
   const handleSubscribeClick = (planId) => {
-    const targetPath = `/student/subscription${
-      planId ? `?planId=${planId}` : ""
-    }`;
+    const targetPath = `/student/subscription${planId ? `?planId=${planId}` : ""}`;
 
     if (!token) {
       router.push({
@@ -51,39 +101,177 @@ const Home = () => {
     fetchPlans();
   }, []);
 
+  // ✅ JSON-LD (Structured Data)
+  const jsonLdWebSite = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "GhostExams",
+    url: siteUrl,
+    inLanguage: "ar-JO",
+    description: seoDescription,
+  };
+
+  const jsonLdOrganization = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "GhostExams",
+    url: siteUrl,
+    logo: `${siteUrl}/logo.png`,
+    sameAs: [],
+  };
+
+  const jsonLdWebPage = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: seoTitle,
+    url: canonicalUrl,
+    description: seoDescription,
+    inLanguage: "ar-JO",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "GhostExams",
+      url: siteUrl,
+    },
+  };
+
+  const jsonLdItemList = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "مواد توجيهي 2009 على GhostExams",
+    itemListElement: subjects.map((s, idx) => ({
+      "@type": "ListItem",
+      position: idx + 1,
+      name: s.name,
+      url: `${siteUrl}${s.slug}`,
+    })),
+  };
+
   return (
     <div className="bg-gray-900 text-white min-h-screen">
+      <Head>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+        <meta name="keywords" content={seoKeywords} />
+        <meta name="robots" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="GhostExams" />
+
+        {/* ✅ Canonical */}
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* ✅ Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="ar_JO" />
+        <meta property="og:site_name" content="GhostExams" />
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta
+          property="og:image:alt"
+          content="GhostExams | امتحانات توجيهي 2009"
+        />
+
+        {/* ✅ Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoTitle} />
+        <meta name="twitter:description" content={seoDescription} />
+        <meta name="twitter:image" content={ogImage} />
+
+        {/* ✅ JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebSite) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLdOrganization),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebPage) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdItemList) }}
+        />
+      </Head>
+
       <Navbar />
 
       {/* 🔝 Hero Section */}
       <div className="pt-24">
-        <section className="flex flex-col items-center justify-center text-center py-24 px-4">
-          <h1 className="text-5xl font-extrabold text-yellow-400 mb-6">
-            💯 طلاب توجيهي 2009 - جهز حالك للعلامة الكاملة! 💯
+        <section
+          dir="rtl"
+          className="flex flex-col items-center justify-center text-center py-24 px-4"
+        >
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-yellow-400 mb-4 leading-snug">
+            امتحانات توجيهي الأردن 2009 — أول معلم Ai بالأردن
           </h1>
-          <div
-            dir="rtl"
-            className="text-gray-300 max-w-2xl space-y-4 mb-30 text-right"
-          >
-            <p className="text-lg font-semibold">
-              🇯🇴 أول موقع بنوك أسئلة بمعلم ذكي في الأردن 🇯🇴
-              <span className="text-yellow-400"> لطلاب التوجيهي 2009 </span>
+
+          <div className="text-yellow-300/90 text-lg mb-6">
+            <span className="mx-1">💯</span>
+            <span className="mx-1">🇯🇴</span>
+            <span className="mx-1">🤖</span>
+            <span className="mx-1">🧠</span>
+          </div>
+
+          <p className="text-gray-300 max-w-3xl mb-6 leading-relaxed text-center">
+            امتحانات إلكترونية وبنك أسئلة لتوجيهي الأردن 2009: عربي، إنجليزي،
+            تربية إسلامية، وتاريخ الأردن — نماذج تحاكي النمط الوزاري مع تتبع
+            مستوى الطالب ونقاط القوة والضعف.
+          </p>
+
+          {/* ✅ بلوكات المواد */}
+          <div dir="rtl" className="w-full max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {subjects.map((s) => (
+                <Link
+                  key={s.slug}
+                  href={s.slug}
+                  className="group bg-gray-800/70 hover:bg-gray-800 border border-yellow-500/15 hover:border-yellow-500/40 rounded-2xl p-5 text-right transition shadow-lg"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs px-3 py-1 rounded-full bg-yellow-500/15 text-yellow-300 border border-yellow-500/20">
+                      {s.badge}
+                    </span>
+                    <span className="text-yellow-400 group-hover:translate-x-1 transition">
+                      ←
+                    </span>
+                  </div>
+
+                  <h2 className="text-lg font-extrabold text-yellow-300 leading-tight line-clamp-1">
+                    <span className="ml-2">{s.emoji}</span>
+                    {s.name}
+                  </h2>
+
+                  <p className="mt-2 text-xs text-gray-300/90 leading-relaxed min-h-[38px]">
+                    {s.description}
+                  </p>
+
+                  <div className="mt-4 text-sm font-bold text-black bg-yellow-500 group-hover:bg-yellow-600 inline-flex items-center justify-center rounded-xl px-4 py-2 w-full">
+                    عرض الامتحانات
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <p className="mt-5 text-xs text-gray-300/80">
+              ملاحظة: يمكنك تصفح المواد والامتحانات، وعند بدء الحل قد تحتاج
+              إنشاء حساب.
             </p>
           </div>
-          <Link
-            href="/auth/Register"
-            className="mt-10 bg-yellow-500 hover:bg-yellow-600 text-black py-3 px-6 rounded-lg text-lg"
-          >
-            سجل أشترك وأمتحن من هنا
-          </Link>
         </section>
       </div>
 
       {/* ✅ لماذا منصة الشبح؟ */}
       <section className="bg-gray-800 py-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-10">
-          🔥 ماذا يتضمن الاشتراك؟في أحدث موقع امتحانات وبنوك أسئلة لجيل 2009 ؟
-          🔥
+          ماذا يتضمن الاشتراك لطلاب توجيهي 2009؟
         </h2>
 
         <div
@@ -97,6 +285,7 @@ const Home = () => {
           <div className="bg-gray-700 p-6 rounded-xl shadow-lg">
             🎁 اكثر من 7000+ سؤال - 250+ امتحان - اربع مواد وزارية
           </div>
+
           <div className="bg-gray-700 p-6 rounded-xl shadow-lg">
             🚀 أضخم بنك أسئلة وزارية مصنّفة وفق أعلى المعايير الأكاديمية
           </div>
@@ -126,7 +315,7 @@ const Home = () => {
       {/* 📊 أنواع الامتحانات */}
       <section className="py-16 px-6 bg-gray-900">
         <h2 className="text-3xl font-bold text-center mb-10">
-          أنواع الامتحانات في منصة الشبح 🧠
+          أنواع الامتحانات في منصة الشبح
         </h2>
 
         <div
@@ -156,6 +345,7 @@ const Home = () => {
           <div className="bg-red-600 p-6 rounded-xl shadow-lg">
             📊 امتحانات تقييم شاملة قبل الاختبارات
           </div>
+
           <div className="bg-blue-600 p-6 rounded-xl shadow-lg">
             📝 بنك اسئلة مرتب ومصنف لكل مادة
           </div>
@@ -172,10 +362,8 @@ const Home = () => {
 
       {/* 🎁 عرض مجاني */}
       <section className="bg-gray-800 py-16 px-6 text-center">
-        <h2 className="text-3xl font-bold mb-4">🎁 اعمل حساب مجانا🎁 </h2>
-        <p className="mb-6 text-gray-300">
-          جرب امتحانات الشبح مـــجـــانـــا الآن
-        </p>
+        <h2 className="text-3xl font-bold mb-4">اعمل حساب مجانا</h2>
+        <p className="mb-6 text-gray-300">جرب امتحانات الشبح مجانا الآن</p>
         <Link
           href="/auth/Register"
           className="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-lg text-lg"
@@ -187,7 +375,7 @@ const Home = () => {
       {/* 🛍️ خطط الاشتراك */}
       <section className="py-16 px-6">
         <h2 className="text-3xl font-bold text-center mb-10">
-          خطط الاشتراك لطلاب 🎯 2009
+          خطط الاشتراك لطلاب 2009
         </h2>
 
         <h2 className="text-3xl font-bold text-center mb-10">
@@ -234,7 +422,6 @@ const Home = () => {
                     </p>
                   )}
 
-                  {/* ✅ تفاصيل الخطة (حقول الطالب الصحيحة) */}
                   <div className="space-y-2 text-sm text-right mt-3">
                     <p>اشتراك لطالب 1</p>
 
@@ -249,7 +436,7 @@ const Home = () => {
                           ? "معلم أساسي"
                           : plan.teacherType === "ghost"
                             ? "معلم Ai"
-                            : "معلم أساسي أو  معلم Ai"}
+                            : "معلم أساسي أو معلم Ai"}
                       </p>
                     )}
 
@@ -259,9 +446,7 @@ const Home = () => {
                   </div>
 
                   <p
-                    className={`text-3xl my-4 ${
-                      colorClasses[index] || "text-gray-400"
-                    }`}
+                    className={`text-3xl my-4 ${colorClasses[index] || "text-gray-400"}`}
                   >
                     {plan.price} {plan.currency}
                   </p>
@@ -277,7 +462,6 @@ const Home = () => {
                           : plan.durationUnit}
                   </p>
 
-                  {/* زر الاشتراك */}
                   <button
                     type="button"
                     onClick={() => handleSubscribeClick(plan._id)}
