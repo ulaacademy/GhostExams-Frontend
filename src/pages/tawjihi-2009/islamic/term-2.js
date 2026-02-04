@@ -33,14 +33,14 @@ export async function getServerSideProps() {
     }
 
     return { props: { exams: exams1, usedFallback: false } };
-  } catch (e) {
+  } catch {
     return { props: { exams: [], usedFallback: false } };
   }
 }
 
 export default function IslamicTerm2({ exams, usedFallback }) {
   const router = useRouter();
-  const { user, token } = useAuth();
+  useAuth();
 
   const siteUrl = "https://ghostexams.com";
   const canonicalUrl = `${siteUrl}/tawjihi-2009/islamic/term-2`;
@@ -98,17 +98,7 @@ export default function IslamicTerm2({ exams, usedFallback }) {
     })),
   };
 
-  // (اختياري) بدء الامتحان الحقيقي من الداشبورد لاحقًا
-  const handleStartExam = (examId) => {
-    const isLoggedIn = !!(token && user);
-    const examUrl = `/dashboard/exams/custom/${examId}`;
-    if (!isLoggedIn) {
-      router.push(`/auth/Register?redirect=${encodeURIComponent(examUrl)}`);
-      return;
-    }
-    router.push(examUrl);
-  };
-
+  
   return (
     <div className="bg-gray-900 text-white min-h-screen">
       <Head>

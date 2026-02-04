@@ -16,7 +16,7 @@ export async function getServerSideProps({ params }) {
     if (!json?.success || !json?.data) return { notFound: true };
 
     return { props: { exam: json.data } };
-  } catch (e) {
+  } catch {
     return { notFound: true };
   }
 }

@@ -33,14 +33,14 @@ export async function getServerSideProps() {
     }
 
     return { props: { exams: exams1, usedFallback: false } };
-  } catch (e) {
+  } catch {
     return { props: { exams: [], usedFallback: false } };
   }
 }
 
 export default function JordanHistoryTerm2({ exams, usedFallback }) {
   const router = useRouter();
-  const { user, token } = useAuth();
+  useAuth();
 
   const siteUrl = "https://ghostexams.com";
   const canonicalUrl = `${siteUrl}/tawjihi-2009/jordan-history/term-2`;
@@ -177,8 +177,8 @@ export default function JordanHistoryTerm2({ exams, usedFallback }) {
 
           {usedFallback && (
             <div className="mt-3 text-xs sm:text-sm text-yellow-300/90">
-              ✅ ملاحظة: تم عرض النتائج بدون فلتر الصف لأن قيم الصف في الداتا ليست
-              موحدة.
+              ✅ ملاحظة: تم عرض النتائج بدون فلتر الصف لأن قيم الصف في الداتا
+              ليست موحدة.
             </div>
           )}
         </header>

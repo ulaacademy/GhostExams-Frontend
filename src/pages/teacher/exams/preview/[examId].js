@@ -20,7 +20,7 @@ export default function TeacherExamPreviewPage() {
       try {
         const data = await fetchTeacherCustomExamById(examId);
         setExam(data?.exam || data); // حسب شكل الريسبونس عندك
-      } catch (e) {
+      } catch {
         console.error("❌ فشل جلب الامتحان للمعاينة:", e);
       } finally {
         setLoading(false);

@@ -25,7 +25,7 @@ export default function TeacherReportsPage() {
       );
       // Expecting: { reports: [{ subject, examName, studentsCount, averageScore, updatedAt }, ...] }
       setReports(res.data?.reports || []);
-    } catch (e) {
+    } catch {
       console.error("❌ فشل في جلب التقارير:", e);
       setError("فشل في جلب التقارير. تأكد من تسجيل الدخول ووجود بيانات.");
     } finally {
