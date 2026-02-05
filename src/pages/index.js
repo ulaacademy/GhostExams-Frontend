@@ -203,6 +203,9 @@ const Home = () => {
 
       <Navbar />
 
+         {/* ✅ Main landmark (حل مشكلة التقرير) */}
+    <main id="main-content" dir="rtl">
+
       {/* 🔝 Hero Section */}
       <div className="pt-24">
         <section
@@ -489,6 +492,8 @@ const Home = () => {
           تواصل معنا للحصول على بنك اسئلة الكتروني
         </a>
       </section>
+          </main>
+
 
       {/* ✅ الشات بوت العائم */}
       <SmartChatBot />
