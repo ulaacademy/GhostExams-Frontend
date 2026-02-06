@@ -17,15 +17,19 @@ const StudentSubscription = ({ embedded = false }) => {
   const [selectedPlan, setSelectedPlan] = useState(null);
 
   const [subscriptionData, setSubscriptionData] = useState({
+    // ✅ بنخليهم موجودين بالستيت (مش ظاهرين بالفورم)
     startDate: "",
     endDate: "",
     paymentMethod: "cash",
+
+    // ✅ اللي بدنا نظهره
     amount: 0,
     currency: "JOD",
-    notes: "",
+
+    // ✅ نخليه ثابت (مش ظاهر ولا قابل للكتابة)
+    notes: "مرحبا، أنا مهتم بالاشتراك بحزمة الموقع.",
   });
 
-  //const [setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
   const [studentId, setStudentId] = useState(null);
@@ -54,7 +58,6 @@ const StudentSubscription = ({ embedded = false }) => {
         subscriptionData.startDate || new Date().toISOString().split("T")[0];
 
       const endDate = new Date(currentStartDate);
-      // ✅ إذا duration = أيام
       endDate.setDate(endDate.getDate() + (plan.duration || 30));
 
       setSubscriptionData((prev) => ({
@@ -63,6 +66,8 @@ const StudentSubscription = ({ embedded = false }) => {
         currency: plan.currency || "JOD",
         startDate: currentStartDate,
         endDate: endDate.toISOString().split("T")[0],
+        paymentMethod: "cash",
+        notes: `مرحبا، أنا مهتم بالاشتراك بحزمة الموقع: ${plan.name}`,
       }));
     },
     [subscriptionData.startDate],
@@ -71,23 +76,18 @@ const StudentSubscription = ({ embedded = false }) => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // ✅ جلب خطط الطلاب
         const plansResponse = await fetchActiveStudentPlans();
         if (plansResponse?.success && Array.isArray(plansResponse.data)) {
           setPlans(plansResponse.data);
-          console.log("PLANS_FROM_API:", plansResponse.data);
-          console.log("PLAN_0_FIELDS:", plansResponse.data?.[0]);
         } else {
           setPlans([]);
         }
 
-        // ✅ جلب studentId
         const uid = await fetchUserId();
         if (uid) setStudentId(uid);
       } catch (err) {
         console.error("❌ خطأ في تحميل بيانات خطط الطلاب:", err);
         setMessage("❌ حدث خطأ في تحميل البيانات");
-      } finally {
       }
     };
 
@@ -102,18 +102,14 @@ const StudentSubscription = ({ embedded = false }) => {
     }
   }, [router.query.planId, plans, selectedPlan, handlePlanSelect]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSubscriptionData((prev) => ({ ...prev, [name]: value }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!selectedPlan) {
-      setMessage("❌ يرجى اختيار خطة أولاً");
+      setMessage("❌ اختر خطة من الأعلى أولاً ثم اضغط إرسال");
       return;
     }
+
     if (!studentId) {
       setMessage("❌ لم يتم العثور على معرف الطالب، جرّب تسجيل خروج ودخول");
       return;
@@ -127,55 +123,55 @@ const StudentSubscription = ({ embedded = false }) => {
         studentId,
         planId: selectedPlan._id,
 
-        // ✅ إذا عندك هذه الحقول بالصفحة وخليتها بالموديل/الكنترولر
+        // ✅ بنرسلهم زي قبل (حتى لو مش ظاهرين)
         customStartDate: subscriptionData?.startDate || undefined,
         customEndDate: subscriptionData?.endDate || undefined,
         paymentMethod: subscriptionData?.paymentMethod || "cash",
+
         amount: Number(subscriptionData?.amount || 0),
         currency: subscriptionData?.currency || "JOD",
-        notes: subscriptionData?.notes || "",
+
+        // ✅ ملاحظات ثابتة (للتفريق إنه Lead)
+        notes:
+          subscriptionData?.notes || "مرحبا، أنا مهتم بالاشتراك بحزمة الموقع.",
+
         source: "student-portal",
       };
 
       const res = await createStudentSubscription(payload);
 
       if (res?.success) {
-        // ✅ خذ رسالة الباك مباشرة
         const successMsg =
           res?.message ||
           "✅ تم إرسال طلب اشتراكك بنجاح. الرجاء الانتظار لتفعيل الاشتراك خلال 24 ساعة.";
 
         setMessage(successMsg);
 
-        // ✅ حوّل للداشبورد مع باراميتر pending + اسم الخطة
         const planName = encodeURIComponent(selectedPlan?.name || "الخطة");
         router.push(
           `/dashboard/studentDashboard?status=pending&plan=${planName}`,
         );
 
-        // (اختياري) تنظيف
+        // تنظيف
         setSelectedPlan(null);
-        setSubscriptionData({
+        setSubscriptionData((prev) => ({
+          ...prev,
           startDate: "",
           endDate: "",
           paymentMethod: "cash",
           amount: 0,
           currency: "JOD",
-          notes: "",
-        });
+          notes: "مرحبا، أنا مهتم بالاشتراك بحزمة الموقع.",
+        }));
       } else {
         setMessage(res?.message || "❌ فشل إرسال طلب الاشتراك");
       }
     } catch (error) {
       console.error("❌ خطأ في اشتراك الطالب:", error);
-
-      // ✅ أهم سطر: خذ رسالة الباك (409 pending أو 409 active أو 400...)
       const apiMsg =
         error?.response?.data?.message || "❌ حدث خطأ أثناء الإرسال";
-
       setMessage(apiMsg);
 
-      // ✅ إذا رجع 409 بسبب Pending: خليه يروح للداشبورد ويشوف رسالة انتظار
       if (error?.response?.status === 409) {
         const planName = encodeURIComponent(selectedPlan?.name || "الخطة");
         router.push(
@@ -200,7 +196,7 @@ const StudentSubscription = ({ embedded = false }) => {
           {/* ✅ عرض خطط الطلاب */}
           <div className="mb-8">
             <h2 className="text-2xl font-bold mb-4 text-center">
-              اضغط على الخطة المناسبة ثم أكمل الطلب
+              اختر الخطة من الأسفل (ثم أكمل الطلب من فورم الاشتراك)
             </h2>
 
             {plans.length === 0 ? (
@@ -295,20 +291,6 @@ const StudentSubscription = ({ embedded = false }) => {
                       >
                         {plan.price} {plan.currency || "JOD"}
                       </p>
-
-                      {plan.features && plan.features.length > 0 && (
-                        <ul className="text-sm space-y-1">
-                          {plan.features.map((feature, idx) => (
-                            <li
-                              key={idx}
-                              className="flex items-start justify-end gap-2"
-                            >
-                              <span className="text-right">{feature}</span>
-                              <span className="shrink-0">✓</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
                     </div>
                   );
                 })}
@@ -316,145 +298,107 @@ const StudentSubscription = ({ embedded = false }) => {
             )}
           </div>
 
-          {/* ✅ نموذج الإرسال */}
-          {selectedPlan ? (
-            <div className="bg-gray-800 p-6 rounded-2xl">
-              <h2 className="text-2xl font-bold mb-4 text-center">
-                تفاصيل الاشتراك -{" "}
-                <span className="text-yellow-400 font-extrabold">
-                  {selectedPlan.name}
+          {/* ✅ نموذج الإرسال (ظاهر دائمًا) */}
+          <div className="bg-gray-800 p-6 rounded-2xl">
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              تفاصيل الاشتراك{" "}
+              {selectedPlan ? (
+                <>
+                  -{" "}
+                  <span className="text-yellow-400 font-extrabold">
+                    {selectedPlan.name}
+                  </span>
+                </>
+              ) : (
+                <span className="text-gray-300 text-base font-normal">
+                  (اختر خطة من الأعلى أولاً)
                 </span>
-              </h2>
+              )}
+            </h2>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-bold mb-2">
-                      تاريخ بداية الاشتراك
-                    </label>
-                    <input
-                      type="date"
-                      name="startDate"
-                      value={subscriptionData.startDate}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                    />
-                  </div>
+            {/* ✅ تنبيه واضح */}
+            {!selectedPlan && (
+              <div className="mb-4 p-4 rounded-xl bg-gray-900/60 border border-yellow-500/20 text-yellow-200 text-sm">
+                ✅ اختار أي خطة من الأعلى أولاً، بعدها بصير زر “إرسال طلب
+                الاشتراك” شغال.
+              </div>
+            )}
 
-                  <div>
-                    <label className="block text-sm font-bold mb-2">
-                      تاريخ نهاية الاشتراك
-                    </label>
-                    <input
-                      type="date"
-                      name="endDate"
-                      value={subscriptionData.endDate}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                    />
-                  </div>
-                </div>
-
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold mb-2">
-                    طريقة الدفع
-                  </label>
-                  <select
-                    name="paymentMethod"
-                    value={subscriptionData.paymentMethod}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  >
-                    <option value="cash">
-                      تحويل مبلغ الاشتراك كليك إلى GHOSTEXAMS - بنك الاتحاد
-                    </option>
-                  </select>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-bold mb-2">
-                      المبلغ
-                    </label>
-                    <input
-                      type="number"
-                      name="amount"
-                      value={subscriptionData.amount}
-                      readOnly
-                      className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-bold mb-2">
-                      العملة
-                    </label>
-                    <input
-                      type="text"
-                      name="currency"
-                      value={subscriptionData.currency}
-                      readOnly
-                      className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold mb-2">
-                    ملاحظات (اكتب رقم تلفونك للتواصل)
-                  </label>
-                  <textarea
-                    name="notes"
-                    value={subscriptionData.notes}
-                    onChange={handleInputChange}
-                    rows="3"
-                    className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                    placeholder="اكتب رقمك وملاحظاتك..."
+                  <label className="block text-sm font-bold mb-2">المبلغ</label>
+                  <input
+                    type="number"
+                    name="amount"
+                    value={subscriptionData.amount}
+                    readOnly
+                    className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none"
                   />
                 </div>
 
-                {message && (
-                  <div
-                    className={`p-4 rounded-lg ${
-                      message.includes("✅")
-                        ? "bg-green-900 text-green-100"
-                        : "bg-red-900 text-red-100"
-                    }`}
-                  >
-                    {message}
-                  </div>
-                )}
-
-                <div className="flex gap-4">
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-lg transition-colors disabled:opacity-50"
-                  >
-                    {submitting ? "جاري المعالجة..." : "إرسال طلب الاشتراك"}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedPlan(null);
-                      setMessage("");
-                    }}
-                    className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-                  >
-                    إلغاء
-                  </button>
+                <div>
+                  <label className="block text-sm font-bold mb-2">العملة</label>
+                  <input
+                    type="text"
+                    name="currency"
+                    value={subscriptionData.currency}
+                    readOnly
+                    className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none"
+                  />
                 </div>
-              </form>
-            </div>
-          ) : (
-            <div className="text-center py-8 text-gray-400">
-              اختر خطة من الأعلى لإكمال الطلب
-            </div>
-          )}
+              </div>
+
+              {/* ✅ ملاحظات ثابتة (مش ظاهرة) */}
+              <input
+                type="hidden"
+                name="notes"
+                value={subscriptionData.notes}
+              />
+
+              {message && (
+                <div
+                  className={`p-4 rounded-lg ${
+                    message.includes("✅")
+                      ? "bg-green-900 text-green-100"
+                      : "bg-red-900 text-red-100"
+                  }`}
+                >
+                  {message}
+                </div>
+              )}
+
+              <div className="flex gap-4">
+                <button
+                  type="submit"
+                  disabled={submitting || !selectedPlan}
+                  className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {submitting ? "جاري المعالجة..." : "إرسال طلب الاشتراك"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedPlan(null);
+                    setMessage("");
+                    setSubscriptionData((prev) => ({
+                      ...prev,
+                      startDate: "",
+                      endDate: "",
+                      paymentMethod: "cash",
+                      amount: 0,
+                      currency: "JOD",
+                      notes: "مرحبا، أنا مهتم بالاشتراك بحزمة الموقع.",
+                    }));
+                  }}
+                  className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                >
+                  إلغاء
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
