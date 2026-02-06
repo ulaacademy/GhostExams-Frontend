@@ -189,8 +189,9 @@ const StudentSubscription = ({ embedded = false }) => {
 
       <div dir="rtl" className={embedded ? "p-0" : "p-6 text-right pt-24"}>
         <div className="container mx-auto max-w-6xl">
-          <h1 className="text-4xl font-bold text-center mb-8 text-yellow-400">
-            اختر خطة الطالب المناسبة 🎯 او تواصل على 0791515106 للمساعدة
+          <h1 className="text-3xl font-bold text-center mb-8 text-yellow-400">
+            اختر خطة الطالب المناسبة 🎯 ثم ارسل طلب الاشتراك - او تواصل على واتس
+            اب 0791515106 للمساعدة{" "}
           </h1>
 
           {/* ✅ عرض خطط الطلاب */}
