@@ -7,6 +7,7 @@ import "@/styles/booksExamStyles.css";
 import "@/styles/schoolExamStyles.css";
 import Head from "next/head";
 import Script from "next/script";
+import Footer from "@/components/Footer";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -32,6 +33,7 @@ export default function App({ Component, pageProps }) {
       <AuthProvider>
         <ToastProvider>
           <Component {...pageProps} />
+          <Footer />
           <SmartChatBot />
         </ToastProvider>
       </AuthProvider>
