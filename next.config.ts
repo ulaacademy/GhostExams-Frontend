@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false, // ✅ هذا السطر الجديد
+
   reactStrictMode: true,
   output: "standalone", // ✅ هذه أهم شيء
   images: {
