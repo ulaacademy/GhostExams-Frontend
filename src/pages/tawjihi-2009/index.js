@@ -21,32 +21,35 @@ export default function Tawjihi2009Index() {
 
   const subjects = [
     {
-      title: "امتحانات عربي توجيهي 2009",
-      emoji: "📚",
-      subjectSlug: "/tawjihi-2009/arabic",
-      term1: "/tawjihi-2009/arabic/term-1",
-      term2: "/tawjihi-2009/arabic/term-2",
+      title: "بنك اسئلة وامتحانات تاريخ الأردن توجيهي 2009",
+      emoji: "🇯🇴",
+      subjectSlug: "/tawjihi-2009/jordan-history",
+      term1: "/tawjihi-2009/jordan-history/term-1",
+      term2: "/tawjihi-2009/jordan-history/term-2",
     },
+
     {
-      title: "امتحانات إنجليزي توجيهي 2009",
+      title: "بنك اسئلة وامتحانات إنجليزي توجيهي 2009",
       emoji: "🇬🇧",
       subjectSlug: "/tawjihi-2009/english",
       term1: "/tawjihi-2009/english/term-1",
       term2: "/tawjihi-2009/english/term-2",
     },
+
     {
-      title: "امتحانات دين توجيهي 2009",
+      title: "بنك اسئلة وامتحانات عربي توجيهي 2009",
+      emoji: "📚",
+      subjectSlug: "/tawjihi-2009/arabic",
+      term1: "/tawjihi-2009/arabic/term-1",
+      term2: "/tawjihi-2009/arabic/term-2",
+    },
+
+    {
+      title: "بنك اسئلة وامتحانات دين توجيهي 2009",
       emoji: "🕌",
       subjectSlug: "/tawjihi-2009/islamic",
       term1: "/tawjihi-2009/islamic/term-1",
       term2: "/tawjihi-2009/islamic/term-2",
-    },
-    {
-      title: "امتحانات تاريخ الأردن توجيهي 2009",
-      emoji: "🇯🇴",
-      subjectSlug: "/tawjihi-2009/jordan-history",
-      term1: "/tawjihi-2009/jordan-history/term-1",
-      term2: "/tawjihi-2009/jordan-history/term-2",
     },
   ];
 
@@ -135,7 +138,9 @@ export default function Tawjihi2009Index() {
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumbs) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLdBreadcrumbs),
+          }}
         />
         <script
           type="application/ld+json"
@@ -190,7 +195,7 @@ export default function Tawjihi2009Index() {
         </div>
 
         <p className="mt-8 text-xs text-gray-400">
-          ملاحظة: قد تحتاج إنشاء حساب عند بدء حل الامتحان.
+          ملاحظة: تحتاج للاشتراك بأحد عروضنا عند بدء حل الامتحانات.
         </p>
       </main>
     </div>

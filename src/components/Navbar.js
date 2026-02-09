@@ -86,6 +86,12 @@ export default function Navbar() {
             </Link>
 
             <Link
+              href="/tawjihi-2009"
+              className="hover:text-gray-300 cursor-pointer"
+            >
+              الامتحانات 📌
+            </Link>
+            <Link
               href="/pricing"
               className="hover:text-gray-300 cursor-pointer"
             >
