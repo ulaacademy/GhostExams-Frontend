@@ -128,7 +128,7 @@ export default function SubscribedTeachersPage() {
           <div className="bg-white p-5 md:p-6 shadow-md rounded-xl">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
               <h1 className="text-xl md:text-2xl font-bold text-blue-600">
-                🤝 المعلمون المشترك معهم
+                🤝 البنوك المشترك معهم
               </h1>
 
               {/* CTA سريع */}
