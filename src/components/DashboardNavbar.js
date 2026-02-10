@@ -8,8 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 // ✅ Top Navbar (بدون الامتحانات)
 const NAV_ITEMS = [
   { href: "/dashboard/subscribed-teachers", label: " 🤝 الامتحانات" },
-    { href: "/dashboard/ourteachers", label: " 🤝 بنوك الاسئلة" },
-
+  { href: "/ourteachers", label: " 🤝 بنوك الاسئلة" },
 ];
 
 const SIDEBAR_ITEMS = [
@@ -28,8 +27,8 @@ const SIDEBAR_ITEMS = [
     label: " الامتحانات",
     icon: "🤝",
   },
-   {
-    href: "/dashboard/ourteachers",
+  {
+    href: "/ourteachers",
     label: " اضف بنوك الاسئلة",
     icon: "🤝",
   },
