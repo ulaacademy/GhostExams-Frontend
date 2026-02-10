@@ -411,23 +411,23 @@ export default function OurTeachersPage() {
         </p>
 
         <div className="mt-5 flex flex-wrap gap-2">
-            <span className="px-3 py-1.5 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-100">
-              ✅ امتحانات تفاعلية مع نتائج فورية 
-            </span>
-            <span className="px-3 py-1.5 rounded-full text-xs bg-green-50 text-green-700 border border-green-100">
-              ✅ منظم حسب المادة والفصل والوحدة
-            </span>
-            <span className="px-3 py-1.5 rounded-full text-xs bg-purple-50 text-purple-700 border border-purple-100">
-              ✅ بنك أسئلة شامل لكل المادة فصلين 
-            </span>
+          <span className="px-3 py-1.5 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-100">
+            ✅ امتحانات تفاعلية مع نتائج فورية
+          </span>
+          <span className="px-3 py-1.5 rounded-full text-xs bg-green-50 text-green-700 border border-green-100">
+            ✅ منظم حسب المادة والفصل والوحدة
+          </span>
+          <span className="px-3 py-1.5 rounded-full text-xs bg-purple-50 text-purple-700 border border-purple-100">
+            ✅ بنك أسئلة شامل لكل المادة فصلين
+          </span>
 
-            <span className="px-3 py-1.5 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-100">
-              ✅ اكثر من 120+ امتحان  
-            </span>
-            <span className="px-3 py-1.5 rounded-full text-xs bg-green-50 text-green-700 border border-green-100">
-              ✅ اكثر من 8000+ سؤال  
-            </span>
-          </div>
+          <span className="px-3 py-1.5 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-100">
+            ✅ اكثر من 120+ امتحان
+          </span>
+          <span className="px-3 py-1.5 rounded-full text-xs bg-green-50 text-green-700 border border-green-100">
+            ✅ اكثر من 8000+ سؤال
+          </span>
+        </div>
       </section>
 
       {feedback && (
@@ -495,13 +495,12 @@ export default function OurTeachersPage() {
   );
 
   // ✅ SEO values (بدون أي تغيير على الواجهة)
-  const pageTitle = "بنوك الأسئلة للمعلمين | منصة الشبح";
+  const pageTitle = "بنوك الأسئلة والامتحانات | منصة الشبح";
   const pageDescription =
     "استعرض بنوك الأسئلة للمعلمين على منصة الشبح لطلاب توجيهي 2009 واشترك مباشرة مع معلمك المفضل وفق خطط مرنة.";
   const pageKeywords =
     "بنوك اسئلة, توجيهي 2009, بنك اسئلة, امتحانات تفاعلية, منصة الشبح, GhostExams, معلمون, خطط اشتراك";
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://ghostexams.com"; // ✅ غيّرها لو عندك دومين مختلف
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ghostexams.com"; // ✅ غيّرها لو عندك دومين مختلف
   const canonicalUrl = `${siteUrl}${router?.asPath?.split("?")[0] || ""}`;
 
   // ✅ Schema (JSON-LD) بدون تأثير بصري
