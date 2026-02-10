@@ -102,7 +102,7 @@ export default function Navbar() {
               href="/ourteachers/"
               className="hover:text-gray-300 cursor-pointer"
             >
-              معلمونا 👩‍🏫
+              البنوك 👩‍🏫
             </Link>
 
             <Link href="/chat/" className="hover:text-gray-300 cursor-pointer">

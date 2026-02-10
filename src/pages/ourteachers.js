@@ -217,6 +217,7 @@ export default function OurTeachersPage() {
           alt={teacher.name}
           width={64}
           height={64}
+          sizes="64px" // ✅ تحسين موبايل/LCP بدون تغيير أي شيء بصري
           className="w-16 h-16 rounded-full object-cover border-2 border-blue-100"
           priority={index < 3}
           unoptimized={imageUrl.startsWith("data:")}
@@ -285,12 +286,6 @@ export default function OurTeachersPage() {
                   <h2 className="text-base sm:text-lg font-bold text-gray-900 truncate">
                     {teacher.name}
                   </h2>
-
-                  <p className="text-xs sm:text-sm text-gray-500 truncate">
-                    {teacher.planName
-                      ? `الباقة الحالية: ${teacher.planName}`
-                      : "الباقة الحالية: غير محددة"}
-                  </p>
 
                   <div className="mt-2 flex flex-wrap gap-2">
                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-100">
@@ -389,7 +384,7 @@ export default function OurTeachersPage() {
                 className="mt-3 w-full px-4 py-2 rounded-xl border border-gray-200 text-gray-700 bg-white hover:bg-gray-50 transition text-sm font-semibold"
                 title="مشاركة ملف المعلم"
               >
-                🔗 مشاركة ملف المعلم
+                🔗 مشاركة ملف البنك
               </button>
             </div>
           </div>
@@ -408,12 +403,31 @@ export default function OurTeachersPage() {
     >
       <section className="mb-10 text-center">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
-          👩‍🏫 معلمونا المميزون
+          بنوك الاسئلة المتوفرة لطلاب 2009
         </h1>
         <p className="mt-3 text-gray-600 max-w-3xl mx-auto">
-          اختر المعلم المناسب لك من بين نخبة المعلمين المشتركين في الخطط النشطة.
-          يمكنك الاشتراك فوراً إذا كان هناك مقعد متاح في خطتهم الحالية.
+          اكبر واحدث بنوك اسئلة تم كتابتها بأدق التفاصيل ، حسب المنهاج المعتمد ،
+          تحاكي النمط الوزاري ومدعومة بالذكاء الاصطناعي الحقيقي
         </p>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+            <span className="px-3 py-1.5 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-100">
+              ✅ امتحانات تفاعلية مع نتائج فورية 
+            </span>
+            <span className="px-3 py-1.5 rounded-full text-xs bg-green-50 text-green-700 border border-green-100">
+              ✅ منظم حسب المادة والفصل والوحدة
+            </span>
+            <span className="px-3 py-1.5 rounded-full text-xs bg-purple-50 text-purple-700 border border-purple-100">
+              ✅ بنك أسئلة شامل لكل المادة فصلين 
+            </span>
+
+            <span className="px-3 py-1.5 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-100">
+              ✅ اكثر من 120+ امتحان  
+            </span>
+            <span className="px-3 py-1.5 rounded-full text-xs bg-green-50 text-green-700 border border-green-100">
+              ✅ اكثر من 8000+ سؤال  
+            </span>
+          </div>
       </section>
 
       {feedback && (
@@ -439,6 +453,9 @@ export default function OurTeachersPage() {
             key={teacherId}
             className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
             dir="rtl"
+            role="dialog" // ✅ وصولية/SEO غير مباشر
+            aria-modal="true"
+            aria-label="مشاركة رابط المعلم"
           >
             <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
               <h3 className="text-xl font-bold mb-4">🔗 رابط مشاركة المعلم</h3>
@@ -452,6 +469,7 @@ export default function OurTeachersPage() {
                     value={url || ""}
                     readOnly
                     className="flex-1 p-2 border rounded-lg bg-gray-50 text-sm"
+                    aria-label="رابط المشاركة"
                   />
                   <button
                     onClick={() => copyToClipboard(url)}
@@ -476,13 +494,55 @@ export default function OurTeachersPage() {
     </main>
   );
 
+  // ✅ SEO values (بدون أي تغيير على الواجهة)
+  const pageTitle = "بنوك الأسئلة للمعلمين | منصة الشبح";
+  const pageDescription =
+    "استعرض بنوك الأسئلة للمعلمين على منصة الشبح لطلاب توجيهي 2009 واشترك مباشرة مع معلمك المفضل وفق خطط مرنة.";
+  const pageKeywords =
+    "بنوك اسئلة, توجيهي 2009, بنك اسئلة, امتحانات تفاعلية, منصة الشبح, GhostExams, معلمون, خطط اشتراك";
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://ghostexams.com"; // ✅ غيّرها لو عندك دومين مختلف
+  const canonicalUrl = `${siteUrl}${router?.asPath?.split("?")[0] || ""}`;
+
+  // ✅ Schema (JSON-LD) بدون تأثير بصري
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageTitle,
+    description: pageDescription,
+    url: canonicalUrl,
+    inLanguage: "ar",
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Head>
-        <title>معلمونا | منصة الشبح</title>
-        <meta
-          name="description"
-          content="استعرض أفضل المعلمين على منصة الشبح واشترك مباشرة مع معلمك المفضل وفق خطط مرنة."
+        {/* ✅ Mobile */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* ✅ Basic SEO */}
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <meta name="keywords" content={pageKeywords} />
+        <meta name="robots" content="index,follow" />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* ✅ Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:locale" content="ar_AR" />
+
+        {/* ✅ Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+
+        {/* ✅ JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
         />
       </Head>
 
