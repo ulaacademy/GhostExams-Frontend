@@ -157,7 +157,7 @@ export default function SubscribedTeachersPage() {
                   onClick={() => router.push("/ourteachers")}
                   className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
                 >
-                  تصفح المعلمين
+                  تصفح البنوك
                 </button>
               </div>
             ) : (
@@ -165,10 +165,10 @@ export default function SubscribedTeachersPage() {
                 {/* ✅ Stats صغيرة */}
                 <div className="mt-4 flex flex-wrap gap-2">
                   <span className="text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-700">
-                    عدد المعلمين: {teachers.length}
+                    عدد البنوك: {teachers.length}
                   </span>
                   <span className="text-xs px-3 py-1 rounded-full bg-blue-50 text-blue-700">
-                    اضغط على “عرض الامتحانات” للدخول لامتحانات المعلم
+                    اضغط على “عرض الامتحانات” للدخول لامتحانات البنك
                   </span>
                 </div>
 
