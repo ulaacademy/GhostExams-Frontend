@@ -3,9 +3,9 @@
 import Link from "next/link";
 
 export default function Footer() {
-  const phoneDisplay = "0791515106";
-  const phoneIntl = "+962791515106"; // الأردن
-  const waLink = "https://wa.me/962791515106";
+  const phoneDisplay = "0798777781";
+  const phoneIntl = "+962798777781"; // الأردن
+  const waLink = "https://wa.me/96279877781";
   const igLink = "https://www.instagram.com/ghostexams/";
   const fbLink = "https://www.facebook.com/ghostexams";
 

@@ -226,7 +226,15 @@ export default function Navbar() {
                 onClick={closeMobile}
                 className="block px-3 py-2 rounded hover:bg-white/10"
               >
-                معلمونا 👩‍🏫
+                البنوك 👩‍🏫
+              </Link>
+
+              <Link
+                href="/tawjihi-2009/"
+                onClick={closeMobile}
+                className="block px-3 py-2 rounded hover:bg-white/10"
+              >
+                الامتحانات 📌
               </Link>
 
               <Link

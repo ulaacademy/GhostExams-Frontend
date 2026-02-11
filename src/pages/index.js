@@ -212,8 +212,8 @@ const Home = () => {
             dir="rtl"
             className="flex flex-col items-center justify-center text-center py-24 px-4"
           >
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-yellow-400 mb-4 leading-snug">
-              امتحانات توجيهي الأردن 2009 — أول معلم Ai بالأردن
+            <h1 className="text-4xl sm:text-4xl font-extrabold text-yellow-400 mb-4 leading-snug">
+              بنوك اسئلة وامتحانات توجيهي 2009 — أول معلم Ai بالأردن{" "}
             </h1>
 
             <div className="text-yellow-300/90 text-lg mb-6">
@@ -271,6 +271,18 @@ const Home = () => {
           </section>
         </div>
 
+        {/* 🎁 عرض مجاني */}
+        <section className="bg-gray-800 py-16 px-6 text-center">
+          <h2 className="text-3xl font-bold mb-4">اعمل حساب مجانا</h2>
+          <p className="mb-6 text-gray-300">جرب امتحانات الشبح مجانا الآن</p>
+          <Link
+            href="/auth/Register"
+            className="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-lg text-lg"
+          >
+            التجربة مجانية للطلاب
+          </Link>
+        </section>
+
         {/* ✅ لماذا منصة الشبح؟ */}
         <section className="bg-gray-800 py-16 px-6">
           <h2 className="text-3xl font-bold text-center mb-10">
@@ -286,7 +298,7 @@ const Home = () => {
             </div>
 
             <div className="bg-gray-700 p-6 rounded-xl shadow-lg">
-              🎁 اكثر من 7000+ سؤال - 250+ امتحان - اربع مواد وزارية
+              🎁 اكثر من 8000+ سؤال - 120+ امتحان - اربع مواد وزارية
             </div>
 
             <div className="bg-gray-700 p-6 rounded-xl shadow-lg">
@@ -338,7 +350,7 @@ const Home = () => {
             </div>
 
             <div className="bg-yellow-600 p-6 rounded-xl shadow-lg text-black">
-              👨‍🏫 امتحانات من نخبة معلمي المملكة
+              👨‍🏫 امتحانات بأفكار جديدة وذكية
             </div>
 
             <div className="bg-pink-600 p-6 rounded-xl shadow-lg">
@@ -354,25 +366,13 @@ const Home = () => {
             </div>
 
             <div className="bg-green-600 p-6 rounded-xl shadow-lg">
-              ⚡ امتحانات وتقيمات بالذكاء الاصطناعي
+              ⚡ امتحانات وتقيمات بعد كل امتحان
             </div>
 
             <div className="bg-yellow-600 p-6 rounded-xl shadow-lg text-black">
-              👨‍🏫 اول معلم (Ai) ذكاء اصطناعي للتوجيهي
+              👨‍🏫 اول معلم (Ai) للتوجيهي
             </div>
           </div>
-        </section>
-
-        {/* 🎁 عرض مجاني */}
-        <section className="bg-gray-800 py-16 px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4">اعمل حساب مجانا</h2>
-          <p className="mb-6 text-gray-300">جرب امتحانات الشبح مجانا الآن</p>
-          <Link
-            href="/auth/Register"
-            className="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-lg text-lg"
-          >
-            التجربة مجانية للطلاب
-          </Link>
         </section>
 
         {/* 🛍️ خطط الاشتراك */}

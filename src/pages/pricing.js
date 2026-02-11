@@ -72,7 +72,7 @@ const Pricing = () => {
       {/* 🎓 لماذا منصة الشبح للمعلمين؟ */}
       <section className="bg-gray-900 pt-24 py-24 px-6">
         {/* العنوان الكبير */}
-        <h1 className="text-3xl md:text-5xl font-extrabold text-yellow-400 text-center mb-6 mt-24">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-yellow-400 text-center mb-6 mt-24">
           أول موقع للمعلمين لانشاء امتحانات تفاعلية وبنوك اسئلة للطلاب
         </h1>
 

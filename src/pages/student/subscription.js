@@ -191,7 +191,7 @@ const StudentSubscription = ({ embedded = false }) => {
         <div className="container mx-auto max-w-6xl">
           <h1 className="text-3xl font-bold text-center mb-8 text-yellow-400">
             اختر خطة الطالب المناسبة 🎯 ثم ارسل طلب الاشتراك - او تواصل على واتس
-            اب 0791515106 للمساعدة{" "}
+            اب 0798777781 للمساعدة{" "}
           </h1>
 
           {/* ✅ عرض خطط الطلاب */}
