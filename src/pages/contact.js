@@ -13,7 +13,7 @@ export default function ContactPage() {
 
   const seoTitle = "تواصل معنا | GhostExams";
   const seoDescription =
-    "للتواصل والدعم في GhostExams: واتساب فقط على الرقم 0798777781.";
+    "للتواصل والدعم في GhostExams: واتساب فقط على الرقم 0791515106.";
 
   // ✅ JSON-LD
   const jsonLdWebPage = {
@@ -77,7 +77,7 @@ export default function ContactPage() {
 
           <div className="mt-8 bg-gray-800/70 border border-yellow-500/15 rounded-2xl p-6 text-center shadow-lg">
             <div className="text-xl sm:text-2xl font-extrabold text-white">
-              0798777781
+              0791515106
             </div>
 
             <p className="mt-3 text-sm text-gray-300">
