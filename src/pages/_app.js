@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastProvider } from "@/components/Toast";
-import SmartChatBot from "@/components/SmartChatBot";
+//import SmartChatBot from "@/components/SmartChatBot";
 import "@/styles/teacherExamStyles.css";
 import "@/styles/booksExamStyles.css";
 import "@/styles/schoolExamStyles.css";
@@ -34,7 +34,7 @@ export default function App({ Component, pageProps }) {
         <ToastProvider>
           <Component {...pageProps} />
           <Footer />
-          <SmartChatBot />
+          {/* <SmartChatBot /> */}
         </ToastProvider>
       </AuthProvider>
     </>

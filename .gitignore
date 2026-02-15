@@ -35,3 +35,4 @@ FIX_ALL_ALERTS.js
 *.traineddata
 FIX_ALL_ALERTS.js
 
+secrets/
