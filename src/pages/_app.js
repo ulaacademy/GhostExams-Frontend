@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <link rel="icon" href="/next.svg" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       {/* ✅ Google Analytics (GA4) - Lazy load */}
