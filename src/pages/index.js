@@ -6,7 +6,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
-import SmartChatBot from "../components/SmartChatBot";
+//import SmartChatBot from "../components/SmartChatBot";
 import { fetchActiveStudentPlans } from "../services/api";
 import { useAuth } from "@/context/AuthContext";
 
@@ -495,7 +495,7 @@ const Home = () => {
       </main>
 
       {/* ✅ الشات بوت العائم */}
-      <SmartChatBot />
+      {/* <SmartChatBot /> */}
     </div>
   );
 };
