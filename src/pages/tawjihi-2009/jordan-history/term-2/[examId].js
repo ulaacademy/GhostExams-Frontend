@@ -42,10 +42,30 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "توجيهي 2009", item: `${siteUrl}/tawjihi-2009` },
-      { "@type": "ListItem", position: 2, name: "تاريخ الأردن", item: `${siteUrl}/tawjihi-2009/jordan-history` },
-      { "@type": "ListItem", position: 3, name: "الفصل الثاني", item: `${siteUrl}/tawjihi-2009/jordan-history/term-2` },
-      { "@type": "ListItem", position: 4, name: exam.examName, item: canonicalUrl },
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "توجيهي 2009",
+        item: `${siteUrl}/tawjihi-2009`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "تاريخ الأردن",
+        item: `${siteUrl}/tawjihi-2009/jordan-history`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "الفصل الثاني",
+        item: `${siteUrl}/tawjihi-2009/jordan-history/term-2`,
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: exam.examName,
+        item: canonicalUrl,
+      },
     ],
   };
 
@@ -119,26 +139,39 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
 
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-gray-200">
             <div className="bg-gray-900/50 rounded-xl p-4 text-sm sm:text-base">
-              📚 المادة: <span className="text-yellow-300 font-bold">{exam.subject}</span>
+              📚 المادة:{" "}
+              <span className="text-yellow-300 font-bold">{exam.subject}</span>
             </div>
             <div className="bg-gray-900/50 rounded-xl p-4 text-sm sm:text-base">
-              🧪 الصف: <span className="text-yellow-300 font-bold">{exam.grade}</span>
+              🧪 الصف:{" "}
+              <span className="text-yellow-300 font-bold">{exam.grade}</span>
             </div>
             <div className="bg-gray-900/50 rounded-xl p-4 text-sm sm:text-base">
-              📅 الفصل: <span className="text-yellow-300 font-bold">{exam.term || "غير محدد"}</span>
+              📅 الفصل:{" "}
+              <span className="text-yellow-300 font-bold">
+                {exam.term || "غير محدد"}
+              </span>
             </div>
             <div className="bg-gray-900/50 rounded-xl p-4 text-sm sm:text-base">
-              🕒 المدة: <span className="text-yellow-300 font-bold">{exam.duration}</span> دقيقة
+              🕒 المدة:{" "}
+              <span className="text-yellow-300 font-bold">{exam.duration}</span>{" "}
+              دقيقة
             </div>
           </div>
 
           <div className="mt-3 bg-gray-900/40 border border-yellow-500/10 rounded-xl p-4 text-sm sm:text-base text-gray-200">
-            ❓ عدد الأسئلة: <span className="text-yellow-300 font-bold">{exam.questionsCount}</span>
+            ❓ عدد الأسئلة:{" "}
+            <span className="text-yellow-300 font-bold">
+              {exam.questionsCount}
+            </span>
           </div>
 
           {exam.teacher && (
             <div className="mt-3 bg-gray-900/40 border border-yellow-500/10 rounded-xl p-4 text-sm sm:text-base">
-              👩‍🏫 المعلم: <span className="text-yellow-300 font-bold">{exam.teacher?.name}</span>
+              👩‍🏫 المعلم:{" "}
+              <span className="text-yellow-300 font-bold">
+                {exam.teacher?.name}
+              </span>
             </div>
           )}
 
@@ -146,12 +179,13 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
             href="https://wa.link/ghostexams"
             className="mt-5 inline-flex w-full justify-center rounded-xl bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3"
           >
-            اشترك الآن
+            اشترك معنا الآن
           </Link>
 
-          <div className="mt-3 text-xs text-gray-400">
-            هذه صفحة تقدم معلومات الامتحان  — تقديم الامتحان يتم من داخل حساب
-            الطالب بعد الاشتراك.
+          <div className="mt-5 text-xs text-blue-400 font-bold">
+            هذه صفحة تقدم معلومات الامتحان فقط — تقديم الامتحان يتم من داخل حساب
+            الطالب بعد تفعيل الاشتراك لتفعيل الاشتراك اضغط على الزر تواصل معنا
+            نساعدك
           </div>
         </div>
       </main>

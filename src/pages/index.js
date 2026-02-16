@@ -484,7 +484,7 @@ const Home = () => {
           <p className="text-lg mb-4">هل عندك استفسار؟ تواصل معنا فورًا!</p>
 
           <a
-            href="https://wa.link/edubank"
+            href="https://wa.link/ghostexams"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-6 rounded-lg inline-block rounded-lg"

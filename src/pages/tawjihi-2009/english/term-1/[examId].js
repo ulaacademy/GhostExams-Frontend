@@ -146,12 +146,12 @@ export default function EnglishTerm1ExamSEO({ exam }) {
             href="https://wa.link/ghostexams"
             className="mt-5 inline-flex w-full justify-center rounded-xl bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3"
           >
-            اشترك الآن
+            اشترك معنا الآن 
           </Link>
 
-          <div className="mt-3 text-xs text-gray-400">
-            هذه صفحة تقدم معلومات الامتحان  — تقديم الامتحان يتم من داخل حساب
-            الطالب بعد الاشتراك.
+          <div className="mt-5 text-xs text-blue-400 font-bold">
+       هذه صفحة تقدم معلومات الامتحان  فقط — تقديم الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك
+          لتفعيل الاشتراك اضغط على الزر تواصل معنا نساعدك
           </div>
         </div>
       </main>
