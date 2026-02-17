@@ -337,39 +337,39 @@ const Home = () => {
             dir="rtl"
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-right"
           >
-            <div className="bg-blue-600 p-6 rounded-xl shadow-lg">
+            <div className="bg-blue-600 text-white p-6 rounded-xl shadow-lg font-semibold">
               📝 امتحانات محاكية لنمط الوزارة الحقيقي
             </div>
 
-            <div className="bg-green-600 p-6 rounded-xl shadow-lg">
+            <div className="bg-green-700 text-white p-6 rounded-xl shadow-lg font-semibold">
               ⚡ امتحانات تفاعلية سريعة للمراجعة
             </div>
 
-            <div className="bg-purple-600 p-6 rounded-xl shadow-lg">
+            <div className="bg-purple-700 text-white p-6 rounded-xl shadow-lg font-semibold">
               📚 امتحانات لأهم المواد الوزارية
             </div>
 
-            <div className="bg-yellow-600 p-6 rounded-xl shadow-lg text-black">
+            <div className="bg-yellow-500 text-slate-900 p-6 rounded-xl shadow-lg font-semibold">
               👨‍🏫 امتحانات بأفكار جديدة وذكية
             </div>
 
-            <div className="bg-pink-600 p-6 rounded-xl shadow-lg">
+            <div className="bg-pink-700 text-white p-6 rounded-xl shadow-lg font-semibold">
               🔢 امتحانات من 20 إلى 100 سؤال
             </div>
 
-            <div className="bg-red-600 p-6 rounded-xl shadow-lg">
+            <div className="bg-red-700 text-white p-6 rounded-xl shadow-lg font-semibold">
               📊 امتحانات تقييم شاملة قبل الاختبارات
             </div>
 
-            <div className="bg-blue-600 p-6 rounded-xl shadow-lg">
+            <div className="bg-blue-600 text-white p-6 rounded-xl shadow-lg font-semibold">
               📝 بنك اسئلة مرتب ومصنف لكل مادة
             </div>
 
-            <div className="bg-green-600 p-6 rounded-xl shadow-lg">
+            <div className="bg-green-700 text-white p-6 rounded-xl shadow-lg font-semibold">
               ⚡ امتحانات وتقيمات بعد كل امتحان
             </div>
 
-            <div className="bg-yellow-600 p-6 rounded-xl shadow-lg text-black">
+            <div className="bg-yellow-500 text-slate-900 p-6 rounded-xl shadow-lg font-semibold">
               👨‍🏫 اول معلم (Ai) للتوجيهي
             </div>
           </div>

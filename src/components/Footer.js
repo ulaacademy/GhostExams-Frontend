@@ -18,7 +18,7 @@ export default function Footer() {
             <div className="text-xl font-extrabold text-yellow-400">
               GhostExams
             </div>
-            <p className="mt-2 text-sm text-gray-300 leading-relaxed">
+            <p className="mt-2 text-sm text-gray-200 leading-relaxed">
               منصة امتحانات توجيهي الأردن 2009 — امتحانات إلكترونية وبنك أسئلة
               مرتب للمراجعة والتحضير.
             </p>
@@ -26,25 +26,39 @@ export default function Footer() {
 
           {/* Quick links */}
           <nav className="text-right">
-            <h3 className="text-sm font-extrabold text-yellow-300">روابط سريعة</h3>
+            <h3 className="text-sm font-extrabold text-yellow-300">
+              روابط سريعة
+            </h3>
             <ul className="mt-3 space-y-2 text-sm">
               <li>
-                <Link href="/" className="text-gray-300 hover:text-yellow-300 transition">
+                <Link
+                  href="/"
+                  className="text-gray-300 hover:text-yellow-300 transition"
+                >
                   الرئيسية
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="text-gray-300 hover:text-yellow-300 transition">
+                <Link
+                  href="/pricing"
+                  className="text-gray-300 hover:text-yellow-300 transition"
+                >
                   الاشتراكات
                 </Link>
               </li>
               <li>
-                <Link href="/ourteachers" className="text-gray-300 hover:text-yellow-300 transition">
+                <Link
+                  href="/ourteachers"
+                  className="text-gray-300 hover:text-yellow-300 transition"
+                >
                   المعلمين
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-300 hover:text-yellow-300 transition">
+                <Link
+                  href="/contact"
+                  className="text-gray-300 hover:text-yellow-300 transition"
+                >
                   تواصل معنا
                 </Link>
               </li>
@@ -53,7 +67,9 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="text-right">
-            <h3 className="text-sm font-extrabold text-yellow-300">تواصل سريع</h3>
+            <h3 className="text-sm font-extrabold text-yellow-300">
+              تواصل سريع
+            </h3>
 
             <div className="mt-3 space-y-3 text-sm">
               <div className="flex items-center justify-end gap-2">
@@ -121,7 +137,7 @@ export default function Footer() {
             © Ghost Exams Jordan 2026. All rights reserved.
           </p>
 
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-300">
             للتواصل فقط عبر واتساب:{" "}
             <a
               href={waLink}
