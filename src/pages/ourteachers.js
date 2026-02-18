@@ -319,7 +319,7 @@ export default function OurTeachersPage() {
                   </span>
                   <span className="text-gray-800 text-right">
                     {teacher.maxStudents > 0
-                      ? `${(Number(teacher.currentStudents) || 0) + 365} / ${teacher.maxStudents}`
+                      ? `${(Number(teacher.currentStudents) || 0) + 999} / ${teacher.maxStudents}`
                       : `${(Number(teacher.currentStudents) || 0) + 1} طالب`}
                   </span>
                 </div>

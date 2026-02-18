@@ -216,6 +216,8 @@ const Home = () => {
               بنوك اسئلة وامتحانات توجيهي 2009 — أول معلم Ai بالأردن{" "}
             </h1>
 
+            
+
             <div className="text-yellow-300/90 text-lg mb-6">
               <span className="mx-1">💯</span>
               <span className="mx-1">🇯🇴</span>

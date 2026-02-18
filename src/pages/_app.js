@@ -8,6 +8,8 @@ import "@/styles/schoolExamStyles.css";
 import Head from "next/head";
 import Script from "next/script";
 import Footer from "@/components/Footer";
+import WhatsAppChat from "@/components/WhatsAppChat";
+
 
 export default function App({ Component, pageProps }) {
   return (
@@ -37,6 +39,9 @@ export default function App({ Component, pageProps }) {
           <Component {...pageProps} />
           <Footer />
           {/* <SmartChatBot /> */}
+          <WhatsAppChat
+        phone="962791515106"
+  message = "-مرحبا، عندي استفسار بخصوص الاشتراك 👋، (بدي الاربع مواد بسعر 5 دنانير لاني جاي من الموقع ) "      />
         </ToastProvider>
       </AuthProvider>
     </>
