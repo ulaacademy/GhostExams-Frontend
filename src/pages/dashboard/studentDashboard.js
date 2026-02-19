@@ -398,7 +398,9 @@ export default function StudentDashboard() {
               {/* ✅ إذا الاشتراك صار Active */}
               {subStatus.active ? (
                 <div className="mb-4 rounded-lg border border-green-200 bg-green-50 p-4 text-green-800">
-                  ✅ تم تفعيل اشتراكك بنجاح.
+                  ✅ تم تفعيل اشتراكك بنجاح.الرجاء الذهاب الى ( قسم اضف بنوك
+                  الاسئلة ) واشترك مع المعلم/المعلمين حسب البكج الذي اخترته سيتم
+                  تفعيل امتحانات المعلم مباشرة من ( قسم الامتحانات )
                   <div className="mt-1 text-sm text-green-700">
                     الخطة الحالية:{" "}
                     <b>

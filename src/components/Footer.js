@@ -6,7 +6,7 @@ export default function Footer() {
   const phoneDisplay = "0791515106";
   const phoneIntl = "+962791515106"; // الأردن
   const waLink = "https://wa.me/962791515106";
-  const igLink = "https://www.instagram.com/ghostexams/";
+  const igLink = "https://www.instagram.com/ghostexams_tawjihi_2009/";
   const fbLink = "https://www.facebook.com/ghostexams";
 
   return (
