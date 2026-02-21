@@ -11,7 +11,7 @@ import {
   fetchUserProfile,
 } from "@/services/api";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+//import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Button from "@/components/ui/button";
 import {
   BarChart,
@@ -106,7 +106,7 @@ export default function StudentDashboard() {
   const router = useRouter();
 
   const { user, userId: authUserId } = useAuth();
-  const queryUserId = router?.query?.userId || null; // ✅ أضفه هون
+  const queryUserId = router?.query?.userId || null;
 
   const userId =
     queryUserId || authUserId || user?.userId || user?.id || user?._id;
@@ -201,7 +201,7 @@ export default function StudentDashboard() {
     try {
       // ✅ آخر نتيجة
       const latestRawWrap = await fetchLatestExamResult(userId);
-      const latestRaw = latestRawWrap?.latestResult || latestRawWrap; // ✅ فك التغليف
+      const latestRaw = latestRawWrap?.latestResult || latestRawWrap;
 
       let latest = null;
       if (latestRaw && latestRaw.score !== undefined) {
@@ -220,8 +220,6 @@ export default function StudentDashboard() {
       const last10 = arr.slice(-10);
       const enrichedLast10 = await Promise.all(last10.map(enrichResult));
 
-      // نرجّعهم بنفس ترتيبهم الأصلي + نخزن كل التاريخ لو بدك
-      // هون بنخزن آخر 10 فقط لأنك بتعرض آخر 10/4 أساسًا
       setExamHistory(enrichedLast10);
 
       // ✅ متوسط آخر 4
@@ -239,7 +237,7 @@ export default function StudentDashboard() {
       const performanceData = await fetchStudentPerformance(userId);
       setPerformance(Array.isArray(performanceData) ? performanceData : []);
 
-      // ✅ امتحانات المعلمين (القائمة المتاحة)
+      // ✅ امتحانات المعلمين
       const examsFromTeachers = await fetchTeacherCustomExams();
       setTeacherExams(
         Array.isArray(examsFromTeachers) ? examsFromTeachers : [],
@@ -295,6 +293,7 @@ export default function StudentDashboard() {
     if (!examId) return;
     router.push(`/dashboard/exams/custom/${examId}?retake=1`);
   };
+
   const [subStatus, setSubStatus] = useState({
     loading: true,
     active: null,
@@ -320,7 +319,7 @@ export default function StudentDashboard() {
     load();
   }, []);
 
-  // ✅ قراءة رسالة pending من الرابط (جاية من student/subscription بعد الإرسال)
+  // ✅ قراءة رسالة pending من الرابط
   const statusQuery = router?.query?.status || null;
   const planQueryRaw = router?.query?.plan || null;
 
@@ -342,348 +341,405 @@ export default function StudentDashboard() {
     planFromQuery ||
     "الخطة";
 
-  return (
-    <ProtectedRoute requiredRole="student">
-      <DashboardNavbar student={studentDetails}>
-        <div
-          dir="rtl"
-          className="max-w-4xl mx-auto bg-white p-6 shadow-md rounded-lg"
-        >
-          <h1 className="text-2xl font-bold text-blue-600 mb-4">
-            📊 لوحة تحكم الطالب
-          </h1>
+return (
+  <ProtectedRoute requiredRole="student">
+    <DashboardNavbar student={studentDetails}>
+      <div dir="rtl" className="max-w-5xl mx-auto p-4 md:p-6 space-y-4">
+        {/* Header: title + next step */}
+        <div className="bg-white rounded-2xl shadow-md p-4 md:p-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-extrabold text-blue-700">
+                لوحة تحكم الطالب 📊
+              </h1>
+              <p className="text-sm text-gray-600 mt-1">
+                أهلاً فيك{" "}
+                <span className="font-bold text-gray-900">
+                  {studentDetails?.name || "الطالب"}
+                </span>{" "}
+                👋
+              </p>
+            </div>
 
-          {/* ✅ تنبيه الاشتراك للطالب (يظهر فقط إذا ما عنده اشتراك Active ولا طلب Pending) */}
-          {!subLoading && !isSubscribed && !subStatus.pending && (
-            <div
-              dir="rtl"
-              className="mb-6 rounded-xl bg-blue-600 p-5 text-white shadow-lg"
-            >
-              <div className="text-center text-xl font-extrabold">
-                أهلاً فيك {studentDetails?.name || "الطالب"} 👋
-              </div>
+            <div className="flex gap-2 flex-wrap">
+              <Link href="/dashboard/subscribed-teachers">
+                <Button className="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition">
+                  🚀 ابدأ امتحان الآن
+                </Button>
+              </Link>
 
-              <div className="mt-2 text-center text-lg font-bold">
-                ✅ هذا حسابك المجاني لتجربة امتحانات المعلمين. 🔺للحصول على
-                المزيد من الامتحانات، وبنوك الاسئلة فعّل حسابك من هنا 👇او تواصل
-                معنا على واتس اب 👈 0791515106 👉
-              </div>
+              <Link href="/dashboard/performance">
+                <Button className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+                  📈 اعرف مستواك
+                </Button>
+              </Link>
 
-              <div className="mt-4 flex justify-center">
+              {!subLoading && !isSubscribed && (
                 <Link href="/dashboard/student/subscription">
-                  <button className="rounded-lg bg-white px-7 py-3 text-lg font-extrabold text-blue-700 hover:bg-gray-100 transition">
-                    📦 تفعيل الاشتراك الآن
-                  </button>
+                  <Button className="px-4 py-2 bg-yellow-500 text-black rounded-xl hover:bg-yellow-400 transition font-bold">
+                    ⭐ فعّل الاشتراك
+                  </Button>
                 </Link>
+              )}
+            </div>
+          </div>
+
+          {/* Subscription banners (shorter + clearer) */}
+          <div className="mt-4 space-y-3">
+            {!subLoading && !isSubscribed && !subStatus.pending && (
+              <div className="rounded-2xl bg-blue-600 text-white p-4 md:p-5 shadow-lg">
+                <div className="font-extrabold text-center text-base md:text-lg">
+                  حسابك مجاني للتجربة ✅ — فعّل الاشتراك لفتح بنوك الأسئلة + امتحانات أكثر
+                </div>
+                <div className="text-center text-sm md:text-base mt-2">
+                  واتس اب الدعم:{" "}
+                  <span dir="ltr" className="font-extrabold">
+                    0791515106
+                  </span>
+                </div>
+
+                <div className="mt-3 flex justify-center">
+                  <Link href="/dashboard/student/subscription">
+                    <button className="rounded-xl bg-white px-6 py-3 text-blue-700 font-extrabold hover:bg-gray-100 transition">
+                      📦 تفعيل الاشتراك الآن
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {!subLoading && !isSubscribed && !!subStatus.pending && (
+              <div className="rounded-2xl bg-yellow-50 border border-yellow-200 p-4 text-yellow-900">
+                <div className="font-extrabold text-center">
+                  ⏳ طلب اشتراكك قيد المراجعة — بنفعّله بعد تأكيد الدفع خلال 24 ساعة
+                </div>
+              </div>
+            )}
+
+            {!subStatus.loading && subStatus.active ? (
+              <div className="rounded-2xl bg-green-50 border border-green-200 p-4 text-green-800">
+                <div className="font-extrabold">✅ اشتراكك فعّال</div>
+                <div className="text-sm mt-1 text-green-700">
+                  الخطة الحالية:{" "}
+                  <b>
+                    {subStatus?.active?.planSnapshot?.name ||
+                      subStatus?.active?.planSnapshot?.title ||
+                      "الخطة"}
+                  </b>
+                </div>
+              </div>
+            ) : null}
+
+            {!subStatus.active &&
+            !subStatus.loading &&
+            (subStatus.pending || statusQuery === "pending") ? (
+              <div className="rounded-2xl bg-yellow-50 border border-yellow-200 p-4 text-yellow-900">
+                ⏳ تم إرسال طلب الاشتراك بحزمة <b>{pendingPlanName}</b>.
+                <div className="text-sm text-yellow-800 mt-1">
+                  سيتم التفعيل بعد تأكيد الدفع خلال <b>24 ساعة</b>.
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          {/* Loading / Error */}
+          <div className="mt-4">
+            {loading ? (
+              <div className="text-center text-gray-500 font-bold">
+                🔄 تحميل البيانات...
+              </div>
+            ) : error ? (
+              <div className="text-center py-4">
+                <div className="text-red-500 font-bold mb-3">{error}</div>
+                <button
+                  onClick={() => {
+                    setError(null);
+                    loadDashboardData();
+                  }}
+                  className="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-bold"
+                >
+                  🔄 إعادة المحاولة
+                </button>
+              </div>
+            ) : null}
+          </div>
+        </div>
+
+        {/* Main content */}
+        {!loading && !error && (
+          <>
+            {/* KPI cards: super practical */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="bg-white rounded-2xl shadow-md p-4 border">
+                <div className="text-sm text-gray-500">آخر نتيجة</div>
+                <div className="text-2xl font-extrabold text-gray-900 mt-1">
+                  {latestExamResult ? `${latestExamResult?._percent ?? 0}%` : "—"}
+                </div>
+                <div className="text-sm text-gray-600 mt-1">
+                  {latestExamResult?._exam?.subject ||
+                    latestExamResult?._exam?.examName ||
+                    "لم تقدّم امتحان بعد"}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-md p-4 border">
+                <div className="text-sm text-gray-500">متوسط آخر 4 امتحانات</div>
+                <div className="text-2xl font-extrabold text-blue-700 mt-1">
+                  {performanceAverage}%
+                </div>
+                <div className="text-sm text-gray-600 mt-1">
+                  {performanceAverage < 50
+                    ? "ابدأ بمراجعة نقاط ضعفك"
+                    : performanceAverage < 80
+                      ? "ممتاز — كمّل بنفس الوتيرة"
+                      : "🔥 أداء قوي جدًا"}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-md p-4 border">
+                <div className="text-sm text-gray-500">عدد الامتحانات الأخيرة</div>
+                <div className="text-2xl font-extrabold text-gray-900 mt-1">
+                  {examHistory?.length || 0}
+                </div>
+                <div className="text-sm text-gray-600 mt-1">
+                  (نعرض آخر 10 نتائج عندك)
+                </div>
               </div>
             </div>
-          )}
 
-          {/* ✅ إذا عنده طلب قيد المراجعة */}
-          {!subLoading && !isSubscribed && !!subStatus.pending && (
-            <div
-              dir="rtl"
-              className="mb-6 rounded-xl bg-yellow-400 p-5 text-black shadow-lg"
-            >
-              <div className="text-center text-lg font-extrabold">
-                ✅ تم إرسال طلبك سابقًا وهو قيد المراجعة. الرجاء الانتظار لتفعيل
-                الاشتراك.
+            {/* Latest Exam Result (action-focused) */}
+            <div className="bg-white rounded-2xl shadow-md p-4 md:p-6">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <h2 className="text-xl font-extrabold text-gray-900">
+                  ✅ آخر امتحان
+                </h2>
+
+                {latestExamResult?._examId ? (
+                  <div className="flex gap-2 flex-wrap">
+                    <button
+                      onClick={() => handleRetake(latestExamResult?._examId)}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-bold"
+                    >
+                      🔁 أعد الامتحان
+                    </button>
+                    <button
+                      onClick={() =>
+                        router.push(
+                          `/dashboard/exams/custom/${latestExamResult?._examId}`,
+                        )
+                      }
+                      className="px-4 py-2 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition font-bold"
+                    >
+                      👀 عرض
+                    </button>
+                  </div>
+                ) : (
+                  <Link href="/dashboard/subscribed-teachers">
+                    <Button className="bg-green-500 text-white rounded-xl hover:bg-green-600">
+                      🚀 ابدأ أول امتحان
+                    </Button>
+                  </Link>
+                )}
               </div>
-            </div>
-          )}
 
-          {/* ✅ رسائل الاشتراك (Pending / Active) */}
-          {!subStatus.loading && (
-            <>
-              {/* ✅ إذا الاشتراك صار Active */}
-              {subStatus.active ? (
-                <div className="mb-4 rounded-lg border border-green-200 bg-green-50 p-4 text-green-800">
-                  ✅ تم تفعيل اشتراكك بنجاح.الرجاء الذهاب الى ( قسم اضف بنوك
-                  الاسئلة ) واشترك مع المعلم/المعلمين حسب البكج الذي اخترته سيتم
-                  تفعيل امتحانات المعلم مباشرة من ( قسم الامتحانات )
-                  <div className="mt-1 text-sm text-green-700">
-                    الخطة الحالية:{" "}
-                    <b>
-                      {subStatus?.active?.planSnapshot?.name ||
-                        subStatus?.active?.planSnapshot?.title ||
-                        "الخطة"}
-                    </b>
-                  </div>
-                </div>
-              ) : null}
-
-              {/* ✅ إذا في Pending أو جاي من الرابط status=pending */}
-              {!subStatus.active &&
-              (subStatus.pending || statusQuery === "pending") ? (
-                <div className="mb-4 rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-yellow-900">
-                  ⏳ تم إرسال طلبك للاشتراك بحزمة <b>{pendingPlanName}</b>.
-                  <div className="mt-1 text-sm text-yellow-800">
-                    الرجاء الانتظار، سيتم تفعيل الاشتراك بعد تأكيد عملية الدفع
-                    خلال <b>24 ساعة</b>.
-                  </div>
-                </div>
-              ) : null}
-            </>
-          )}
-
-          {loading ? (
-            <p className="text-center text-gray-500">🔄 تحميل البيانات...</p>
-          ) : error ? (
-            <div className="text-center py-8">
-              <p className="text-red-500 mb-4">{error}</p>
-              <button
-                onClick={() => {
-                  setError(null);
-                  loadDashboardData();
-                }}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-              >
-                🔄 إعادة المحاولة
-              </button>
-            </div>
-          ) : (
-            <>
-              {/* ✅ نتيجة آخر امتحان */}
               {latestExamResult ? (
-                <Card className="bg-white p-4 rounded shadow-md mt-4">
-                  <CardHeader>
-                    <CardTitle className="text-lg font-semibold">
-                      ✅ نتيجة آخر امتحان:
-                    </CardTitle>
-                  </CardHeader>
+                <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="rounded-xl bg-gray-50 border p-3">
+                    <div className="text-sm text-gray-500">اسم الامتحان</div>
+                    <div className="font-bold text-gray-900">
+                      {latestExamResult?._exam?.examName ||
+                        latestExamResult?._exam?.subject ||
+                        "غير متاح"}
+                    </div>
+                  </div>
 
-                  <CardContent className="space-y-2">
-                    <p>
-                      🧾 اسم الامتحان:{" "}
-                      <b className="text-gray-900">
-                        {latestExamResult?._exam?.examName ||
-                          latestExamResult?._exam?.subject ||
-                          "غير متاح"}
-                      </b>
-                    </p>
+                  <div className="rounded-xl bg-gray-50 border p-3">
+                    <div className="text-sm text-gray-500">النتيجة</div>
+                    <div className="font-extrabold text-blue-700 text-lg">
+                      {latestExamResult?._correct ?? 0}/{latestExamResult?._total ?? 0}{" "}
+                      ({latestExamResult?._percent ?? 0}%)
+                    </div>
+                  </div>
 
-                    <p>
-                      📚 المادة:{" "}
-                      {latestExamResult?._exam?.subject ?? "غير متاحة"}
-                    </p>
-
-                    <p>
-                      📅 التاريخ:{" "}
+                  <div className="rounded-xl bg-gray-50 border p-3">
+                    <div className="text-sm text-gray-500">التاريخ</div>
+                    <div className="font-bold text-gray-900">
                       {latestExamResult?._date
                         ? new Date(latestExamResult._date).toLocaleDateString()
                         : "غير متاح"}
-                    </p>
-
-                    <p className="font-bold text-gray-900">
-                      🎯 النتيجة: {latestExamResult?._correct ?? 0} /{" "}
-                      {latestExamResult?._total ?? 0}{" "}
-                      <span className="text-blue-700">
-                        ({latestExamResult?._percent ?? 0}%)
-                      </span>
-                    </p>
-
-                    <div className="pt-2">
-                      <button
-                        onClick={() => handleRetake(latestExamResult?._examId)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-semibold"
-                      >
-                        🔁 أعد الامتحان
-                      </button>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               ) : (
-                <Card className="bg-white p-4 rounded shadow-md mt-4">
-                  <CardHeader>
-                    <CardTitle className="text-lg font-semibold">
-                      📌 لا توجد نتائج امتحانات
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600">
-                      ⚠️ لم تقم بإجراء أي امتحانات بعد.
-                    </p>
-                  </CardContent>
-                </Card>
+                <div className="mt-3 text-gray-600">
+                  ⚠️ لم تقدّم أي امتحان بعد — اضغط “ابدأ امتحان الآن”.
+                </div>
               )}
+            </div>
 
-              {/* ✅ آخر 4/10 نتائج */}
-              {examHistory.length > 0 && (
-                <div className="mt-6">
-                  <h2 className="text-xl font-bold mb-4">
-                    🧾 نتائج الامتحانات التى قدمتها ( اخر 4 امتحانات )
+            {/* Exam history (simple list cards) */}
+            {examHistory.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-md p-4 md:p-6">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <h2 className="text-xl font-extrabold text-gray-900">
+                    🧾 آخر نتائجك
                   </h2>
+                  <span className="text-sm text-gray-500">
+                    آخر 10 امتحانات (الأحدث أولاً)
+                  </span>
+                </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {examHistory
-                      .slice(-10)
-                      .reverse()
-                      .map((exam, index) => {
-                        const title =
-                          exam?._exam?.examName ||
-                          exam?._exam?.subject ||
-                          "امتحان";
+                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {examHistory
+                    .slice(-10)
+                    .reverse()
+                    .map((exam, index) => {
+                      const title =
+                        exam?._exam?.examName || exam?._exam?.subject || "امتحان";
 
-                        return (
-                          <Card
-                            key={index}
-                            className="shadow-lg rounded-lg p-4"
-                          >
-                            <CardHeader>
-                              <CardTitle className="text-lg font-semibold">
+                      return (
+                        <div
+                          key={index}
+                          className="border rounded-2xl p-4 hover:shadow-md transition bg-white"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <div className="font-extrabold text-gray-900">
                                 {title}
-                              </CardTitle>
-                            </CardHeader>
-
-                            <CardContent className="space-y-2">
-                              <p className="text-gray-600">
+                              </div>
+                              <div className="text-sm text-gray-600 mt-1">
                                 📅{" "}
                                 {exam?._date
                                   ? new Date(exam._date).toLocaleDateString()
                                   : "غير متاح"}
-                              </p>
-
-                              <p className="text-gray-800 font-bold">
-                                🎯 النتيجة: {exam?._correct ?? 0} /{" "}
-                                {exam?._total ?? 0}{" "}
-                                <span className="text-blue-700">
-                                  ({exam?._percent ?? 0}%)
-                                </span>
-                              </p>
-
-                              <div className="flex gap-2 pt-2">
-                                <button
-                                  onClick={() => handleRetake(exam?._examId)}
-                                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-semibold"
-                                >
-                                  🔁 أعد الامتحان
-                                </button>
-
-                                <button
-                                  onClick={() =>
-                                    router.push(
-                                      `/dashboard/exams/custom/${exam?._examId}`,
-                                    )
-                                  }
-                                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
-                                >
-                                  👀 عرض الامتحان
-                                </button>
                               </div>
-                            </CardContent>
-                          </Card>
-                        );
-                      })}
-                  </div>
-                </div>
-              )}
+                            </div>
 
-              {/* ✅ امتحانات من معلمك */}
-              {teacherExams.length > 0 && (
-                <div className="mt-6">
-                  <h2 className="text-xl font-bold text-blue-600 mb-4">
-                    📘 جرب امتحانات مجانية من معلمك الافتراضي ( جرب طريقة
-                    الامتحانات فقط ){" "}
-                  </h2>
+                            <div className="text-blue-700 font-extrabold text-lg">
+                              {exam?._percent ?? 0}%
+                            </div>
+                          </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {teacherExams.slice(0, 4).map((exam, index) => (
-                      <div
-                        key={index}
-                        className="border p-4 rounded shadow bg-blue-50 hover:bg-blue-100 transition cursor-pointer"
-                        onClick={() =>
-                          router.push(`/dashboard/exams/custom/${exam._id}`)
-                        }
-                      >
-                        <h3 className="font-semibold text-lg">
-                          {exam.examName}
-                        </h3>
-                        <p className="text-sm text-gray-600">
-                          📚 المادة: {exam.subject} | 🧪 الصف: {exam.grade} | 📅
-                          الفصل: {exam.term}
-                        </p>
-                        <p className="text-sm mt-1 text-gray-500">
-                          🕒 المدة: {exam.duration} دقيقة
-                        </p>
-                        <div className="mt-3">
-                          <div className="inline-block px-4 py-2 rounded bg-blue-600 text-white text-sm font-semibold">
-                            ابدأ الامتحان
+                          <div className="mt-3 rounded-xl bg-gray-50 border p-3 font-bold text-gray-900">
+                            🎯 {exam?._correct ?? 0}/{exam?._total ?? 0}
+                          </div>
+
+                          <div className="mt-3 flex gap-2 flex-wrap">
+                            <button
+                              onClick={() => handleRetake(exam?._examId)}
+                              className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-bold"
+                            >
+                              🔁 أعد
+                            </button>
+                            <button
+                              onClick={() =>
+                                router.push(`/dashboard/exams/custom/${exam?._examId}`)
+                              }
+                              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition font-bold"
+                            >
+                              👀 عرض
+                            </button>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {teacherExams.length > 4 && (
-                    <div className="mt-4 flex justify-center">
-                      <Link href="/dashboard/subscribed-teachers">
-                        <Button className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                          📌 عرض كل امتحانات المعلمين المشترك معهم{" "}
-                        </Button>
-                      </Link>
-                    </div>
-                  )}
+                      );
+                    })}
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* ✅ تطور أداء الطالب */}
-              <div className="mt-8">
-                <h2 className="text-xl font-bold mb-4">
-                  📊 تطور أدائك عبر الامتحانات
-                </h2>
-
-                <p className="text-md text-gray-600 mb-2">
-                  📈 متوسط أدائك في آخر 4 امتحانات:{" "}
-                  <span className="font-bold text-blue-600">
-                    {performanceAverage}% - قدم امتحانات اضافية لتقوية ذاكرتك
-                    ورفع مستواك
+            {/* Teacher exams: clear CTA */}
+            {teacherExams.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-md p-4 md:p-6">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <h2 className="text-xl font-extrabold text-blue-700">
+                    🎁 امتحانات مجانية للتجربة
+                  </h2>
+                  <span className="text-sm text-gray-500">
+                    جرّب طريقة الامتحانات قبل الاشتراك
                   </span>
-                </p>
+                </div>
 
-                <p className="text-sm text-green-600 mb-4">
-                  {performanceAverage < 50
-                    ? "⚠️ مستواك يحتاج إلى مراجعة، حاول التركيز على نقاط ضعفك."
-                    : performanceAverage < 80
-                      ? "✅ أنت على الطريق الصحيح، استمر بالمذاكرة المنتظمة."
-                      : "🎉 أداء ممتاز! حافظ على هذا المستوى الرائع 👏"}
-                </p>
+                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {teacherExams.slice(0, 4).map((exam, index) => (
+                    <div
+                      key={index}
+                      className="border rounded-2xl p-4 hover:shadow-md transition cursor-pointer bg-blue-50"
+                      onClick={() => router.push(`/dashboard/exams/custom/${exam._id}`)}
+                    >
+                      <div className="font-extrabold text-gray-900 text-lg">
+                        {exam.examName}
+                      </div>
+                      <div className="text-sm text-gray-700 mt-1">
+                        📚 {exam.subject} • 🧪 {exam.grade} • 📅 {exam.term}
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        🕒 المدة: <b>{exam.duration}</b> دقيقة
+                      </div>
 
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart
-                    data={examHistory.slice(-10).map((exam) => ({
-                      name:
-                        exam?._exam?.examName ||
-                        exam?._exam?.subject ||
-                        "امتحان",
-                      performancePercentage: exam?._percent ?? 0,
-                    }))}
-                  >
-                    <XAxis dataKey="name" />
-                    <YAxis domain={[0, 100]} />
-                    <Tooltip />
-                    <Bar dataKey="performancePercentage" fill="#4f46e5" />
-                  </BarChart>
-                </ResponsiveContainer>
+                      <div className="mt-3">
+                        <div className="inline-block px-4 py-2 rounded-xl bg-blue-600 text-white font-extrabold">
+                          ▶️ ابدأ الآن
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {teacherExams.length > 4 && (
+                  <div className="mt-4 flex justify-center">
+                    <Link href="/dashboard/subscribed-teachers">
+                      <Button className="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+                        📌 عرض كل امتحانات المعلمين
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </div>
+            )}
 
-              {/* ✅ روابط إضافية */}
-              <div className="mt-6 flex justify-between">
-                <Link href="/dashboard/performance">
-                  <Button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
-                    📊 تحليل أدائك بالتفصيل
-                  </Button>
-                </Link>
+            {/* Chart */}
+            <div className="bg-white rounded-2xl shadow-md p-4 md:p-6">
+              <h2 className="text-xl font-extrabold text-gray-900 mb-2">
+                📊 تطور أدائك
+              </h2>
+              <p className="text-sm text-gray-600 mb-4">
+                هذا الرسم يعرض آخر 10 نتائج (كلما زادت الامتحانات، تطلع صورتك أوضح)
+              </p>
 
-                <Link href="/dashboard/exams">
-                  <Button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-200">
-                    📚 جرب امتحان جديد
-                  </Button>
-                </Link>
-              </div>
-            </>
-          )}
-        </div>
-      </DashboardNavbar>
-    </ProtectedRoute>
-  );
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart
+                  data={examHistory.slice(-10).map((exam) => ({
+                    name: exam?._exam?.subject || exam?._exam?.examName || "امتحان",
+                    performancePercentage: exam?._percent ?? 0,
+                  }))}
+                >
+                  <XAxis dataKey="name" />
+                  <YAxis domain={[0, 100]} />
+                  <Tooltip />
+                  <Bar dataKey="performancePercentage" fill="#4f46e5" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Bottom actions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <Link href="/dashboard/subscribed-teachers">
+                <Button className="w-full py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition font-extrabold">
+                  🚀 ابدأ امتحان جديد
+                </Button>
+              </Link>
+
+              <Link href="/dashboard/performance">
+                <Button className="w-full py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-extrabold">
+                  📈 شوف تحليل أدائك
+                </Button>
+              </Link>
+            </div>
+          </>
+        )}
+      </div>
+    </DashboardNavbar>
+  </ProtectedRoute>
+);
+
 }
