@@ -4,6 +4,7 @@ import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { API_URL } from "@/services/api";
+import { useEffect, useMemo, useState } from "react";
 
 export async function getServerSideProps({ params }) {
   try {
@@ -40,9 +41,7 @@ export default function JordanHistoryTerm1ExamSEO({ exam }) {
   const canonicalUrl = `${siteUrl}${listPagePath}/${examId}`;
 
   // ✅ Safe values
-  const safeExamName = (
-    exam?.examName || `امتحان ${subjectShort} توجيهي 2009`
-  ).trim();
+  const safeExamName = (exam?.examName || `امتحان ${subjectShort} توجيهي 2009`).trim();
 
   const durationVal = exam?.duration;
   const questionsCountVal = exam?.questionsCount;
@@ -108,7 +107,8 @@ export default function JordanHistoryTerm1ExamSEO({ exam }) {
     },
     {
       q: "هل تظهر الإجابات الصحيحة أثناء الحل؟",
-      a: "نعم، كل سؤال يظهر للطالب يكون معه الاجابة الصحيحة ستظهر بعد اختيار الاجابة من الخيارات الاربعة ",    },
+      a: "نعم، كل سؤال يظهر للطالب يكون معه الاجابة الصحيحة ستظهر بعد اختيار الاجابة من الخيارات الاربعة",
+    },
     {
       q: "هل يغطي الأحداث والشخصيات والمصطلحات؟",
       a: "نعم، الامتحانات تهدف لتغطية محاور تاريخ الأردن الأساسية ضمن وحدات الفصل.",
@@ -119,18 +119,21 @@ export default function JordanHistoryTerm1ExamSEO({ exam }) {
     },
   ];
 
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqItems.map((item) => ({
-      "@type": "Question",
-      name: item.q,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.a,
-      },
-    })),
-  };
+  const faqJsonLd = useMemo(
+    () => ({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      })),
+    }),
+    [faqItems]
+  );
 
   // ✅ Breadcrumbs JSON-LD
   const breadcrumbJsonLd = {
@@ -221,6 +224,27 @@ export default function JordanHistoryTerm1ExamSEO({ exam }) {
       ? String(exam.teacher.name).trim()
       : null;
 
+  /**
+   * ✅ حل Duplicate FAQPage:
+   * - بنعرض FAQ JSON-LD مرة واحدة فقط حتى لو كان موجود بكومبوننت آخر.
+   * - نستعمل window guard عشان يمنع تكراره.
+   */
+  const [renderFaqJsonLd, setRenderFaqJsonLd] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const KEY = "__GE_FAQ_JSONLD__";
+    // إذا سبق وانعرض FAQPage على الصفحة، ما نعرضه مرة ثانية
+    if (window[KEY]) {
+      setRenderFaqJsonLd(false);
+      return;
+    }
+
+    window[KEY] = true;
+    setRenderFaqJsonLd(true);
+  }, []);
+
   return (
     <div className="bg-gray-900 text-white min-h-screen">
       <Head>
@@ -231,7 +255,7 @@ export default function JordanHistoryTerm1ExamSEO({ exam }) {
         <meta name="robots" content="index, follow" />
         <meta httpEquiv="content-language" content="ar-JO" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <html lang="ar" />
+        {/* ❌ لا تضع <html lang="ar" /> هنا */}
 
         <link rel="canonical" href={canonicalUrl} />
 
@@ -254,17 +278,25 @@ export default function JordanHistoryTerm1ExamSEO({ exam }) {
 
         {/* ✅ JSON-LD */}
         <script
+          id="breadcrumb-jsonld"
+          key="breadcrumb-jsonld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
         <script
+          id="article-jsonld"
+          key="article-jsonld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
+        {renderFaqJsonLd && (
+          <script
+            id="faq-jsonld"
+            key="faq-jsonld"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+          />
+        )}
       </Head>
 
       <Navbar />
@@ -290,15 +322,10 @@ export default function JordanHistoryTerm1ExamSEO({ exam }) {
           <ol className="flex flex-wrap gap-2 text-xs sm:text-sm text-gray-300">
             {crumb.map((c, idx) => (
               <li key={idx} className="flex items-center gap-2">
-                <Link
-                  href={c.href}
-                  className="hover:text-yellow-300 transition"
-                >
+                <Link href={c.href} className="hover:text-yellow-300 transition">
                   {c.label}
                 </Link>
-                {idx < crumb.length - 1 && (
-                  <span className="text-gray-500">›</span>
-                )}
+                {idx < crumb.length - 1 && <span className="text-gray-500">›</span>}
               </li>
             ))}
           </ol>
@@ -311,28 +338,21 @@ export default function JordanHistoryTerm1ExamSEO({ exam }) {
           </h1>
 
           <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed">
-            هذه صفحة معلومات مفهرسة لتوضيح بيانات الامتحان . تقديم الامتحان
-            يتم من داخل حساب الطالب بعد تفعيل الاشتراك.
+            هذه صفحة معلومات مفهرسة لتوضيح بيانات الامتحان . تقديم الامتحان يتم
+            من داخل حساب الطالب بعد تفعيل الاشتراك.
           </p>
 
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-gray-200">
             <div className="bg-gray-900/50 rounded-xl p-4">
-              📚 المادة:{" "}
-              <span className="text-yellow-300 font-bold">{subjectLabel}</span>
+              📚 المادة: <span className="text-yellow-300 font-bold">{subjectLabel}</span>
             </div>
 
             <div className="bg-gray-900/50 rounded-xl p-4">
-              🧪 الصف:{" "}
-              <span className="text-yellow-300 font-bold">
-                {exam?.grade || "2009"}
-              </span>
+              🧪 الصف: <span className="text-yellow-300 font-bold">{exam?.grade || "2009"}</span>
             </div>
 
             <div className="bg-gray-900/50 rounded-xl p-4">
-              📅 الفصل:{" "}
-              <span className="text-yellow-300 font-bold">
-                {exam?.term || termNumber}
-              </span>
+              📅 الفصل: <span className="text-yellow-300 font-bold">{exam?.term || termNumber}</span>
             </div>
 
             <div className="bg-gray-900/50 rounded-xl p-4">
@@ -344,15 +364,12 @@ export default function JordanHistoryTerm1ExamSEO({ exam }) {
 
           <div className="mt-4 bg-gray-900/40 border border-yellow-500/10 rounded-xl p-4 text-gray-200">
             ❓ عدد الأسئلة:{" "}
-            <span className="text-yellow-300 font-bold">
-              {questionsCountText}
-            </span>
+            <span className="text-yellow-300 font-bold">{questionsCountText}</span>
           </div>
 
           {teacherName && (
             <div className="mt-3 bg-gray-900/40 border border-yellow-500/10 rounded-xl p-4 text-gray-200">
-              👩‍🏫 المعلم:{" "}
-              <span className="text-yellow-300 font-bold">{teacherName}</span>
+              👩‍🏫 المعلم: <span className="text-yellow-300 font-bold">{teacherName}</span>
             </div>
           )}
 
@@ -365,8 +382,8 @@ export default function JordanHistoryTerm1ExamSEO({ exam }) {
           </Link>
 
           <div className="mt-4 text-xs text-blue-400 font-bold leading-relaxed">
-            هذه الصفحة تعرض معلومات الامتحان فقط — تقديم الامتحان يتم من داخل
-            حساب الطالب بعد تفعيل الاشتراك.
+            هذه الصفحة تعرض معلومات الامتحان فقط — تقديم الامتحان يتم من داخل حساب
+            الطالب بعد تفعيل الاشتراك.
             <br />
             لتفعيل الاشتراك اضغط على الزر (اشترك معنا الآن) وسنساعدك فورًا.
           </div>
@@ -399,16 +416,14 @@ export default function JordanHistoryTerm1ExamSEO({ exam }) {
                       {l.desc}
                     </div>
                   </div>
-                  <span className="text-yellow-300 group-hover:translate-x-1 transition">
-                    ←
-                  </span>
+                  <span className="text-yellow-300 group-hover:translate-x-1 transition">←</span>
                 </div>
               </Link>
             ))}
           </div>
         </section>
 
-        {/* ✅ FAQ Section */}
+        {/* ✅ FAQ Section (Visible فقط - بدون تكرار في JSON-LD) */}
         <section className="mt-8 bg-gray-800/50 border border-yellow-500/10 rounded-2xl p-5 sm:p-6">
           <h2 className="text-base sm:text-lg font-extrabold text-yellow-300">
             أسئلة شائعة عن امتحانات {subjectLabel} توجيهي 2009
