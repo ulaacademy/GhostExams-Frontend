@@ -4,6 +4,7 @@ import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { API_URL } from "@/services/api";
+import { useEffect, useMemo, useState } from "react";
 
 export async function getServerSideProps({ params }) {
   try {
@@ -40,7 +41,9 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
   const canonicalUrl = `${siteUrl}${listPagePath}/${examId}`;
 
   // ✅ Safe values
-  const safeExamName = (exam?.examName || `امتحان ${subjectShort} توجيهي 2009`).trim();
+  const safeExamName = (
+    exam?.examName || `امتحان ${subjectShort} توجيهي 2009`
+  ).trim();
 
   const durationVal = exam?.duration;
   const questionsCountVal = exam?.questionsCount;
@@ -106,7 +109,8 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
     },
     {
       q: "هل تظهر الإجابات الصحيحة أثناء الحل؟",
-      a: "نعم، كل سؤال يظهر للطالب يكون معه الاجابة الصحيحة ستظهر بعد اختيار الاجابة من الخيارات الاربعة ",    },
+      a: "نعم، كل سؤال يظهر للطالب يكون معه الاجابة الصحيحة ستظهر بعد اختيار الاجابة من الخيارات الاربعة",
+    },
     {
       q: "هل يغطي الأحداث والشخصيات والمصطلحات؟",
       a: "نعم، الامتحانات تهدف لتغطية محاور تاريخ الأردن الأساسية ضمن وحدات الفصل.",
@@ -117,18 +121,21 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
     },
   ];
 
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqItems.map((item) => ({
-      "@type": "Question",
-      name: item.q,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.a,
-      },
-    })),
-  };
+  const faqJsonLd = useMemo(
+    () => ({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      })),
+    }),
+    [faqItems],
+  );
 
   // ✅ Breadcrumbs JSON-LD
   const breadcrumbJsonLd = {
@@ -219,6 +226,27 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
       ? String(exam.teacher.name).trim()
       : null;
 
+  /**
+   * ✅ حل Duplicate FAQPage:
+   * - بنعرض FAQ JSON-LD مرة واحدة فقط حتى لو كان موجود بكومبوننت آخر.
+   */
+  const [renderFaqJsonLd, setRenderFaqJsonLd] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // مميز لكل Term حتى ما يصير تعارض
+    const KEY = "__GE_FAQ_JSONLD_JH_T2__";
+
+    if (window[KEY]) {
+      setRenderFaqJsonLd(false);
+      return;
+    }
+
+    window[KEY] = true;
+    setRenderFaqJsonLd(true);
+  }, []);
+
   return (
     <div className="bg-gray-900 text-white min-h-screen">
       <Head>
@@ -229,7 +257,7 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
         <meta name="robots" content="index, follow" />
         <meta httpEquiv="content-language" content="ar-JO" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <html lang="ar" />
+        {/* ❌ لا تضع <html lang="ar" /> داخل Head */}
 
         <link rel="canonical" href={canonicalUrl} />
 
@@ -252,17 +280,25 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
 
         {/* ✅ JSON-LD */}
         <script
+          id="breadcrumb-jsonld-jh-t2"
+          key="breadcrumb-jsonld-jh-t2"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
         <script
+          id="article-jsonld-jh-t2"
+          key="article-jsonld-jh-t2"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
+        {renderFaqJsonLd && (
+          <script
+            id="faq-jsonld-jh-t2"
+            key="faq-jsonld-jh-t2"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+          />
+        )}
       </Head>
 
       <Navbar />
@@ -288,7 +324,10 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
           <ol className="flex flex-wrap gap-2 text-xs sm:text-sm text-gray-300">
             {crumb.map((c, idx) => (
               <li key={idx} className="flex items-center gap-2">
-                <Link href={c.href} className="hover:text-yellow-300 transition">
+                <Link
+                  href={c.href}
+                  className="hover:text-yellow-300 transition"
+                >
                   {c.label}
                 </Link>
                 {idx < crumb.length - 1 && (
@@ -306,8 +345,8 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
           </h1>
 
           <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed">
-            هذه صفحة معلومات مفهرسة لتوضيح بيانات الامتحان . تقديم الامتحان
-            يتم من داخل حساب الطالب بعد تفعيل الاشتراك.
+            هذه صفحة معلومات مفهرسة لتوضيح بيانات الامتحان . تقديم الامتحان يتم
+            من داخل حساب الطالب بعد تفعيل الاشتراك.
           </p>
 
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-gray-200">
@@ -403,7 +442,7 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
           </div>
         </section>
 
-        {/* ✅ FAQ Section */}
+        {/* ✅ FAQ Section (Visible فقط - والـ JSON-LD صار guarded بالأعلى) */}
         <section className="mt-8 bg-gray-800/50 border border-yellow-500/10 rounded-2xl p-5 sm:p-6">
           <h2 className="text-base sm:text-lg font-extrabold text-yellow-300">
             أسئلة شائعة عن امتحانات {subjectLabel} توجيهي 2009
