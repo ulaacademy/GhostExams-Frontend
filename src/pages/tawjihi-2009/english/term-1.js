@@ -1,8 +1,8 @@
+"use client";
+
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useAuth } from "@/context/AuthContext";
 import { API_URL } from "@/services/api";
 
 export async function getServerSideProps() {
@@ -26,7 +26,6 @@ export async function getServerSideProps() {
       const res2 = await fetch(url2);
       const json2 = await res2.json();
       const exams2 = json2?.success ? json2.data : [];
-
       return { props: { exams: exams2 || [], usedFallback: true } };
     }
 
@@ -37,65 +36,142 @@ export async function getServerSideProps() {
 }
 
 export default function EnglishTerm1({ exams, usedFallback }) {
-  const router = useRouter();
-  useAuth();
-
+  // ✅ ثوابت الصفحة
   const siteUrl = "https://ghostexams.com";
-  const canonicalUrl = `${siteUrl}/tawjihi-2009/english/term-1`;
+  const subjectLabel = "اللغة الإنجليزية";
+  const subjectShort = "إنجليزي";
+  const subjectSlug = "english";
+  const termNumber = 1;
+  const termLabel = "الفصل الأول";
 
-  const title = "امتحانات إنجليزي توجيهي 2009 | الفصل الأول - GhostExams";
+  // ✅ Paths
+  const listPagePath = `/tawjihi-2009/${subjectSlug}/term-${termNumber}`;
+  const subjectHubPath = `/tawjihi-2009/${subjectSlug}`;
+  const tawjihi2009Path = `/tawjihi-2009`;
+
+  // ✅ Canonical
+  const canonicalUrl = `${siteUrl}${listPagePath}`;
+
+  // ✅ Meta
+  const title = `امتحانات ${subjectShort} توجيهي 2009 | ${termLabel} - GhostExams`;
   const description =
-    "قائمة امتحانات اللغة الإنجليزية (الفصل الأول) لتوجيهي 2009 في الأردن. استعرض الامتحانات حسب الوحدة مع مدة الامتحان وعدد الأسئلة.";
+    `قائمة امتحانات ${subjectLabel} لتوجيهي الأردن 2009 (${termLabel}). ` +
+    `اختر الامتحان حسب الوحدة/الكتاب واعرض معاينة الامتحان. تقديم الامتحان الفعلي يتم من داخل حساب الطالب بعد تفعيل الاشتراك.`;
 
-  const ogImage = `${siteUrl}/og/english-term-1-2009.jpg`; // ضع صورة فعلية داخل public/og
+  const keywords = [
+    `امتحانات ${subjectLabel} توجيهي 2009`,
+    `بنك اسئلة ${subjectLabel} توجيهي 2009`,
+    `امتحانات ${subjectShort} 2009 ${termLabel}`,
+    "امتحانات الكترونية توجيهي الأردن",
+    "وزاري تفاعلي",
+    "نمط وزاري",
+    "حسب المنهاج المعتمد",
+    "GhostExams",
+  ].join(", ");
 
-  const introText = `هذه صفحة امتحانات اللغة الإنجليزية لتوجيهي الأردن 2009 (الفصل الأول) على GhostExams.
+  // ✅ OG Image
+  const ogImage = `${siteUrl}/og/${subjectSlug}-term-${termNumber}-2009.jpg`;
+  const defaultOgImage = `${siteUrl}/og/default.jpg`;
+
+  // ✅ نص تعريفي (SEO قابل للفهرسة)
+  const introText = `هذه صفحة امتحانات ${subjectLabel} لتوجيهي الأردن 2009 (${termLabel}) على GhostExams.
 ستجد هنا الامتحانات الحقيقية الموجودة بالموقع مرتبة حسب اسم الوحدة/الكتاب، مع مدة الامتحان وعدد الأسئلة.
-اضغط على "عرض الامتحان" لمعاينة بيانات الامتحان قبل الدخول للامتحان من لوحة الطالب.`;
+اعرض معاينة أي امتحان من الكروت، أما التقديم الفعلي فيكون من داخل حساب الطالب بعد تفعيل الاشتراك.`;
 
-  const keywords =
-    "امتحانات انجليزي توجيهي 2009, امتحانات English توجيهي, بنك اسئلة انجليزي توجيهي 2009, امتحانات الكترونية انجليزي, توجيهي الاردن 2009 انجليزي, نمط وزاري انجليزي";
+  // ✅ Visible Breadcrumbs
+  const crumb = [
+    { label: "توجيهي 2009", href: tawjihi2009Path },
+    { label: subjectLabel, href: subjectHubPath },
+    { label: termLabel, href: listPagePath },
+  ];
 
+  // ✅ FAQ (Visible) + FAQ Schema
+  const faqItems = [
+    {
+      q: `هل امتحانات ${subjectShort} هنا قريبة من النمط الوزاري؟`,
+      a: "نعم، الامتحانات مصممة لتكون قريبة من النمط الوزاري وتساعدك على التدريب بشكل واقعي قبل الامتحان.",
+    },
+    {
+      q: "هل المحتوى حسب المنهاج المعتمد لتوجيهي 2009؟",
+      a: "نعم، المحتوى مبني على المنهاج الرسمي ومقسّم بما يتوافق مع وحدات الفصل.",
+    },
+    {
+      q: "هل أستطيع تقديم الامتحان من هذه الصفحة؟",
+      a: "هذه الصفحة مخصصة لعرض قائمة الامتحانات ومعاينة كل امتحان. التقديم الفعلي يتم من داخل حساب الطالب بعد تفعيل الاشتراك.",
+    },
+    {
+      q: "كيف أفعّل الاشتراك؟",
+      a: "اضغط زر (اشترك معنا الآن) للتواصل معنا على واتساب، وسنساعدك بتفعيل الاشتراك بسرعة.",
+    },
+  ];
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+
+  // ✅ Breadcrumbs JSON-LD
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "توجيهي 2009",
-        item: `${siteUrl}/tawjihi-2009`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "اللغة الإنجليزية",
-        item: `${siteUrl}/tawjihi-2009/english`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: "الفصل الأول",
-        item: canonicalUrl,
-      },
+      { "@type": "ListItem", position: 1, name: "توجيهي 2009", item: `${siteUrl}${tawjihi2009Path}` },
+      { "@type": "ListItem", position: 2, name: subjectLabel, item: `${siteUrl}${subjectHubPath}` },
+      { "@type": "ListItem", position: 3, name: termLabel, item: canonicalUrl },
     ],
   };
 
+  // ✅ ItemList JSON-LD
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "امتحانات إنجليزي توجيهي 2009 - الفصل الأول",
+    name: `امتحانات ${subjectShort} توجيهي 2009 - ${termLabel}`,
     itemListOrder: "https://schema.org/ItemListUnordered",
-    numberOfItems: exams?.length || 0,
-    itemListElement: (exams || []).map((exam, idx) => ({
-      "@type": "ListItem",
-      position: idx + 1,
-      name: exam.examName || `امتحان إنجليزي ${idx + 1}`,
-      url: `${siteUrl}/tawjihi-2009/english/term-1/${exam._id}`,
-    })),
+    numberOfItems: Array.isArray(exams) ? exams.length : 0,
+    itemListElement: (exams || []).map((exam, idx) => {
+      const previewUrl = `${siteUrl}${listPagePath}/${exam?._id}`;
+      return {
+        "@type": "ListItem",
+        position: idx + 1,
+        name: (exam?.examName || `امتحان ${subjectShort} ${idx + 1}`).trim(),
+        url: previewUrl,
+      };
+    }),
   };
 
-  
+  // ✅ CollectionPage JSON-LD
+  const collectionPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: title,
+    url: canonicalUrl,
+    inLanguage: "ar-JO",
+    description,
+    isPartOf: { "@type": "WebSite", name: "GhostExams", url: siteUrl },
+    about: [
+      { "@type": "Thing", name: `امتحانات ${subjectLabel} توجيهي 2009` },
+      { "@type": "Thing", name: termLabel },
+    ],
+    primaryImageOfPage: { "@type": "ImageObject", url: ogImage },
+  };
+
+  // ✅ روابط داخلية قوية
+  const relatedLinks = [
+    { label: `صفحة ${subjectLabel} `, href: subjectHubPath, desc: "روابط الفصول + وصف المادة" },
+    { label: `الفصل الثاني - ${subjectShort}`, href: `/tawjihi-2009/${subjectSlug}/term-2`, desc: "الانتقال لقائمة امتحانات الفصل الثاني" },
+    { label: "توجيهي 2009 (الصفحة الرئيسية)", href: tawjihi2009Path, desc: "الرجوع لصفحة توجيهي 2009" },
+  ];
+
+  // ✅ Long-tail SEO Content
+  const seoIntro =
+    `إذا كنت تبحث عن "امتحانات ${subjectShort} توجيهي 2009 ${termLabel}" أو "بنك أسئلة ${subjectShort} 2009"، ` +
+    `فهذه الصفحة تجمع الامتحانات المرتبة حسب الوحدات وتعرض معاينة لكل امتحان مع المدة وعدد الأسئلة. ` +
+    `التجربة الفعلية (حل الامتحان) تتم من داخل حساب الطالب بعد تفعيل الاشتراك.`;
 
   return (
     <div className="bg-gray-900 text-white min-h-screen">
@@ -107,9 +183,11 @@ export default function EnglishTerm1({ exams, usedFallback }) {
         <meta name="robots" content="index, follow" />
         <meta httpEquiv="content-language" content="ar-JO" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <html lang="ar" />
+
         <link rel="canonical" href={canonicalUrl} />
 
-        {/* OG */}
+        {/* ✅ Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="ar_JO" />
         <meta property="og:site_name" content="GhostExams" />
@@ -117,49 +195,59 @@ export default function EnglishTerm1({ exams, usedFallback }) {
         <meta property="og:description" content={description} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content={ogImage} />
+        <meta property="og:image:alt" content={`امتحانات ${subjectShort} توجيهي 2009 ${termLabel}`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
 
-        {/* Twitter */}
+        {/* ✅ Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
 
-        {/* JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
-        />
+        {/* ✅ JSON-LD */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       </Head>
 
       <Navbar />
 
       <main className="pt-24 pb-16 px-4 sm:px-6 max-w-6xl mx-auto" dir="rtl">
-        {/* Top nav (Mobile-friendly) */}
+        {/* ✅ Top bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
           <Link
-            href="/tawjihi-2009/english"
+            href={subjectHubPath}
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-800/70 hover:bg-gray-800 border border-yellow-500/20 hover:border-yellow-500/40 px-4 py-2 text-sm font-bold text-yellow-300 transition w-full sm:w-auto"
+            aria-label="الرجوع لصفحة المادة"
           >
             <span className="text-base">→</span> رجوع
           </Link>
 
-          <Link
-            href="/tawjihi-2009/english"
-            className="text-xs sm:text-sm text-gray-300 hover:text-yellow-300 transition w-full sm:w-auto text-center sm:text-left"
-          >
-            إنجليزي / الفصل الأول
-          </Link>
+          <div className="text-xs sm:text-sm text-gray-300 w-full sm:w-auto text-center sm:text-left">
+            {subjectShort} 2009 / {termLabel}
+          </div>
         </div>
 
+        {/* ✅ Visible Breadcrumbs */}
+        <nav aria-label="Breadcrumb" className="mb-5">
+          <ol className="flex flex-wrap gap-2 text-xs sm:text-sm text-gray-300">
+            {crumb.map((c, idx) => (
+              <li key={idx} className="flex items-center gap-2">
+                <Link href={c.href} className="hover:text-yellow-300 transition">
+                  {c.label}
+                </Link>
+                {idx < crumb.length - 1 && <span className="text-gray-500">›</span>}
+              </li>
+            ))}
+          </ol>
+        </nav>
+
+        {/* ✅ Header */}
         <header className="text-center px-1 sm:px-0">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-yellow-400 leading-snug sm:leading-tight">
-            امتحانات إنجليزي توجيهي 2009 — الفصل الأول
+            امتحانات {subjectShort} توجيهي 2009 — {termLabel}
           </h1>
 
           <p className="mt-4 text-sm sm:text-base text-gray-200 max-w-4xl mx-auto leading-7 sm:leading-relaxed text-center whitespace-pre-line">
@@ -168,9 +256,7 @@ export default function EnglishTerm1({ exams, usedFallback }) {
 
           <p className="mt-4 text-sm sm:text-base text-gray-300 max-w-3xl mx-auto leading-7 sm:leading-relaxed text-center">
             عدد الامتحانات:
-            <span className="mx-2 text-yellow-300 font-extrabold">
-              {exams?.length || 0}
-            </span>
+            <span className="mx-2 text-yellow-300 font-extrabold">{Array.isArray(exams) ? exams.length : 0}</span>
           </p>
 
           {usedFallback && (
@@ -180,54 +266,132 @@ export default function EnglishTerm1({ exams, usedFallback }) {
           )}
         </header>
 
+        {/* ✅ Exams Grid */}
         {!exams || exams.length === 0 ? (
           <div className="mt-8 bg-gray-800/60 border border-yellow-500/15 rounded-2xl p-6 text-gray-300 text-center">
-            لا توجد امتحانات حالياً للفصل الأول (إنجليزي).
+            لا توجد امتحانات حالياً لـ {subjectShort} ({termLabel}).
           </div>
         ) : (
           <section className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {exams.map((exam) => {
-              const previewHref = `/tawjihi-2009/english/term-1/${exam._id}`;
-              const seoCardText = `امتحان إنجليزي توجيهي 2009 (الفصل الأول) — ${
-                exam.examName || "بدون عنوان"
-              }. مدة الامتحان ${exam.duration || "?"} دقيقة، وعدد الأسئلة ${
-                exam.questionsCount || "?"
-              }.`;
+            {exams.map((exam, idx) => {
+              const examId = exam?._id;
+              const examName =
+                (exam?.examName && String(exam.examName).trim() !== ""
+                  ? String(exam.examName).trim()
+                  : `امتحان ${subjectShort} ${idx + 1}`) || `امتحان ${subjectShort}`;
+
+              const durationVal = exam?.duration;
+              const questionsCountVal = exam?.questionsCount;
+
+              const durationText =
+                durationVal !== undefined && durationVal !== null && String(durationVal).trim() !== ""
+                  ? String(durationVal).trim()
+                  : "غير محددة";
+
+              const questionsCountText =
+                questionsCountVal !== undefined && questionsCountVal !== null && String(questionsCountVal).trim() !== ""
+                  ? String(questionsCountVal).trim()
+                  : "غير محدد";
+
+              const previewHref = `${listPagePath}/${examId}`;
+              const seoCardText = `امتحان ${subjectShort} توجيهي 2009 (${termLabel}) — ${examName}. مدة الامتحان: ${durationText} دقيقة، وعدد الأسئلة: ${questionsCountText}.`;
 
               return (
                 <article
-                  key={exam._id}
-                  className="bg-gray-800/70 border border-yellow-500/15 hover:border-yellow-500/40 rounded-2xl p-5 sm:p-6 transition shadow-lg flex flex-col min-h-[220px]"
+                  key={examId || idx}
+                  className="bg-gray-800/70 border border-yellow-500/15 hover:border-yellow-500/40 rounded-2xl p-5 sm:p-6 transition shadow-lg flex flex-col min-h-[240px]"
                 >
                   <h2 className="text-lg sm:text-xl font-extrabold text-yellow-300 leading-snug line-clamp-2">
-                    {exam.examName}
+                    {examName}
                   </h2>
 
-                  <p className="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed">
-                    {seoCardText}
-                  </p>
+                  <p className="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed">{seoCardText}</p>
 
                   <div className="mt-3 text-sm text-gray-300 space-y-1">
-                    <p>⏱️ المدة: {exam.duration} دقيقة</p>
-                    <p>🧠 عدد الأسئلة: {exam.questionsCount}</p>
-                    <p className="text-xs text-gray-400">
-                      📌 الفصل: {exam.term || "غير محدد"}
+                    <p>
+                      ⏱️ المدة: {durationText}
+                      {durationText !== "غير محددة" ? " دقيقة" : ""}
                     </p>
+                    <p>🧠 عدد الأسئلة: {questionsCountText}</p>
+                    <p className="text-xs text-gray-400">📌 الفصل: {exam?.term || termNumber}</p>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => router.push(previewHref)}
+                  <Link
+                    href={previewHref}
                     className="mt-4 inline-flex w-full justify-center rounded-xl bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3"
-                    aria-label={`عرض معاينة الامتحان: ${exam.examName}`}
+                    aria-label={`عرض معاينة الامتحان: ${examName}`}
                   >
                     عرض الامتحان (معاينة)
-                  </button>
+                  </Link>
                 </article>
               );
             })}
           </section>
         )}
+
+        {/* ✅ CTA */}
+        <Link
+          href="https://wa.link/ghostexams"
+          className="mt-10 inline-flex w-full justify-center rounded-xl bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3"
+        >
+          اشترك معنا الآن
+        </Link>
+
+        <div className="mt-4 text-xs text-blue-400 font-bold leading-relaxed text-center">
+          هذه الصفحة تعرض قائمة الامتحانات ومعاينة كل امتحان فقط — تقديم الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك.
+          <br />
+          لتفعيل الاشتراك اضغط على الزر (اشترك معنا الآن) وسنساعدك فورًا.
+        </div>
+
+        {/* ✅ Long-tail SEO */}
+        <section className="mt-8 bg-gray-800/50 border border-yellow-500/10 rounded-2xl p-5 sm:p-6">
+          <h2 className="text-base sm:text-lg font-extrabold text-yellow-300">
+            امتحانات {subjectLabel} توجيهي 2009 {termLabel} — بنك أسئلة مرتب حسب الوحدات
+          </h2>
+
+          <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed whitespace-pre-line">{seoIntro}</p>
+
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {relatedLinks.map((l, idx) => (
+              <Link
+                key={idx}
+                href={l.href}
+                className="group bg-gray-900/40 hover:bg-gray-900/60 border border-yellow-500/10 hover:border-yellow-500/25 rounded-xl p-4 transition"
+                aria-label={l.label}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-sm sm:text-base font-extrabold text-yellow-200">{l.label}</div>
+                    <div className="mt-1 text-xs sm:text-sm text-gray-300 leading-relaxed">{l.desc}</div>
+                  </div>
+                  <span className="text-yellow-300 group-hover:translate-x-1 transition">←</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ✅ FAQ */}
+        <section className="mt-8 bg-gray-800/50 border border-yellow-500/10 rounded-2xl p-5 sm:p-6">
+          <h2 className="text-base sm:text-lg font-extrabold text-yellow-300">
+            أسئلة شائعة عن امتحانات {subjectShort} توجيهي 2009
+          </h2>
+
+          <div className="mt-4 space-y-3">
+            {faqItems.map((item, idx) => (
+              <details key={idx} className="bg-gray-900/40 border border-yellow-500/10 rounded-xl p-4">
+                <summary className="cursor-pointer text-sm sm:text-base font-bold text-gray-100">{item.q}</summary>
+                <p className="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* ✅ اختياري */}
+        <div className="sr-only">
+          <img src={ogImage} alt={`امتحانات ${subjectShort} توجيهي 2009 ${termLabel}`} />
+          <img src={defaultOgImage} alt="GhostExams" />
+        </div>
       </main>
     </div>
   );

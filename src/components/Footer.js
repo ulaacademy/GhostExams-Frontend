@@ -62,6 +62,14 @@ export default function Footer() {
                   تواصل معنا
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="text-gray-300 hover:text-yellow-300 transition"
+                >
+من نحن
+                </Link>
+              </li>
             </ul>
           </nav>
 
