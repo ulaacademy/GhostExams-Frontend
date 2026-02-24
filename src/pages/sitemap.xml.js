@@ -1,51 +1,27 @@
 /**
  * ✅ Dynamic Sitemap for GhostExams (Next.js Pages Router)
- * Path (IMPORTANT):  src/pages/sitemap.xml.js
- * This will serve:   https://ghostexams.com/sitemap.xml
- *
- * ✅ Includes:
- * 1) Static site pages (home, pricing, teachers, chat, contact, etc.)
- * 2) Tawjihi 2009 subject pages + term pages
- * 3) ALL exam SEO pages: /tawjihi-2009/{subject}/term-{1|2}/{examId}
- *
- * Notes:
- * - It fetches exams from:  `${API_URL}/public/exams?subject=...&term=...&grade=2009`
- * - If grade filter returns empty, it auto-fallbacks to without grade.
+ * Path:  src/pages/sitemap.xml.js
+ * URL :  https://ghostexams.com/sitemap.xml
  */
 
 import { API_URL } from "@/services/api";
 
-// ✅ Your production domain
 const SITE_URL = "https://ghostexams.com";
 
-// ✅ Add/Remove static pages here (ONLY REAL PAGES)
-const STATIC_PATHS = [
-  "/",
-  "/pricing",
-  "/ourteachers",
-  "/chat",
-  "/contact",
+const STATIC_PATHS = ["/", "/pricing", "/ourteachers", "/chat", "/contact"];
 
-  // ⚠️ Optional (usually you DON'T want auth pages indexed)
-  // "/auth/Login",
-  // "/auth/Register",
-  // "/auth/reset-password",
-];
-
-// ✅ Tawjihi 2009 hub
 const TAWJIHI_2009_HUB = "/tawjihi-2009";
 
-// ✅ Subjects (slug = folder/file name under /tawjihi-2009)
 const SUBJECTS = [
-  { key: "arabic", slug: "arabic", label: "عربي" },
-  { key: "english", slug: "english", label: "إنجليزي" },
-  { key: "jordan-history", slug: "jordan-history", label: "تاريخ الأردن" },
-  { key: "islamic", slug: "islamic", label: "دين" },
+  { key: "arabic", slug: "arabic" },
+  { key: "english", slug: "english" },
+  { key: "jordan-history", slug: "jordan-history" },
+  { key: "islamic", slug: "islamic" },
 ];
 
 const TERMS = ["1", "2"];
 
-// ------------------------- helpers -------------------------
+// ---------------- helpers ----------------
 
 function escapeXml(str = "") {
   return String(str)
@@ -57,7 +33,6 @@ function escapeXml(str = "") {
 }
 
 function normalizeLastMod(exam) {
-  // Try to use updatedAt/createdAt if present and valid
   const d = exam?.updatedAt || exam?.createdAt || null;
   if (!d) return null;
   const dt = new Date(d);
@@ -81,13 +56,16 @@ async function fetchExamsFor(subjectKey, term) {
     try {
       const res = await fetch(url);
       if (!res.ok) continue;
+
       const json = await res.json();
       const exams = json?.success ? json?.data : [];
+
       if (Array.isArray(exams) && exams.length > 0) return exams;
-    } catch (e) {
-      // ignore and fallback to next url
+    } catch {
+      // ignore and fallback
     }
   }
+
   return [];
 }
 
@@ -95,7 +73,8 @@ function buildUrlEntry({ loc, lastmod, changefreq, priority }) {
   let xml = "  <url>\n";
   xml += `    <loc>${escapeXml(loc)}</loc>\n`;
   if (lastmod) xml += `    <lastmod>${escapeXml(lastmod)}</lastmod>\n`;
-  if (changefreq) xml += `    <changefreq>${escapeXml(changefreq)}</changefreq>\n`;
+  if (changefreq)
+    xml += `    <changefreq>${escapeXml(changefreq)}</changefreq>\n`;
   if (priority != null) xml += `    <priority>${String(priority)}</priority>\n`;
   xml += "  </url>\n";
   return xml;
@@ -110,11 +89,10 @@ function buildSitemapXml(entries) {
   );
 }
 
-// ------------------------- Next.js handler -------------------------
+// ---------------- Next.js handler ----------------
 
 export async function getServerSideProps({ res }) {
   try {
-    // ✅ Collect all URLs
     const entries = [];
 
     // 1) Static pages
@@ -137,7 +115,7 @@ export async function getServerSideProps({ res }) {
       })
     );
 
-    // 3) Subjects + Terms
+    // 3) Subject + term + exam pages
     for (const s of SUBJECTS) {
       const subjectRoot = `${TAWJIHI_2009_HUB}/${s.slug}`;
 
@@ -150,9 +128,10 @@ export async function getServerSideProps({ res }) {
         })
       );
 
-      // term pages + examId pages
       for (const term of TERMS) {
         const termPath = `${subjectRoot}/term-${term}`;
+
+        // term page
         entries.push(
           buildUrlEntry({
             loc: `${SITE_URL}${termPath}`,
@@ -161,15 +140,11 @@ export async function getServerSideProps({ res }) {
           })
         );
 
-        // ✅ Fetch exams and generate SEO URLs
+        // exams
         const exams = await fetchExamsFor(s.key, term);
-
         for (const exam of exams) {
           if (!exam?._id) continue;
 
-          // IMPORTANT:
-          // Your SEO exam preview route MUST match this:
-          // /tawjihi-2009/{subjectSlug}/term-{term}/{examId}
           const examSeoUrl = `${SITE_URL}${termPath}/${exam._id}`;
 
           entries.push(
@@ -186,9 +161,7 @@ export async function getServerSideProps({ res }) {
 
     const sitemap = buildSitemapXml(entries);
 
-    // ✅ XML headers
     res.setHeader("Content-Type", "text/xml; charset=utf-8");
-    // Cache behavior (safe)
     res.setHeader(
       "Cache-Control",
       "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400"
@@ -196,10 +169,14 @@ export async function getServerSideProps({ res }) {
 
     res.write(sitemap);
     res.end();
-  } catch (err) {
-    // If anything fails, still return a valid XML (so Google doesn't error)
+  } catch  {
+    // fallback valid xml
     const fallback = buildSitemapXml([
-      buildUrlEntry({ loc: `${SITE_URL}/`, changefreq: "daily", priority: "1.0" }),
+      buildUrlEntry({
+        loc: `${SITE_URL}/`,
+        changefreq: "daily",
+        priority: "1.0",
+      }),
     ]);
 
     res.setHeader("Content-Type", "text/xml; charset=utf-8");
