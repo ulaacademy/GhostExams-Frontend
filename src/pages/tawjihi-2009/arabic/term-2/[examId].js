@@ -4,6 +4,7 @@ import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { API_URL } from "@/services/api";
+import { useEffect, useMemo, useState } from "react";
 
 export async function getServerSideProps({ params }) {
   try {
@@ -87,45 +88,51 @@ export default function ArabicTerm2ExamSEO({ exam }) {
   ];
 
   // ✅ FAQ (Visible) + FAQ Schema
-  const faqItems = [
-    {
-      q: "هل هذا الامتحان مطابق للنمط الوزاري؟",
-      a: "نعم، الامتحانات مرتبة ومصممة لتكون قريبة من النمط الوزاري المعتمد لتوجيهي الأردن 2009.",
-    },
-    {
-      q: "هل المحتوى حسب المنهاج المعتمد؟",
-      a: "نعم، المحتوى مبني على المنهاج الرسمي ومقسّم بما يتوافق مع الوحدات والدروس ضمن الفصل.",
-    },
-    {
-      q: "هل أستطيع تقديم الامتحان من هذه الصفحة؟",
-      a: "لا. هذه صفحة معلومات مفهرسة فقط. تقديم الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك.",
-    },
-    {
-      q: "هل تظهر الإجابات الصحيحة أثناء الحل؟",
-      a: "لا، الهدف محاكاة امتحان وزاري. تظهر النتيجة بعد إنهاء الامتحان من داخل حساب الطالب.",
-    },
-    {
-      q: "ما الفرق بين بنك أسئلة وامتحانات؟",
-      a: "بنك الأسئلة يركز على تدريب واسع حسب الدروس، بينما الامتحانات تجمع أسئلة بنمط وزاري لمحاكاة الامتحان الحقيقي.",
-    },
-    {
-      q: "كيف أفعّل الاشتراك؟",
-      a: "اضغط زر (اشترك معنا الآن) للتواصل معنا على واتساب، وسنساعدك بتفعيل الاشتراك بسرعة.",
-    },
-  ];
-
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqItems.map((item) => ({
-      "@type": "Question",
-      name: item.q,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.a,
+  const faqItems = useMemo(
+    () => [
+      {
+        q: "هل هذا الامتحان مطابق للنمط الوزاري؟",
+        a: "نعم، الامتحانات مرتبة ومصممة لتكون قريبة من النمط الوزاري المعتمد لتوجيهي الأردن 2009.",
       },
-    })),
-  };
+      {
+        q: "هل المحتوى حسب المنهاج المعتمد؟",
+        a: "نعم، المحتوى مبني على المنهاج الرسمي ومقسّم بما يتوافق مع الوحدات والدروس ضمن الفصل.",
+      },
+      {
+        q: "هل أستطيع تقديم الامتحان من هذه الصفحة؟",
+        a: "لا. هذه صفحة معلومات مفهرسة فقط. تقديم الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك.",
+      },
+      {
+        q: "هل تظهر الإجابات الصحيحة أثناء الحل؟",
+        a: "لا، الهدف محاكاة امتحان وزاري. تظهر النتيجة بعد إنهاء الامتحان من داخل حساب الطالب.",
+      },
+      {
+        q: "ما الفرق بين بنك أسئلة وامتحانات؟",
+        a: "بنك الأسئلة يركز على تدريب واسع حسب الدروس، بينما الامتحانات تجمع أسئلة بنمط وزاري لمحاكاة الامتحان الحقيقي.",
+      },
+      {
+        q: "كيف أفعّل الاشتراك؟",
+        a: "اضغط زر (اشترك معنا الآن) للتواصل معنا على واتساب، وسنساعدك بتفعيل الاشتراك بسرعة.",
+      },
+    ],
+    []
+  );
+
+  const faqJsonLd = useMemo(
+    () => ({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      })),
+    }),
+    [faqItems]
+  );
 
   // ✅ Breadcrumbs JSON-LD
   const breadcrumbJsonLd = {
@@ -159,7 +166,7 @@ export default function ArabicTerm2ExamSEO({ exam }) {
     ],
   };
 
-  // ✅ Article JSON-LD (متوافق مع og:type=article)
+  // ✅ Article JSON-LD
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -183,7 +190,7 @@ export default function ArabicTerm2ExamSEO({ exam }) {
     },
   };
 
-  // ✅ Long-tail SEO content (بدون أسئلة/إجابات)
+  // ✅ Long-tail SEO content
   const seoIntro = `هذا الامتحان ضمن مادة ${subjectLabel} لتوجيهي الأردن 2009 (${termLabel})، وهو جزء من نظام GhostExams الذي يوفّر بنك أسئلة وامتحانات إلكترونية بطريقة وزاري تفاعلي قريبة من النمط الوزاري المعتمد.
 إذا كنت تبحث عن "امتحانات عربي توجيهي 2009 فصل ثاني" أو "امتحان وزاري عربي 2009" فهذه الصفحة توضّح معلومات الامتحان، بينما التقديم الفعلي يتم من داخل حساب الطالب بعد تفعيل الاشتراك.`;
 
@@ -217,6 +224,27 @@ export default function ArabicTerm2ExamSEO({ exam }) {
       ? String(exam.teacher.name).trim()
       : null;
 
+  /**
+   * ✅ حل Duplicate FAQPage:
+   * - بنعرض FAQ JSON-LD مرة واحدة فقط حتى لو كان موجود بكومبوننت آخر.
+   */
+  const [renderFaqJsonLd, setRenderFaqJsonLd] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // مميز للعربي Term 2 حتى ما يصير تعارض
+    const KEY = "__GE_FAQ_JSONLD_AR_T2__";
+
+    if (window[KEY]) {
+      setRenderFaqJsonLd(false);
+      return;
+    }
+
+    window[KEY] = true;
+    setRenderFaqJsonLd(true);
+  }, []);
+
   return (
     <div className="bg-gray-900 text-white min-h-screen">
       <Head>
@@ -227,7 +255,7 @@ export default function ArabicTerm2ExamSEO({ exam }) {
         <meta name="robots" content="index, follow" />
         <meta httpEquiv="content-language" content="ar-JO" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <html lang="ar" />
+        {/* ❌ لا تضع <html lang="ar" /> داخل Head */}
 
         <link rel="canonical" href={canonicalUrl} />
 
@@ -250,17 +278,25 @@ export default function ArabicTerm2ExamSEO({ exam }) {
 
         {/* ✅ JSON-LD */}
         <script
+          id="breadcrumb-jsonld-ar-t2"
+          key="breadcrumb-jsonld-ar-t2"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
         <script
+          id="article-jsonld-ar-t2"
+          key="article-jsonld-ar-t2"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
+        {renderFaqJsonLd && (
+          <script
+            id="faq-jsonld-ar-t2"
+            key="faq-jsonld-ar-t2"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+          />
+        )}
       </Head>
 
       <Navbar />
@@ -304,8 +340,8 @@ export default function ArabicTerm2ExamSEO({ exam }) {
           </h1>
 
           <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed">
-            هذه صفحة معلومات مفهرسة لتوضيح بيانات الامتحان . تقديم الامتحان
-            يتم من داخل حساب الطالب بعد تفعيل الاشتراك.
+            هذه صفحة معلومات مفهرسة لتوضيح بيانات الامتحان . تقديم الامتحان يتم
+            من داخل حساب الطالب بعد تفعيل الاشتراك.
           </p>
 
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-gray-200">
@@ -337,9 +373,7 @@ export default function ArabicTerm2ExamSEO({ exam }) {
 
           <div className="mt-4 bg-gray-900/40 border border-yellow-500/10 rounded-xl p-4 text-gray-200">
             ❓ عدد الأسئلة:{" "}
-            <span className="text-yellow-300 font-bold">
-              {questionsCountText}
-            </span>
+            <span className="text-yellow-300 font-bold">{questionsCountText}</span>
           </div>
 
           {teacherName && (
@@ -401,7 +435,7 @@ export default function ArabicTerm2ExamSEO({ exam }) {
           </div>
         </section>
 
-        {/* ✅ FAQ Section (Visible) */}
+        {/* ✅ FAQ Section (Visible فقط - والـ JSON-LD صار guarded بالأعلى) */}
         <section className="mt-8 bg-gray-800/50 border border-yellow-500/10 rounded-2xl p-5 sm:p-6">
           <h2 className="text-base sm:text-lg font-extrabold text-yellow-300">
             أسئلة شائعة عن امتحانات {subjectLabel} توجيهي 2009

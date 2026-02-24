@@ -4,6 +4,7 @@ import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { API_URL } from "@/services/api";
+import { useEffect, useMemo, useState } from "react";
 
 export async function getServerSideProps({ params }) {
   try {
@@ -90,45 +91,51 @@ export default function EnglishTerm1ExamSEO({ exam }) {
   ];
 
   // ✅ FAQ (Visible) + FAQ Schema
-  const faqItems = [
-    {
-      q: "هل هذا الامتحان قريب من النمط الوزاري لتوجيهي الأردن؟",
-      a: "نعم، الامتحانات مرتبة لتكون قريبة من النمط الوزاري وتساعدك على التدرّب بشكل واقعي.",
-    },
-    {
-      q: "هل المحتوى حسب المنهاج المعتمد لتوجيهي 2009؟",
-      a: "نعم، المحتوى مبني على المنهاج الرسمي ومقسّم بما يتوافق مع الوحدات ضمن الفصل.",
-    },
-    {
-      q: "هل أستطيع تقديم الامتحان من هذه الصفحة؟",
-      a: "لا. هذه صفحة معلومات مفهرسة فقط. تقديم الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك.",
-    },
-    {
-      q: "هل تظهر الإجابات الصحيحة أثناء الحل؟",
-      a: "لا، الهدف محاكاة امتحان وزاري. تظهر النتيجة بعد إنهاء الامتحان من داخل حساب الطالب.",
-    },
-    {
-      q: "هل يغطي الامتحان Grammar وReading وVocabulary؟",
-      a: "نعم، الامتحانات تهدف لتغطية المهارات الأساسية المطلوبة في مادة اللغة الإنجليزية لتوجيهي 2009.",
-    },
-    {
-      q: "كيف أفعّل الاشتراك؟",
-      a: "اضغط زر (اشترك معنا الآن) للتواصل معنا على واتساب، وسنساعدك بتفعيل الاشتراك بسرعة.",
-    },
-  ];
-
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqItems.map((item) => ({
-      "@type": "Question",
-      name: item.q,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.a,
+  const faqItems = useMemo(
+    () => [
+      {
+        q: "هل هذا الامتحان قريب من النمط الوزاري لتوجيهي الأردن؟",
+        a: "نعم، الامتحانات مرتبة لتكون قريبة من النمط الوزاري وتساعدك على التدرّب بشكل واقعي.",
       },
-    })),
-  };
+      {
+        q: "هل المحتوى حسب المنهاج المعتمد لتوجيهي 2009؟",
+        a: "نعم، المحتوى مبني على المنهاج الرسمي ومقسّم بما يتوافق مع الوحدات ضمن الفصل.",
+      },
+      {
+        q: "هل أستطيع تقديم الامتحان من هذه الصفحة؟",
+        a: "لا. هذه صفحة معلومات مفهرسة فقط. تقديم الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك.",
+      },
+      {
+        q: "هل تظهر الإجابات الصحيحة أثناء الحل؟",
+        a: "لا، الهدف محاكاة امتحان وزاري. تظهر النتيجة بعد إنهاء الامتحان من داخل حساب الطالب.",
+      },
+      {
+        q: "هل يغطي الامتحان Grammar وReading وVocabulary؟",
+        a: "نعم، الامتحانات تهدف لتغطية المهارات الأساسية المطلوبة في مادة اللغة الإنجليزية لتوجيهي 2009.",
+      },
+      {
+        q: "كيف أفعّل الاشتراك؟",
+        a: "اضغط زر (اشترك معنا الآن) للتواصل معنا على واتساب، وسنساعدك بتفعيل الاشتراك بسرعة.",
+      },
+    ],
+    []
+  );
+
+  const faqJsonLd = useMemo(
+    () => ({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      })),
+    }),
+    [faqItems]
+  );
 
   // ✅ Breadcrumbs JSON-LD
   const breadcrumbJsonLd = {
@@ -186,7 +193,7 @@ export default function EnglishTerm1ExamSEO({ exam }) {
     },
   };
 
-  // ✅ Long-tail SEO content (بدون أسئلة/إجابات)
+  // ✅ Long-tail SEO content
   const seoIntro = `هذا الامتحان ضمن مادة ${subjectLabel} لتوجيهي الأردن 2009 (${termLabel})، وهو جزء من نظام GhostExams الذي يوفّر بنك أسئلة وامتحانات إلكترونية بطريقة وزاري تفاعلي قريبة من النمط الوزاري المعتمد.
 إذا كنت تبحث عن "امتحانات إنجليزي توجيهي 2009 فصل أول" أو "Tawjihi 2009 English exam" فهذه الصفحة توضّح معلومات الامتحان، بينما التقديم الفعلي يتم من داخل حساب الطالب بعد تفعيل الاشتراك.`;
 
@@ -220,6 +227,27 @@ export default function EnglishTerm1ExamSEO({ exam }) {
       ? String(exam.teacher.name).trim()
       : null;
 
+  /**
+   * ✅ حل Duplicate FAQPage:
+   * - بنعرض FAQ JSON-LD مرة واحدة فقط حتى لو كان موجود بكومبوننت آخر.
+   */
+  const [renderFaqJsonLd, setRenderFaqJsonLd] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // مميز للإنجليزي Term 1 حتى ما يصير تعارض
+    const KEY = "__GE_FAQ_JSONLD_EN_T1__";
+
+    if (window[KEY]) {
+      setRenderFaqJsonLd(false);
+      return;
+    }
+
+    window[KEY] = true;
+    setRenderFaqJsonLd(true);
+  }, []);
+
   return (
     <div className="bg-gray-900 text-white min-h-screen">
       <Head>
@@ -230,7 +258,7 @@ export default function EnglishTerm1ExamSEO({ exam }) {
         <meta name="robots" content="index, follow" />
         <meta httpEquiv="content-language" content="ar-JO" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <html lang="ar" />
+        {/* ❌ لا تضع <html lang="ar" /> داخل Head */}
 
         <link rel="canonical" href={canonicalUrl} />
 
@@ -253,17 +281,25 @@ export default function EnglishTerm1ExamSEO({ exam }) {
 
         {/* ✅ JSON-LD */}
         <script
+          id="breadcrumb-jsonld-en-t1"
+          key="breadcrumb-jsonld-en-t1"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
         <script
+          id="article-jsonld-en-t1"
+          key="article-jsonld-en-t1"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
+        {renderFaqJsonLd && (
+          <script
+            id="faq-jsonld-en-t1"
+            key="faq-jsonld-en-t1"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+          />
+        )}
       </Head>
 
       <Navbar />
@@ -307,8 +343,8 @@ export default function EnglishTerm1ExamSEO({ exam }) {
           </h1>
 
           <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed">
-            هذه صفحة معلومات مفهرسة لتوضيح بيانات الامتحان . تقديم الامتحان
-            يتم من داخل حساب الطالب بعد تفعيل الاشتراك.
+            هذه صفحة معلومات مفهرسة لتوضيح بيانات الامتحان . تقديم الامتحان يتم
+            من داخل حساب الطالب بعد تفعيل الاشتراك.
           </p>
 
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-gray-200">
@@ -405,7 +441,7 @@ export default function EnglishTerm1ExamSEO({ exam }) {
           </div>
         </section>
 
-        {/* ✅ FAQ Section (Visible) */}
+        {/* ✅ FAQ Section (Visible فقط - والـ JSON-LD صار guarded بالأعلى) */}
         <section className="mt-8 bg-gray-800/50 border border-yellow-500/10 rounded-2xl p-5 sm:p-6">
           <h2 className="text-base sm:text-lg font-extrabold text-yellow-300">
             أسئلة شائعة عن امتحانات {subjectLabel} توجيهي 2009
