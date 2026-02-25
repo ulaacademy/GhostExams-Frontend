@@ -233,7 +233,10 @@ export default function ArabicTerm1({ exams, usedFallback }) {
         <meta property="og:description" content={description} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content={ogImage} />
-        <meta property="og:image:alt" content={`امتحانات ${subjectShort} توجيهي 2009 ${termLabel}`} />
+        <meta
+          property="og:image:alt"
+          content={`امتحانات ${subjectShort} توجيهي 2009 ${termLabel}`}
+        />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
 
@@ -250,7 +253,9 @@ export default function ArabicTerm1({ exams, usedFallback }) {
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(collectionPageJsonLd),
+          }}
         />
         <script
           type="application/ld+json"
@@ -286,10 +291,15 @@ export default function ArabicTerm1({ exams, usedFallback }) {
           <ol className="flex flex-wrap gap-2 text-xs sm:text-sm text-gray-300">
             {crumb.map((c, idx) => (
               <li key={idx} className="flex items-center gap-2">
-                <Link href={c.href} className="hover:text-yellow-300 transition">
+                <Link
+                  href={c.href}
+                  className="hover:text-yellow-300 transition"
+                >
                   {c.label}
                 </Link>
-                {idx < crumb.length - 1 && <span className="text-gray-500">›</span>}
+                {idx < crumb.length - 1 && (
+                  <span className="text-gray-500">›</span>
+                )}
               </li>
             ))}
           </ol>
@@ -314,7 +324,8 @@ export default function ArabicTerm1({ exams, usedFallback }) {
 
           {usedFallback && (
             <div className="mt-3 text-xs sm:text-sm text-yellow-300/90">
-              ✅ ملاحظة: تم عرض النتائج بدون فلتر الصف لأن قيم الصف في الداتا ليست موحدة.
+              ✅ ملاحظة: تم عرض النتائج بدون فلتر الصف لأن قيم الصف في الداتا
+              ليست موحدة.
             </div>
           )}
         </header>
@@ -331,7 +342,8 @@ export default function ArabicTerm1({ exams, usedFallback }) {
               const examName =
                 (exam?.examName && String(exam.examName).trim() !== ""
                   ? String(exam.examName).trim()
-                  : `امتحان ${subjectShort} ${idx + 1}`) || `امتحان ${subjectShort}`;
+                  : `امتحان ${subjectShort} ${idx + 1}`) ||
+                `امتحان ${subjectShort}`;
 
               const durationVal = exam?.duration;
               const questionsCountVal = exam?.questionsCount;
@@ -368,27 +380,31 @@ export default function ArabicTerm1({ exams, usedFallback }) {
                   </p>
 
                   <div className="mt-3 text-sm text-gray-300 space-y-1">
-                    <p>⏱️ المدة: {durationText}{durationText !== "غير محددة" ? " دقيقة" : ""}</p>
+                    <p>
+                      ⏱️ المدة: {durationText}
+                      {durationText !== "غير محددة" ? " دقيقة" : ""}
+                    </p>
                     <p>🧠 عدد الأسئلة: {questionsCountText}</p>
                     <p className="text-xs text-gray-400">
                       📌 الفصل: {exam?.term || termNumber}
                     </p>
                   </div>
 
-                  {Array.isArray(exam.sampleQuestions) && exam.sampleQuestions.length > 0 && (
-                    <div className="mt-3 bg-gray-900/40 border border-yellow-500/10 rounded-xl p-3">
-                      <div className="text-xs text-yellow-200 font-bold mb-2">
-                        أمثلة أسئلة من الامتحان:
+                  {Array.isArray(exam.sampleQuestions) &&
+                    exam.sampleQuestions.length > 0 && (
+                      <div className="mt-3 bg-gray-900/40 border border-yellow-500/10 rounded-xl p-3">
+                        <div className="text-xs text-yellow-200 font-bold mb-2">
+                          أمثلة أسئلة من الامتحان:
+                        </div>
+                        <ul className="text-xs text-gray-200 space-y-2">
+                          {exam.sampleQuestions.slice(0, 3).map((q, i) => (
+                            <li key={i} className="line-clamp-2">
+                              • {q}
+                            </li>
+                          ))}
+                        </ul>
                       </div>
-                      <ul className="text-xs text-gray-200 space-y-2">
-                        {exam.sampleQuestions.slice(0, 3).map((q, i) => (
-                          <li key={i} className="line-clamp-2">
-                            • {q}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                    )}
 
                   {/* ✅ IMPORTANT: Link وليس button (SEO) */}
                   <Link
@@ -406,14 +422,15 @@ export default function ArabicTerm1({ exams, usedFallback }) {
 
         {/* ✅ CTA */}
         <Link
-          href="https://wa.link/ghostexams"
+          href="/auth/Register"
           className="mt-10 inline-flex w-full justify-center rounded-xl bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3"
         >
           اشترك معنا الآن
         </Link>
 
         <div className="mt-4 text-xs text-blue-400 font-bold leading-relaxed text-center">
-          هذه الصفحة تعرض قائمة الامتحانات ومعاينة كل امتحان فقط — تقديم الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك.
+          هذه الصفحة تعرض قائمة الامتحانات ومعاينة كل امتحان فقط — تقديم
+          الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك.
           <br />
           لتفعيل الاشتراك اضغط على الزر (اشترك معنا الآن) وسنساعدك فورًا.
         </div>
@@ -421,7 +438,8 @@ export default function ArabicTerm1({ exams, usedFallback }) {
         {/* ✅ Long-tail SEO Content */}
         <section className="mt-8 bg-gray-800/50 border border-yellow-500/10 rounded-2xl p-5 sm:p-6">
           <h2 className="text-base sm:text-lg font-extrabold text-yellow-300">
-            امتحانات {subjectLabel} توجيهي 2009 {termLabel} — بنك أسئلة مرتب حسب الوحدات
+            امتحانات {subjectLabel} توجيهي 2009 {termLabel} — بنك أسئلة مرتب حسب
+            الوحدات
           </h2>
 
           <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed whitespace-pre-line">
@@ -479,7 +497,10 @@ export default function ArabicTerm1({ exams, usedFallback }) {
 
         {/* ✅ صغيرة: صورة بديلة OG (اختياري) */}
         <div className="sr-only">
-          <img src={ogImage} alt={`امتحانات ${subjectShort} توجيهي 2009 ${termLabel}`} />
+          <img
+            src={ogImage}
+            alt={`امتحانات ${subjectShort} توجيهي 2009 ${termLabel}`}
+          />
           <img src={defaultOgImage} alt="GhostExams" />
         </div>
       </main>

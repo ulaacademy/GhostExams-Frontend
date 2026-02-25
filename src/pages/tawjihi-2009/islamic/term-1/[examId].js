@@ -353,7 +353,7 @@ export default function IslamicTerm1ExamSEO({ exam }) {
 
           {/* ✅ CTA */}
           <Link
-            href="https://wa.link/ghostexams"
+            href="/auth/Register"
             className="mt-6 inline-flex w-full justify-center rounded-xl bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3"
           >
             اشترك معنا الآن
