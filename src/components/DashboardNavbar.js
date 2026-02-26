@@ -33,9 +33,20 @@ const SIDEBAR_ITEMS = [
     icon: "🤝",
   },
   {
+  href: "/ourteachers",
+  label: " البنوك 2009",
+  icon: "🤝",
+},
+  {
+  href: "/dashboard/chat",
     label: "الشات الذكي",
     icon: "💬",
   },
+  {
+  href: "/dashboard/calculator",
+  label: "حاسبة المعدل",
+  icon: "🧮",
+},
 ];
 
 const DashboardNavbar = ({ children, student = {} }) => {
