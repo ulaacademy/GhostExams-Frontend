@@ -123,8 +123,9 @@ export default function SubscribedTeachersPage() {
   return (
     <ProtectedRoute requiredRole="student">
       <DashboardNavbar student={studentDetails}>
-        <div className="max-w-6xl mx-auto">
-          {/* ✅ Header Card */}
+<div dir="rtl" className="max-w-6xl mx-auto">
+  
+            {/* ✅ Header Card */}
           <div className="bg-white p-5 md:p-6 shadow-md rounded-xl">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
               <h1 className="text-xl md:text-2xl font-bold text-blue-600">

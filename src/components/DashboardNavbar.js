@@ -32,12 +32,7 @@ const SIDEBAR_ITEMS = [
     label: " اضف بنوك الاسئلة",
     icon: "🤝",
   },
-  {
-  href: "/ourteachers",
-  label: " البنوك 2009",
-  icon: "🤝",
-},
-  {
+   {
   href: "/dashboard/chat",
     label: "الشات الذكي",
     icon: "💬",
