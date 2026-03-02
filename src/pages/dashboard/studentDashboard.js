@@ -387,9 +387,10 @@ return (
           {/* Subscription banners (shorter + clearer) */}
           <div className="mt-4 space-y-3">
             {!subLoading && !isSubscribed && !subStatus.pending && (
-              <div className="rounded-2xl bg-blue-600 text-white p-4 md:p-5 shadow-lg">
+              <div className="rounded-2xl bg-yellow-600 text-white p-4 md:p-5 shadow-lg">
                 <div className="font-extrabold text-center text-base md:text-lg">
                   حسابك مجاني للتجربة ✅ — فعّل الاشتراك لفتح بنوك الأسئلة + امتحانات أكثر
+                  - الاسعار والبكجات من هنا 
                 </div>
                 <div className="text-center text-sm md:text-base mt-2">
                   واتس اب الدعم:{" "}
@@ -401,8 +402,8 @@ return (
                 <div className="mt-3 flex justify-center">
                   <Link href="/dashboard/student/subscription">
                     <button className="rounded-xl bg-white px-6 py-3 text-blue-700 font-extrabold hover:bg-gray-100 transition">
-                      📦 تفعيل الاشتراك الآن
-                    </button>
+                      📦 اسعار البكجات | وطلب التفعيل من هنا 
+                                          </button>
                   </Link>
                 </div>
               </div>
@@ -436,7 +437,8 @@ return (
               <div className="rounded-2xl bg-yellow-50 border border-yellow-200 p-4 text-yellow-900">
                 ⏳ تم إرسال طلب الاشتراك بحزمة <b>{pendingPlanName}</b>.
                 <div className="text-sm text-yellow-800 mt-1">
-                  سيتم التفعيل بعد تأكيد الدفع خلال <b>24 ساعة</b>.
+                  سيتم التفعيل بعد تأكيد الدفع خلال <b>24 ساعة</b>. تواصل معنا على واتس اب 0791515106 لتفعيل الحساب 
+ارسل قيمة الاشتراك كليك للحساب ( المعرّف: GHOSTEXAMS)
                 </div>
               </div>
             ) : null}
@@ -464,6 +466,56 @@ return (
             ) : null}
           </div>
         </div>
+        {/* Teacher exams: clear CTA */}
+            {teacherExams.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-md p-4 md:p-6">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <h2 className="text-xl font-extrabold text-blue-700">
+                    🎁 امتحانات مجانية للتجربة
+                  </h2>
+                  <span className="text-sm text-gray-500">
+                    جرّب طريقة الامتحانات قبل الاشتراك
+                  </span>
+                </div>
+
+                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {teacherExams.slice(0, 6).map((exam, index) => (
+                    <div
+                      key={index}
+                      className="border rounded-2xl p-4 hover:shadow-md transition cursor-pointer bg-blue-50"
+                      onClick={() => router.push(`/dashboard/exams/custom/${exam._id}`)}
+                    >
+                      <div className="font-extrabold text-gray-900 text-lg">
+                        {exam.examName}
+                      </div>
+                      <div className="text-sm text-gray-700 mt-1">
+                        📚 {exam.subject} • 🧪 {exam.grade} • 📅 {exam.term}
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        🕒 المدة: <b>{exam.duration}</b> دقيقة
+                      </div>
+
+                      <div className="mt-3">
+                        <div className="inline-block px-4 py-2 rounded-xl bg-blue-600 text-white font-extrabold">
+                          ▶️ ابدأ الآن
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {teacherExams.length > 6 && (
+                  <div className="mt-4 flex justify-center">
+                    <Link href="/dashboard/subscribed-teachers">
+                      <Button className="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+                        📌 عرض كل امتحانات المعلمين
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
+
 
         {/* Main content */}
         {!loading && !error && (
@@ -647,56 +699,7 @@ return (
               </div>
             )}
 
-            {/* Teacher exams: clear CTA */}
-            {teacherExams.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-md p-4 md:p-6">
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <h2 className="text-xl font-extrabold text-blue-700">
-                    🎁 امتحانات مجانية للتجربة
-                  </h2>
-                  <span className="text-sm text-gray-500">
-                    جرّب طريقة الامتحانات قبل الاشتراك
-                  </span>
-                </div>
-
-                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {teacherExams.slice(0, 4).map((exam, index) => (
-                    <div
-                      key={index}
-                      className="border rounded-2xl p-4 hover:shadow-md transition cursor-pointer bg-blue-50"
-                      onClick={() => router.push(`/dashboard/exams/custom/${exam._id}`)}
-                    >
-                      <div className="font-extrabold text-gray-900 text-lg">
-                        {exam.examName}
-                      </div>
-                      <div className="text-sm text-gray-700 mt-1">
-                        📚 {exam.subject} • 🧪 {exam.grade} • 📅 {exam.term}
-                      </div>
-                      <div className="text-sm text-gray-600 mt-1">
-                        🕒 المدة: <b>{exam.duration}</b> دقيقة
-                      </div>
-
-                      <div className="mt-3">
-                        <div className="inline-block px-4 py-2 rounded-xl bg-blue-600 text-white font-extrabold">
-                          ▶️ ابدأ الآن
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {teacherExams.length > 4 && (
-                  <div className="mt-4 flex justify-center">
-                    <Link href="/dashboard/subscribed-teachers">
-                      <Button className="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
-                        📌 عرض كل امتحانات المعلمين
-                      </Button>
-                    </Link>
-                  </div>
-                )}
-              </div>
-            )}
-
+            
             {/* Chart */}
             <div className="bg-white rounded-2xl shadow-md p-4 md:p-6">
               <h2 className="text-xl font-extrabold text-gray-900 mb-2">

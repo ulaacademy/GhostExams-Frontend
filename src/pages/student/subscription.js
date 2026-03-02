@@ -190,15 +190,14 @@ const StudentSubscription = ({ embedded = false }) => {
       <div dir="rtl" className={embedded ? "p-0" : "p-6 text-right pt-24"}>
         <div className="container mx-auto max-w-6xl">
           <h1 className="text-3xl font-bold text-center mb-8 text-yellow-400">
-            اختر خطة الطالب المناسبة 🎯 ثم ارسل طلب الاشتراك - او تواصل على واتس
-            اب 0791515106 للمساعدة{" "}
+                      📦 اختر البكج المناسب 🎯 ثم ارسل طلب الاشتراك - او تواصل على واتس
+                                  اب 0791515106 للمساعدة{" "}
           </h1>
 
           {/* ✅ عرض خطط الطلاب */}
           <div className="mb-8">
             <h2 className="text-2xl font-bold mb-4 text-center">
-              اختر الخطة من الأسفل (ثم أكمل الطلب من فورم الاشتراك)
-            </h2>
+              اختر البكج - اضغط عليه - ثم اضغط زر ارسال طلب الاشتراك من الاسفل            </h2>
 
             {plans.length === 0 ? (
               <div className="text-center text-gray-300">
