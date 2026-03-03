@@ -353,7 +353,7 @@ return (
                 لوحة تحكم الطالب 📊
               </h1>
               <p className="text-sm text-gray-600 mt-1">
-                أهلاً فيك{" "}
+                أهلاً فيك{" "} 
                 <span className="font-bold text-gray-900">
                   {studentDetails?.name || "الطالب"}
                 </span>{" "}
@@ -389,7 +389,7 @@ return (
             {!subLoading && !isSubscribed && !subStatus.pending && (
               <div className="rounded-2xl bg-yellow-600 text-white p-4 md:p-5 shadow-lg">
                 <div className="font-extrabold text-center text-base md:text-lg">
-                  حسابك مجاني للتجربة ✅ — فعّل الاشتراك لفتح بنوك الأسئلة + امتحانات أكثر
+                  حسابك مجاني للتجربة ✅ — فعّل الاشتراك واكشف عالم اخر من الامتحانات الوزارية المتوقعة  - امتحانات أكثر
                   - الاسعار والبكجات من هنا 
                 </div>
                 <div className="text-center text-sm md:text-base mt-2">
