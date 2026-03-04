@@ -189,9 +189,10 @@ export default function Register() {
         🏠 العودة إلى الرئيسية
       </Link>
       <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold text-center text-blue-600 mb-4">
-          ✍️ إنشاء حساب جديد ( معلم او طالب ) ✍️
-        </h2>
+        <h3 className="text-2xl font-bold text-center text-blue-600 mb-4">
+          إنشاء حساب طالب☝️( توجيهي 2009 جرب مجانا امتحانات واسئلة البنوك قبل
+          الاشتراك )
+        </h3>
 
         <Head>
           <title>سجل الآن | منصة الشبح</title>
@@ -288,12 +289,7 @@ export default function Register() {
                 required
                 className="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300"
               >
-                <option value="" disabled>
-                  اختر الصف الدراسي
-                </option>
                 <option value="2009">طالب 2009</option>
-                <option value="2008">طالب 2008</option>
-                <option value="2007">طالب 2007</option>
               </select>
             </div>
           )}

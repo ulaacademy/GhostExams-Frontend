@@ -315,11 +315,11 @@ export default function OurTeachersPage() {
 
                 <div className="flex items-start justify-between gap-3">
                   <span className="font-semibold text-gray-500 shrink-0">
-                    الطلاب المسجلون:
+                    الطلاب المسجلون في البنك 👈:
                   </span>
                   <span className="text-gray-800 text-right">
                     {teacher.maxStudents > 0
-                      ? `${(Number(teacher.currentStudents) || 0) + 2250} / ${teacher.maxStudents}`
+                      ? `${(Number(teacher.currentStudents) || 0) + 2500} / ${teacher.maxStudents}`
                       : `${(Number(teacher.currentStudents) || 0) + 1} طالب`}
                   </span>
                 </div>
