@@ -73,8 +73,12 @@ const SIDEBAR_ACTIVE_ITEMS = [
 ];
 
 const SIDEBAR_FREE_ITEMS = [
-  { href: "/dashboard/student/subscription", label: "الحزم والاشتراك", icon: "📦" },
-  { href: "/ourteachers", label: " اضف بنوك الاسئلة", icon: "🤝" },
+  {
+    href: "/dashboard/student/subscription",
+    label: "الحزم والاشتراك",
+    icon: "📦",
+  },
+  { href: "/ourteachers", label: " بنوك الاسئلة", icon: "🤝" },
 ];
 
 // ✅ Safe token read
@@ -111,7 +115,8 @@ const DashboardNavbar = ({ children, student = {} }) => {
 
     const load = async () => {
       if (!isAuthenticated) {
-        if (!cancelled) setSubStatus({ loading: false, active: null, pending: null });
+        if (!cancelled)
+          setSubStatus({ loading: false, active: null, pending: null });
         return;
       }
 
@@ -125,7 +130,8 @@ const DashboardNavbar = ({ children, student = {} }) => {
           pending: data?.pendingSubscription || null,
         });
       } catch {
-        if (!cancelled) setSubStatus({ loading: false, active: null, pending: null });
+        if (!cancelled)
+          setSubStatus({ loading: false, active: null, pending: null });
       }
     };
 
@@ -227,7 +233,9 @@ const DashboardNavbar = ({ children, student = {} }) => {
             <h2 className="text-lg font-semibold text-gray-800 leading-tight">
               {name} - لوحة الطالب
             </h2>
-            {email && <p className="text-sm text-gray-500 mt-1 break-words">{email}</p>}
+            {email && (
+              <p className="text-sm text-gray-500 mt-1 break-words">{email}</p>
+            )}
 
             {/* ✅ status pill */}
             <div className="mt-3">
@@ -306,13 +314,16 @@ const DashboardNavbar = ({ children, student = {} }) => {
 
               <Link href="/dashboard/studentDashboard" className="inline-block">
                 <h1 className="text-white text-lg font-bold hover:opacity-90">
-                  📌 لوحة تحكم الطالب 
+                  📌 لوحة تحكم الطالب
                 </h1>
               </Link>
             </div>
 
             {/* ✅ Desktop title */}
-            <Link href="/dashboard/studentDashboard" className="hidden md:inline-block">
+            <Link
+              href="/dashboard/studentDashboard"
+              className="hidden md:inline-block"
+            >
               <h1 className="text-white text-lg font-bold hover:opacity-90">
                 📌 لوحة تحكم الطالب
               </h1>
@@ -341,7 +352,11 @@ const DashboardNavbar = ({ children, student = {} }) => {
                     <h2 className="text-lg font-semibold text-gray-800 leading-tight">
                       {name} - لوحة الطالب
                     </h2>
-                    {email && <p className="text-sm text-gray-500 mt-1 break-words">{email}</p>}
+                    {email && (
+                      <p className="text-sm text-gray-500 mt-1 break-words">
+                        {email}
+                      </p>
+                    )}
                   </div>
 
                   <button

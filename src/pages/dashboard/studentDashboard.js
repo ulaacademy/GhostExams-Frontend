@@ -489,10 +489,10 @@ return (
                         {exam.examName}
                       </div>
                       <div className="text-sm text-gray-700 mt-1">
-                        📚 {exam.subject} • 🧪 {exam.grade} • 📅 {exam.term}
+                        📚 {exam.subject} • 🧪 {exam.grade} • 📅 {exam.term} 
                       </div>
                       <div className="text-sm text-gray-600 mt-1">
-                        🕒 المدة: <b>{exam.duration}</b> دقيقة
+                        🕒 المدة: <b>{exam.duration}</b> دقيقة • عدد الاسئلة : {exam.questions.length}  سؤال
                       </div>
 
                       <div className="mt-3">
