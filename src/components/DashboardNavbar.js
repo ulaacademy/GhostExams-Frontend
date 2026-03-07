@@ -79,6 +79,26 @@ const SIDEBAR_FREE_ITEMS = [
     icon: "📦",
   },
   { href: "/ourteachers", label: " بنوك الاسئلة", icon: "🤝" },
+  {
+    href: "",
+    label: " فعل إنجليزي",
+    icon: "🇬🇧",
+  },
+  {
+    href: "",
+    label: "فعل عربي",
+    icon: "📘",
+  },
+  {
+    href: "",
+    label: "فعل دين",
+    icon: "🕌",
+  },
+  {
+    href: "",
+    label: "فعل تاريخ",
+    icon: "🏛️",
+  },
 ];
 
 // ✅ Safe token read
