@@ -11,86 +11,121 @@ import { fetchMyStudentSubscriptionStatus } from "@/services/api";
 ========================= */
 const SUBJECT_ITEMS = [
   {
+    id: "subject-english",
     href: "/dashboard/subscribed-teachers/6945bd19f63cff3e4bd2d854/exams",
-    label: " 🤝 انجليزي ",
+    label: "🤝 انجليزي",
+    icon: "🇬🇧",
   },
   {
+    id: "subject-arabic",
     href: "/dashboard/subscribed-teachers/6945bfcd43cff502c645f5ee/exams",
-    label: " 🤝 عربي ",
+    label: "🤝 عربي",
+    icon: "📘",
   },
   {
+    id: "subject-islamic",
     href: "/dashboard/subscribed-teachers/6945cbc643cff502c6460873/exams",
-    label: " 🤝 دين ",
+    label: "🤝 دين",
+    icon: "🕌",
   },
   {
+    id: "subject-history",
     href: "/dashboard/subscribed-teachers/695c379a76bfebc62783b4a5/exams",
-    label: " 🤝 تاريخ ",
+    label: "🤝 تاريخ",
+    icon: "🏛️",
   },
 ];
 
 /* =========================
    ✅ Top Navbar items
-   - للمشترك: فقط مواد
-   - لغير المشترك: لا شيء (أو تقدر تضيف اشتراك)
 ========================= */
-const TOP_ACTIVE_ITEMS = [...SUBJECT_ITEMS];
+const TOP_ACTIVE_ITEMS = SUBJECT_ITEMS.map((item) => ({
+  ...item,
+  id: `top-${item.id}`,
+}));
 
 const TOP_FREE_ITEMS = [
-  { href: "/dashboard/student/subscription", label: "📦 الحزم والاشتراك" },
   {
-    href: "",
-    label: " فعل إنجليزي",
+    id: "top-subscription",
+    href: "/dashboard/student/subscription",
+    label: "📦 الحزم والاشتراك",
+    icon: "📦",
+  },
+  {
+    id: "top-activate-english",
+    href: "/dashboard/student/subscription",
+    label: "فعل إنجليزي",
     icon: "🇬🇧",
   },
   {
-    href: "",
+    id: "top-activate-arabic",
+    href: "/dashboard/student/subscription",
     label: "فعل عربي",
     icon: "📘",
   },
   {
-    href: "",
+    id: "top-activate-islamic",
+    href: "/dashboard/student/subscription",
     label: "فعل دين",
     icon: "🕌",
   },
   {
-    href: "",
+    id: "top-activate-history",
+    href: "/dashboard/student/subscription",
     label: "فعل تاريخ",
     icon: "🏛️",
   },
   {
+    id: "top-activate-whatsapp",
     href: "https://wa.link/ghostexams",
     label: "فعل اي مادة بدينار",
     icon: "💬",
+    external: true,
   },
 ];
 
 /* =========================
    ✅ Sidebar items
-   - للمشترك: لوحة التحكم + شات + حاسبة + مواد
-   - لغير المشترك: اشتراك + اضف بنوك
 ========================= */
 const SIDEBAR_ACTIVE_ITEMS = [
-  { href: "/dashboard/studentDashboard", label: "لوحة التحكم", icon: "📌" },
-  { href: "/dashboard/chat", label: "الشات الذكي", icon: "💬" },
-  { href: "/dashboard/calculator", label: "حاسبة المعدل", icon: "🧮" },
-
-  // ✅ المواد الأربعة في السايدبار كمان
   {
+    id: "sidebar-dashboard",
+    href: "/dashboard/studentDashboard",
+    label: "لوحة التحكم",
+    icon: "📌",
+  },
+  {
+    id: "sidebar-chat",
+    href: "/dashboard/chat",
+    label: "الشات الذكي",
+    icon: "💬",
+  },
+  {
+    id: "sidebar-calculator",
+    href: "/dashboard/calculator",
+    label: "حاسبة المعدل",
+    icon: "🧮",
+  },
+  {
+    id: "sidebar-subject-english",
     href: "/dashboard/subscribed-teachers/6945bd19f63cff3e4bd2d854/exams",
     label: "إنجليزي",
     icon: "🇬🇧",
   },
   {
+    id: "sidebar-subject-arabic",
     href: "/dashboard/subscribed-teachers/6945bfcd43cff502c645f5ee/exams",
     label: "عربي",
     icon: "📘",
   },
   {
+    id: "sidebar-subject-islamic",
     href: "/dashboard/subscribed-teachers/6945cbc643cff502c6460873/exams",
     label: "دين",
     icon: "🕌",
   },
   {
+    id: "sidebar-subject-history",
     href: "/dashboard/subscribed-teachers/695c379a76bfebc62783b4a5/exams",
     label: "تاريخ",
     icon: "🏛️",
@@ -99,39 +134,53 @@ const SIDEBAR_ACTIVE_ITEMS = [
 
 const SIDEBAR_FREE_ITEMS = [
   {
+    id: "sidebar-subscription",
     href: "/dashboard/student/subscription",
     label: "الحزم والاشتراك",
     icon: "📦",
   },
-  { href: "/ourteachers", label: " بنوك الاسئلة", icon: "🤝" },
   {
-    href: "",
-    label: " فعل إنجليزي",
+    id: "sidebar-banks",
+    href: "/ourteachers",
+    label: "بنوك الاسئلة",
+    icon: "🤝",
+  },
+  {
+    id: "sidebar-activate-english",
+    href: "/dashboard/student/subscription",
+    label: "فعل إنجليزي",
     icon: "🇬🇧",
   },
   {
-    href: "",
+    id: "sidebar-activate-arabic",
+    href: "/dashboard/student/subscription",
     label: "فعل عربي",
     icon: "📘",
   },
   {
-    href: "",
+    id: "sidebar-activate-islamic",
+    href: "/dashboard/student/subscription",
     label: "فعل دين",
     icon: "🕌",
   },
   {
-    href: "",
+    id: "sidebar-activate-history",
+    href: "/dashboard/student/subscription",
     label: "فعل تاريخ",
     icon: "🏛️",
   },
   {
+    id: "sidebar-activate-whatsapp",
     href: "https://wa.link/ghostexams",
     label: "فعل اي مادة بدينار",
     icon: "💬",
+    external: true,
   },
 ];
 
-// ✅ Safe token read
+/* =========================
+   ✅ Safe token read
+========================= */
 function getTokenSafe(tokenFromCtx) {
   if (tokenFromCtx) return tokenFromCtx;
   if (typeof window === "undefined") return "";
@@ -145,7 +194,9 @@ const DashboardNavbar = ({ children, student = {} }) => {
 
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
-  // ✅ Auth
+  /* =========================
+     ✅ Auth
+  ========================= */
   const [accessToken, setAccessToken] = useState("");
   useEffect(() => {
     setAccessToken(getTokenSafe(token));
@@ -153,7 +204,9 @@ const DashboardNavbar = ({ children, student = {} }) => {
 
   const isAuthenticated = !!user && !!accessToken;
 
-  // ✅ Subscription status from existing API
+  /* =========================
+     ✅ Subscription status
+  ========================= */
   const [subStatus, setSubStatus] = useState({
     loading: true,
     active: null,
@@ -165,13 +218,15 @@ const DashboardNavbar = ({ children, student = {} }) => {
 
     const load = async () => {
       if (!isAuthenticated) {
-        if (!cancelled)
+        if (!cancelled) {
           setSubStatus({ loading: false, active: null, pending: null });
+        }
         return;
       }
 
       try {
         const data = await fetchMyStudentSubscriptionStatus();
+
         if (cancelled) return;
 
         setSubStatus({
@@ -180,48 +235,66 @@ const DashboardNavbar = ({ children, student = {} }) => {
           pending: data?.pendingSubscription || null,
         });
       } catch {
-        if (!cancelled)
+        if (!cancelled) {
           setSubStatus({ loading: false, active: null, pending: null });
+        }
       }
     };
 
     load();
+
     return () => {
       cancelled = true;
     };
   }, [isAuthenticated]);
 
-  // ✅ Active?
+  /* =========================
+     ✅ Access rules
+  ========================= */
   const isSubscribed = !!subStatus.active;
   const canAccessAll = isAuthenticated && isSubscribed;
   const isGuest = !isAuthenticated;
 
-  // ✅ Menus
-  const topNavItemsToRender = useMemo(
-    () => (canAccessAll ? TOP_ACTIVE_ITEMS : TOP_FREE_ITEMS),
-    [canAccessAll],
-  );
+  /* =========================
+     ✅ Menus
+  ========================= */
+  const topNavItemsToRender = useMemo(() => {
+    return canAccessAll ? TOP_ACTIVE_ITEMS : TOP_FREE_ITEMS;
+  }, [canAccessAll]);
 
-  const sidebarItemsToRender = useMemo(
-    () => (canAccessAll ? SIDEBAR_ACTIVE_ITEMS : SIDEBAR_FREE_ITEMS),
-    [canAccessAll],
-  );
+  const sidebarItemsToRender = useMemo(() => {
+    return canAccessAll ? SIDEBAR_ACTIVE_ITEMS : SIDEBAR_FREE_ITEMS;
+  }, [canAccessAll]);
 
   const goSubscribe = () => {
     setMobileSidebarOpen(false);
     router.push("/dashboard/student/subscription");
   };
 
+  /* =========================
+     ✅ Shared render helpers
+  ========================= */
+  const renderLinkContent = (item) => (
+    <>
+      {!!item.icon && <span className="text-lg">{item.icon}</span>}
+      <span className="flex-1">{item.label}</span>
+    </>
+  );
+
   const renderSidebarItem = (item) => {
-    const isActive = item.href && router.pathname.startsWith(item.href);
+    const isActive =
+      !!item.href &&
+      item.href !== "#" &&
+      !item.external &&
+      router.pathname.startsWith(item.href);
 
     const baseClasses =
       "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition w-full text-right";
+
     const stateClasses = isActive
       ? "bg-blue-100 text-blue-700"
       : "text-gray-700 hover:bg-gray-100";
 
-    // ✅ Guest: اقفل كل شيء وخليه يروح للاشتراك/التسجيل
     if (isGuest) {
       return (
         <button
@@ -230,23 +303,38 @@ const DashboardNavbar = ({ children, student = {} }) => {
           className={`${baseClasses} text-gray-400 cursor-not-allowed`}
           title="سجّل/اشترك لتفعيل"
         >
-          <span className="text-lg">{item.icon}</span>
-          <span className="flex-1">{item.label}</span>
+          {renderLinkContent(item)}
           <span className="text-sm">🔒</span>
         </button>
       );
     }
 
+    if (item.external) {
+      return (
+        <a
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`${baseClasses} ${stateClasses} text-orange-500 hover:bg-orange-50`}
+        >
+          {renderLinkContent(item)}
+        </a>
+      );
+    }
+
     return (
       <Link href={item.href} className={`${baseClasses} ${stateClasses}`}>
-        <span className="text-lg">{item.icon}</span>
-        <span className="flex-1">{item.label}</span>
+        {renderLinkContent(item)}
       </Link>
     );
   };
 
   const renderTopItem = (item) => {
-    const isActive = router.pathname.startsWith(item.href);
+    const isActive =
+      !!item.href &&
+      item.href !== "#" &&
+      !item.external &&
+      router.pathname.startsWith(item.href);
 
     if (isGuest) {
       return (
@@ -258,6 +346,19 @@ const DashboardNavbar = ({ children, student = {} }) => {
         >
           {item.label} 🔒
         </button>
+      );
+    }
+
+    if (item.external) {
+      return (
+        <a
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-orange-300 font-medium transition hover:text-orange-200"
+        >
+          {item.label}
+        </a>
       );
     }
 
@@ -283,11 +384,11 @@ const DashboardNavbar = ({ children, student = {} }) => {
             <h2 className="text-lg font-semibold text-gray-800 leading-tight">
               {name} - لوحة الطالب
             </h2>
+
             {email && (
               <p className="text-sm text-gray-500 mt-1 break-words">{email}</p>
             )}
 
-            {/* ✅ status pill */}
             <div className="mt-3">
               {subStatus.loading && isAuthenticated ? (
                 <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
@@ -312,11 +413,10 @@ const DashboardNavbar = ({ children, student = {} }) => {
           <nav className="flex-1 overflow-y-auto pr-1">
             <ul className="space-y-2">
               {sidebarItemsToRender.map((item) => (
-                <li key={item.href}>{renderSidebarItem(item)}</li>
+                <li key={item.id}>{renderSidebarItem(item)}</li>
               ))}
             </ul>
 
-            {/* ✅ Upsell if free */}
             {!canAccessAll && !isGuest && (
               <div className="mt-6 rounded-lg border border-gray-200 bg-white p-3">
                 <p className="text-xs text-gray-600 leading-relaxed">
@@ -381,7 +481,7 @@ const DashboardNavbar = ({ children, student = {} }) => {
 
             <ul className="flex flex-wrap gap-4 md:gap-6">
               {topNavItemsToRender.map((item) => (
-                <li key={item.href}>{renderTopItem(item)}</li>
+                <li key={item.id}>{renderTopItem(item)}</li>
               ))}
             </ul>
           </div>
@@ -422,24 +522,41 @@ const DashboardNavbar = ({ children, student = {} }) => {
                 <nav className="flex-1 overflow-y-auto pr-1">
                   <ul className="space-y-2">
                     {sidebarItemsToRender.map((item) => (
-                      <li key={item.href}>
+                      <li key={`mobile-${item.id}`}>
                         {isGuest ? (
                           <button
                             type="button"
                             onClick={goSubscribe}
                             className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition text-gray-400 cursor-not-allowed w-full text-right"
                           >
-                            <span className="text-lg">{item.icon}</span>
+                            {!!item.icon && (
+                              <span className="text-lg">{item.icon}</span>
+                            )}
                             <span className="flex-1">{item.label}</span>
                             <span className="text-sm">🔒</span>
                           </button>
+                        ) : item.external ? (
+                          <a
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => setMobileSidebarOpen(false)}
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition text-orange-500 hover:bg-orange-50 w-full"
+                          >
+                            {!!item.icon && (
+                              <span className="text-lg">{item.icon}</span>
+                            )}
+                            <span className="flex-1">{item.label}</span>
+                          </a>
                         ) : (
                           <Link
                             href={item.href}
                             onClick={() => setMobileSidebarOpen(false)}
                             className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition text-gray-700 hover:bg-gray-100 w-full"
                           >
-                            <span className="text-lg">{item.icon}</span>
+                            {!!item.icon && (
+                              <span className="text-lg">{item.icon}</span>
+                            )}
                             <span className="flex-1">{item.label}</span>
                           </Link>
                         )}
