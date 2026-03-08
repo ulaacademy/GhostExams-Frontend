@@ -37,6 +37,26 @@ const TOP_ACTIVE_ITEMS = [...SUBJECT_ITEMS];
 
 const TOP_FREE_ITEMS = [
   { href: "/dashboard/student/subscription", label: "📦 الحزم والاشتراك" },
+  {
+    href: "",
+    label: " فعل إنجليزي",
+    icon: "🇬🇧",
+  },
+  {
+    href: "",
+    label: "فعل عربي",
+    icon: "📘",
+  },
+  {
+    href: "",
+    label: "فعل دين",
+    icon: "🕌",
+  },
+  {
+    href: "",
+    label: "فعل تاريخ",
+    icon: "🏛️",
+  },
 ];
 
 /* =========================
