@@ -74,7 +74,12 @@ export default function App({ Component, pageProps }) {
           {/* <SmartChatBot /> */}
           <WhatsAppChat
             phone="962791515106"
-            message="-مرحبا، عندي استفسار بخصوص الاشتراك 👋، (بدي الاربع مواد بسعر  7 دنانير لاني جاي من الموقع ) "
+            message="مرحبا Ghost Exams😊 ، انا طالب توجيهي 2009!!! 👈 ( ارسلها الان للحصول على *العرض المجنون*) 👇 ( اي مادة فصلين _*بدينار*_ لمدة 24 ساعة فقط ) 😊يالله يا بطل ابعت طلبك واستفيد من العرض..
+
+
+
+
+"
           />
         </ToastProvider>
       </AuthProvider>

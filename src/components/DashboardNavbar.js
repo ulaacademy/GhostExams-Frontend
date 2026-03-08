@@ -57,6 +57,11 @@ const TOP_FREE_ITEMS = [
     label: "فعل تاريخ",
     icon: "🏛️",
   },
+{
+  href: "https://wa.me/962791515106",
+  label: "فعل اي مادة بدينار",
+  icon: "💬",
+},
 ];
 
 /* =========================
@@ -90,6 +95,7 @@ const SIDEBAR_ACTIVE_ITEMS = [
     label: "تاريخ",
     icon: "🏛️",
   },
+  
 ];
 
 const SIDEBAR_FREE_ITEMS = [
@@ -119,6 +125,11 @@ const SIDEBAR_FREE_ITEMS = [
     label: "فعل تاريخ",
     icon: "🏛️",
   },
+ {
+  href: "https://wa.me/962791515106",
+  label: "فعل اي مادة بدينار",
+  icon: "💬",
+},
 ];
 
 // ✅ Safe token read
