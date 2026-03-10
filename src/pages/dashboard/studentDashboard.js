@@ -390,7 +390,7 @@ return (
               <div className="rounded-2xl bg-yellow-600 text-white p-4 md:p-5 shadow-lg">
                 <div className="font-extrabold text-center text-base md:text-lg">
                   حسابك مجاني للتجربة ✅ — فعّل الاشتراك واكشف عالم اخر من الامتحانات الوزارية المتوقعة  - امتحانات أكثر
-                  - الاسعار والبكجات من هنا 
+                  - الاسعار والبكجات من هنا - ستحصل على 8000 سؤال و 120 امتحان فصلين
                 </div>
                 <div className="text-center text-sm md:text-base mt-2">
                   واتس اب الدعم:{" "}

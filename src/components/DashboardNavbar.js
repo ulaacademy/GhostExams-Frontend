@@ -78,7 +78,7 @@ const TOP_FREE_ITEMS = [
   {
     id: "top-activate-whatsapp",
     href: "https://wa.link/ghostexams",
-    label: "فعل اي مادة بدينار",
+    label: "فعل حسابك ",
     icon: "💬",
     external: true,
   },
@@ -172,7 +172,7 @@ const SIDEBAR_FREE_ITEMS = [
   {
     id: "sidebar-activate-whatsapp",
     href: "https://wa.link/ghostexams",
-    label: "فعل اي مادة بدينار",
+    label: "فعل حسابك",
     icon: "💬",
     external: true,
   },
