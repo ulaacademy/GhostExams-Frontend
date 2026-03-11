@@ -4,6 +4,7 @@ import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { API_URL } from "@/services/api";
+import { useEffect, useMemo, useState } from "react";
 
 export async function getServerSideProps() {
   const subject = "english";
@@ -86,43 +87,67 @@ export default function EnglishTerm1({ exams, usedFallback }) {
   ];
 
   // ✅ FAQ (Visible) + FAQ Schema
-  const faqItems = [
-    {
-      q: `هل امتحانات ${subjectShort} هنا قريبة من النمط الوزاري؟`,
-      a: "نعم، الامتحانات مصممة لتكون قريبة من النمط الوزاري وتساعدك على التدريب بشكل واقعي قبل الامتحان.",
-    },
-    {
-      q: "هل المحتوى حسب المنهاج المعتمد لتوجيهي 2009؟",
-      a: "نعم، المحتوى مبني على المنهاج الرسمي ومقسّم بما يتوافق مع وحدات الفصل.",
-    },
-    {
-      q: "هل أستطيع تقديم الامتحان من هذه الصفحة؟",
-      a: "هذه الصفحة مخصصة لعرض قائمة الامتحانات ومعاينة كل امتحان. التقديم الفعلي يتم من داخل حساب الطالب بعد تفعيل الاشتراك.",
-    },
-    {
-      q: "كيف أفعّل الاشتراك؟",
-      a: "اضغط زر (اشترك معنا الآن) للتواصل معنا على واتساب، وسنساعدك بتفعيل الاشتراك بسرعة.",
-    },
-  ];
+  const faqItems = useMemo(
+    () => [
+      {
+        q: `هل امتحانات ${subjectShort} هنا قريبة من النمط الوزاري؟`,
+        a: "نعم، الامتحانات مصممة لتكون قريبة من النمط الوزاري وتساعدك على التدريب بشكل واقعي قبل الامتحان.",
+      },
+      {
+        q: "هل المحتوى حسب المنهاج المعتمد لتوجيهي 2009؟",
+        a: "نعم، المحتوى مبني على المنهاج الرسمي ومقسّم بما يتوافق مع وحدات الفصل.",
+      },
+      {
+        q: "هل أستطيع تقديم الامتحان من هذه الصفحة؟",
+        a: "هذه الصفحة مخصصة لعرض قائمة الامتحانات ومعاينة كل امتحان. التقديم الفعلي يتم من داخل حساب الطالب بعد تفعيل الاشتراك.",
+      },
+      {
+        q: "كيف أفعّل الاشتراك؟",
+        a: "اضغط زر (اشترك معنا الآن) للتواصل معنا على واتساب، وسنساعدك بتفعيل الاشتراك بسرعة.",
+      },
+    ],
+    []
+  );
 
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqItems.map((item) => ({
-      "@type": "Question",
-      name: item.q,
-      acceptedAnswer: { "@type": "Answer", text: item.a },
-    })),
-  };
+  const faqJsonLd = useMemo(
+    () => ({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      })),
+    }),
+    [faqItems]
+  );
 
   // ✅ Breadcrumbs JSON-LD
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "توجيهي 2009", item: `${siteUrl}${tawjihi2009Path}` },
-      { "@type": "ListItem", position: 2, name: subjectLabel, item: `${siteUrl}${subjectHubPath}` },
-      { "@type": "ListItem", position: 3, name: termLabel, item: canonicalUrl },
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "توجيهي 2009",
+        item: `${siteUrl}${tawjihi2009Path}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: subjectLabel,
+        item: `${siteUrl}${subjectHubPath}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: termLabel,
+        item: canonicalUrl,
+      },
     ],
   };
 
@@ -162,9 +187,21 @@ export default function EnglishTerm1({ exams, usedFallback }) {
 
   // ✅ روابط داخلية قوية
   const relatedLinks = [
-    { label: `صفحة ${subjectLabel} `, href: subjectHubPath, desc: "روابط الفصول + وصف المادة" },
-    { label: `الفصل الثاني - ${subjectShort}`, href: `/tawjihi-2009/${subjectSlug}/term-2`, desc: "الانتقال لقائمة امتحانات الفصل الثاني" },
-    { label: "توجيهي 2009 (الصفحة الرئيسية)", href: tawjihi2009Path, desc: "الرجوع لصفحة توجيهي 2009" },
+    {
+      label: `صفحة ${subjectLabel}`,
+      href: subjectHubPath,
+      desc: "روابط الفصول + وصف المادة",
+    },
+    {
+      label: `الفصل الثاني - ${subjectShort}`,
+      href: `/tawjihi-2009/${subjectSlug}/term-2`,
+      desc: "الانتقال لقائمة امتحانات الفصل الثاني",
+    },
+    {
+      label: "توجيهي 2009 (الصفحة الرئيسية)",
+      href: tawjihi2009Path,
+      desc: "الرجوع لصفحة توجيهي 2009",
+    },
   ];
 
   // ✅ Long-tail SEO Content
@@ -172,6 +209,25 @@ export default function EnglishTerm1({ exams, usedFallback }) {
     `إذا كنت تبحث عن "امتحانات ${subjectShort} توجيهي 2009 ${termLabel}" أو "بنك أسئلة ${subjectShort} 2009"، ` +
     `فهذه الصفحة تجمع الامتحانات المرتبة حسب الوحدات وتعرض معاينة لكل امتحان مع المدة وعدد الأسئلة. ` +
     `التجربة الفعلية (حل الامتحان) تتم من داخل حساب الطالب بعد تفعيل الاشتراك.`;
+
+  /**
+   * ✅ حل Duplicate FAQPage
+   */
+  const [renderFaqJsonLd, setRenderFaqJsonLd] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const KEY = "__GE_FAQ_JSONLD_EN_T1__";
+
+    if (window[KEY]) {
+      setRenderFaqJsonLd(false);
+      return;
+    }
+
+    window[KEY] = true;
+    setRenderFaqJsonLd(true);
+  }, []);
 
   return (
     <div className="bg-gray-900 text-white min-h-screen">
@@ -195,7 +251,10 @@ export default function EnglishTerm1({ exams, usedFallback }) {
         <meta property="og:description" content={description} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content={ogImage} />
-        <meta property="og:image:alt" content={`امتحانات ${subjectShort} توجيهي 2009 ${termLabel}`} />
+        <meta
+          property="og:image:alt"
+          content={`امتحانات ${subjectShort} توجيهي 2009 ${termLabel}`}
+        />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
 
@@ -206,10 +265,34 @@ export default function EnglishTerm1({ exams, usedFallback }) {
         <meta name="twitter:image" content={ogImage} />
 
         {/* ✅ JSON-LD */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+        <script
+          id="breadcrumb-jsonld-en-t1"
+          key="breadcrumb-jsonld-en-t1"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
+        <script
+          id="collection-jsonld-en-t1"
+          key="collection-jsonld-en-t1"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(collectionPageJsonLd),
+          }}
+        />
+        <script
+          id="itemlist-jsonld-en-t1"
+          key="itemlist-jsonld-en-t1"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        />
+        {renderFaqJsonLd && (
+          <script
+            id="faq-jsonld-en-t1"
+            key="faq-jsonld-en-t1"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+          />
+        )}
       </Head>
 
       <Navbar />
@@ -256,7 +339,9 @@ export default function EnglishTerm1({ exams, usedFallback }) {
 
           <p className="mt-4 text-sm sm:text-base text-gray-300 max-w-3xl mx-auto leading-7 sm:leading-relaxed text-center">
             عدد الامتحانات:
-            <span className="mx-2 text-yellow-300 font-extrabold">{Array.isArray(exams) ? exams.length : 0}</span>
+            <span className="mx-2 text-yellow-300 font-extrabold">
+              {Array.isArray(exams) ? exams.length : 0}
+            </span>
           </p>
 
           {usedFallback && (
@@ -284,12 +369,16 @@ export default function EnglishTerm1({ exams, usedFallback }) {
               const questionsCountVal = exam?.questionsCount;
 
               const durationText =
-                durationVal !== undefined && durationVal !== null && String(durationVal).trim() !== ""
+                durationVal !== undefined &&
+                durationVal !== null &&
+                String(durationVal).trim() !== ""
                   ? String(durationVal).trim()
                   : "غير محددة";
 
               const questionsCountText =
-                questionsCountVal !== undefined && questionsCountVal !== null && String(questionsCountVal).trim() !== ""
+                questionsCountVal !== undefined &&
+                questionsCountVal !== null &&
+                String(questionsCountVal).trim() !== ""
                   ? String(questionsCountVal).trim()
                   : "غير محدد";
 
@@ -305,7 +394,9 @@ export default function EnglishTerm1({ exams, usedFallback }) {
                     {examName}
                   </h2>
 
-                  <p className="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed">{seoCardText}</p>
+                  <p className="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed">
+                    {seoCardText}
+                  </p>
 
                   <div className="mt-3 text-sm text-gray-300 space-y-1">
                     <p>
@@ -349,7 +440,9 @@ export default function EnglishTerm1({ exams, usedFallback }) {
             امتحانات {subjectLabel} توجيهي 2009 {termLabel} — بنك أسئلة مرتب حسب الوحدات
           </h2>
 
-          <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed whitespace-pre-line">{seoIntro}</p>
+          <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed whitespace-pre-line">
+            {seoIntro}
+          </p>
 
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
             {relatedLinks.map((l, idx) => (

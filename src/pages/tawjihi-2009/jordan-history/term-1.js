@@ -4,6 +4,7 @@ import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { API_URL } from "@/services/api";
+import { useEffect, useMemo, useState } from "react";
 
 export async function getServerSideProps() {
   const subject = "jordan-history";
@@ -21,6 +22,7 @@ export async function getServerSideProps() {
     const json1 = await res1.json();
     const exams1 = json1?.success ? json1.data : [];
 
+    // ✅ fallback لو بيانات grade مش موحّدة
     if (!exams1 || exams1.length === 0) {
       const url2 = buildUrl({ subject, term });
       const res2 = await fetch(url2);
@@ -36,17 +38,22 @@ export async function getServerSideProps() {
 }
 
 export default function JordanHistoryTerm1({ exams, usedFallback }) {
+  // ✅ ثوابت الصفحة
   const siteUrl = "https://ghostexams.com";
   const subjectLabel = "تاريخ الأردن";
   const subjectSlug = "jordan-history";
   const termNumber = 1;
   const termLabel = "الفصل الأول";
 
+  // ✅ Paths
   const listPagePath = `/tawjihi-2009/${subjectSlug}/term-${termNumber}`;
   const subjectHubPath = `/tawjihi-2009/${subjectSlug}`;
   const tawjihi2009Path = `/tawjihi-2009`;
+
+  // ✅ Canonical
   const canonicalUrl = `${siteUrl}${listPagePath}`;
 
+  // ✅ Meta
   const title = `امتحانات ${subjectLabel} توجيهي 2009 | ${termLabel} - GhostExams`;
   const description =
     `قائمة امتحانات ${subjectLabel} لتوجيهي الأردن 2009 (${termLabel}). ` +
@@ -62,58 +69,88 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
     "GhostExams",
   ].join(", ");
 
+  // ✅ OG Image
   const ogImage = `${siteUrl}/og/${subjectSlug}-term-${termNumber}-2009.jpg`;
   const defaultOgImage = `${siteUrl}/og/default.jpg`;
 
+  // ✅ نص تعريفي (SEO قابل للفهرسة)
   const introText = `هذه صفحة امتحانات ${subjectLabel} لتوجيهي الأردن 2009 (${termLabel}) على GhostExams.
-ستجد هنا الامتحانات الحقيقية الموجودة بالموقع مرتبة حسب اسم الوحدة/الكتاب، مع مدة الامتحان وعدد الأسئلة.
+ستجد هنا الامتحانات الحقيقية الموجودة بالموقع مرتبة حسب أسماء الوحدات/الكتاب، مع مدة الامتحان وعدد الأسئلة.
 اعرض معاينة أي امتحان من الكروت، أما التقديم الفعلي فيكون من داخل حساب الطالب بعد تفعيل الاشتراك.`;
 
+  // ✅ Visible Breadcrumbs
   const crumb = [
     { label: "توجيهي 2009", href: tawjihi2009Path },
     { label: subjectLabel, href: subjectHubPath },
     { label: termLabel, href: listPagePath },
   ];
 
-  const faqItems = [
-    {
-      q: `هل امتحانات ${subjectLabel} هنا قريبة من النمط الوزاري؟`,
-      a: "نعم، الامتحانات قريبة من النمط الوزاري وتساعدك على حفظ التسلسل والأفكار المتكررة في أسئلة الوزارة.",
-    },
-    {
-      q: "هل الامتحانات مرتبة حسب الوحدات؟",
-      a: "نعم، قائمة الامتحانات هنا مرتبة كما هي على الموقع حسب اسم الوحدة/الكتاب لتسهيل المراجعة.",
-    },
-    {
-      q: "هل أستطيع تقديم الامتحان من هذه الصفحة؟",
-      a: "هذه الصفحة مخصصة لعرض قائمة الامتحانات ومعاينة كل امتحان. التقديم الفعلي يتم من داخل حساب الطالب بعد تفعيل الاشتراك.",
-    },
-    {
-      q: "كيف أفعّل الاشتراك؟",
-      a: "اضغط زر (اشترك معنا الآن) للتواصل معنا على واتساب وسنساعدك فورًا.",
-    },
-  ];
+  // ✅ FAQ (Visible) + FAQ Schema
+  const faqItems = useMemo(
+    () => [
+      {
+        q: `هل امتحانات ${subjectLabel} هنا قريبة من النمط الوزاري؟`,
+        a: "نعم، الامتحانات قريبة من النمط الوزاري وتساعدك على حفظ التسلسل والأفكار المتكررة في أسئلة الوزارة.",
+      },
+      {
+        q: "هل الامتحانات مرتبة حسب الوحدات؟",
+        a: "نعم، قائمة الامتحانات هنا مرتبة كما هي على الموقع حسب اسم الوحدة/الكتاب لتسهيل المراجعة.",
+      },
+      {
+        q: "هل أستطيع تقديم الامتحان من هذه الصفحة؟",
+        a: "هذه الصفحة مخصصة لعرض قائمة الامتحانات ومعاينة كل امتحان. التقديم الفعلي يتم من داخل حساب الطالب بعد تفعيل الاشتراك.",
+      },
+      {
+        q: "كيف أفعّل الاشتراك؟",
+        a: "اضغط زر (اشترك معنا الآن) للتواصل معنا على واتساب وسنساعدك فورًا.",
+      },
+    ],
+    [],
+  );
 
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqItems.map((item) => ({
-      "@type": "Question",
-      name: item.q,
-      acceptedAnswer: { "@type": "Answer", text: item.a },
-    })),
-  };
+  const faqJsonLd = useMemo(
+    () => ({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      })),
+    }),
+    [faqItems],
+  );
 
+  // ✅ Breadcrumbs JSON-LD
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "توجيهي 2009", item: `${siteUrl}${tawjihi2009Path}` },
-      { "@type": "ListItem", position: 2, name: subjectLabel, item: `${siteUrl}${subjectHubPath}` },
-      { "@type": "ListItem", position: 3, name: termLabel, item: canonicalUrl },
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "توجيهي 2009",
+        item: `${siteUrl}${tawjihi2009Path}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: subjectLabel,
+        item: `${siteUrl}${subjectHubPath}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: termLabel,
+        item: canonicalUrl,
+      },
     ],
   };
 
+  // ✅ ItemList JSON-LD (قائمة الامتحانات)
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -131,6 +168,7 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
     }),
   };
 
+  // ✅ CollectionPage JSON-LD
   const collectionPageJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -138,24 +176,65 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
     url: canonicalUrl,
     inLanguage: "ar-JO",
     description,
-    isPartOf: { "@type": "WebSite", name: "GhostExams", url: siteUrl },
+    isPartOf: {
+      "@type": "WebSite",
+      name: "GhostExams",
+      url: siteUrl,
+    },
     about: [
       { "@type": "Thing", name: `امتحانات ${subjectLabel} توجيهي 2009` },
       { "@type": "Thing", name: termLabel },
     ],
-    primaryImageOfPage: { "@type": "ImageObject", url: ogImage },
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: ogImage,
+    },
   };
 
+  // ✅ روابط داخلية قوية
   const relatedLinks = [
-    { label: `صفحة ${subjectLabel} `, href: subjectHubPath, desc: "روابط الفصول + وصف المادة" },
-    { label: `الفصل الثاني - ${subjectLabel}`, href: `/tawjihi-2009/${subjectSlug}/term-2`, desc: "الانتقال لقائمة امتحانات الفصل الثاني" },
-    { label: "توجيهي 2009 (الصفحة الرئيسية)", href: tawjihi2009Path, desc: "الرجوع لصفحة توجيهي 2009" },
+    {
+      label: `صفحة ${subjectLabel}`,
+      href: subjectHubPath,
+      desc: "روابط الفصول + وصف المادة",
+    },
+    {
+      label: `الفصل الثاني - ${subjectLabel}`,
+      href: `/tawjihi-2009/${subjectSlug}/term-2`,
+      desc: "الانتقال لقائمة امتحانات الفصل الثاني",
+    },
+    {
+      label: "توجيهي 2009 (الصفحة الرئيسية)",
+      href: tawjihi2009Path,
+      desc: "الرجوع لصفحة توجيهي 2009",
+    },
   ];
 
+  // ✅ Long-tail SEO Content
   const seoIntro =
     `إذا كنت تبحث عن "امتحانات ${subjectLabel} توجيهي 2009 ${termLabel}" أو "بنك أسئلة ${subjectLabel} 2009"، ` +
     `فهذه الصفحة تجمع الامتحانات المرتبة حسب الوحدات وتعرض معاينة لكل امتحان مع المدة وعدد الأسئلة. ` +
-    `التقديم الفعلي يتم من داخل حساب الطالب بعد تفعيل الاشتراك.`;
+    `التجربة الفعلية (حل الامتحان) تتم من داخل حساب الطالب بعد تفعيل الاشتراك.`;
+
+  /**
+   * ✅ حل Duplicate FAQPage:
+   * - نعرض FAQ JSON-LD مرة واحدة فقط حتى لو كان موجود بمكان آخر.
+   */
+  const [renderFaqJsonLd, setRenderFaqJsonLd] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const KEY = "__GE_FAQ_JSONLD_JH_T1__";
+
+    if (window[KEY]) {
+      setRenderFaqJsonLd(false);
+      return;
+    }
+
+    window[KEY] = true;
+    setRenderFaqJsonLd(true);
+  }, []);
 
   return (
     <div className="bg-gray-900 text-white min-h-screen">
@@ -171,7 +250,7 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
 
         <link rel="canonical" href={canonicalUrl} />
 
-        {/* Open Graph */}
+        {/* ✅ Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="ar_JO" />
         <meta property="og:site_name" content="GhostExams" />
@@ -179,27 +258,54 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
         <meta property="og:description" content={description} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content={ogImage} />
-        <meta property="og:image:alt" content={`امتحانات ${subjectLabel} توجيهي 2009 ${termLabel}`} />
+        <meta
+          property="og:image:alt"
+          content={`امتحانات ${subjectLabel} توجيهي 2009 ${termLabel}`}
+        />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
 
-        {/* Twitter */}
+        {/* ✅ Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
 
-        {/* JSON-LD */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+        {/* ✅ JSON-LD */}
+        <script
+          id="breadcrumb-jsonld-jh-t1"
+          key="breadcrumb-jsonld-jh-t1"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
+        <script
+          id="collection-jsonld-jh-t1"
+          key="collection-jsonld-jh-t1"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(collectionPageJsonLd),
+          }}
+        />
+        <script
+          id="itemlist-jsonld-jh-t1"
+          key="itemlist-jsonld-jh-t1"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        />
+        {renderFaqJsonLd && (
+          <script
+            id="faq-jsonld-jh-t1"
+            key="faq-jsonld-jh-t1"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+          />
+        )}
       </Head>
 
       <Navbar />
 
       <main className="pt-24 pb-16 px-4 sm:px-6 max-w-6xl mx-auto" dir="rtl">
-        {/* Top bar */}
+        {/* ✅ Top bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
           <Link
             href={subjectHubPath}
@@ -214,21 +320,26 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
           </div>
         </div>
 
-        {/* Visible Breadcrumbs */}
+        {/* ✅ Visible Breadcrumbs */}
         <nav aria-label="Breadcrumb" className="mb-5">
           <ol className="flex flex-wrap gap-2 text-xs sm:text-sm text-gray-300">
             {crumb.map((c, idx) => (
               <li key={idx} className="flex items-center gap-2">
-                <Link href={c.href} className="hover:text-yellow-300 transition">
+                <Link
+                  href={c.href}
+                  className="hover:text-yellow-300 transition"
+                >
                   {c.label}
                 </Link>
-                {idx < crumb.length - 1 && <span className="text-gray-500">›</span>}
+                {idx < crumb.length - 1 && (
+                  <span className="text-gray-500">›</span>
+                )}
               </li>
             ))}
           </ol>
         </nav>
 
-        {/* Header */}
+        {/* ✅ Header */}
         <header className="text-center px-1 sm:px-0">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-yellow-400 leading-snug sm:leading-tight">
             امتحانات {subjectLabel} توجيهي 2009 — {termLabel}
@@ -240,17 +351,20 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
 
           <p className="mt-4 text-sm sm:text-base text-gray-300 max-w-3xl mx-auto leading-7 sm:leading-relaxed text-center">
             عدد الامتحانات:
-            <span className="mx-2 text-yellow-300 font-extrabold">{Array.isArray(exams) ? exams.length : 0}</span>
+            <span className="mx-2 text-yellow-300 font-extrabold">
+              {Array.isArray(exams) ? exams.length : 0}
+            </span>
           </p>
 
           {usedFallback && (
             <div className="mt-3 text-xs sm:text-sm text-yellow-300/90">
-              ✅ ملاحظة: تم عرض النتائج بدون فلتر الصف لأن قيم الصف في الداتا ليست موحدة.
+              ✅ ملاحظة: تم عرض النتائج بدون فلتر الصف لأن قيم الصف في الداتا
+              ليست موحدة.
             </div>
           )}
         </header>
 
-        {/* Exams Grid */}
+        {/* ✅ Exams Grid */}
         {!exams || exams.length === 0 ? (
           <div className="mt-8 bg-gray-800/60 border border-yellow-500/15 rounded-2xl p-6 text-gray-300 text-center">
             لا توجد امتحانات حالياً لـ {subjectLabel} ({termLabel}).
@@ -260,20 +374,25 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
             {exams.map((exam, idx) => {
               const examId = exam?._id;
               const examName =
-                exam?.examName && String(exam.examName).trim() !== ""
+                (exam?.examName && String(exam.examName).trim() !== ""
                   ? String(exam.examName).trim()
-                  : `امتحان ${subjectLabel} ${idx + 1}`;
+                  : `امتحان ${subjectLabel} ${idx + 1}`) ||
+                `امتحان ${subjectLabel}`;
 
               const durationVal = exam?.duration;
               const questionsCountVal = exam?.questionsCount;
 
               const durationText =
-                durationVal !== undefined && durationVal !== null && String(durationVal).trim() !== ""
+                durationVal !== undefined &&
+                durationVal !== null &&
+                String(durationVal).trim() !== ""
                   ? String(durationVal).trim()
                   : "غير محددة";
 
               const questionsCountText =
-                questionsCountVal !== undefined && questionsCountVal !== null && String(questionsCountVal).trim() !== ""
+                questionsCountVal !== undefined &&
+                questionsCountVal !== null &&
+                String(questionsCountVal).trim() !== ""
                   ? String(questionsCountVal).trim()
                   : "غير محدد";
 
@@ -289,7 +408,9 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
                     {examName}
                   </h2>
 
-                  <p className="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed">{seoCardText}</p>
+                  <p className="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed">
+                    {seoCardText}
+                  </p>
 
                   <div className="mt-3 text-sm text-gray-300 space-y-1">
                     <p>
@@ -297,7 +418,9 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
                       {durationText !== "غير محددة" ? " دقيقة" : ""}
                     </p>
                     <p>🧠 عدد الأسئلة: {questionsCountText}</p>
-                    <p className="text-xs text-gray-400">📌 الفصل: {exam?.term || termNumber}</p>
+                    <p className="text-xs text-gray-400">
+                      📌 الفصل: {exam?.term || termNumber}
+                    </p>
                   </div>
 
                   <Link
@@ -313,7 +436,7 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
           </section>
         )}
 
-        {/* CTA */}
+        {/* ✅ CTA */}
         <Link
           href="/auth/Register"
           className="mt-10 inline-flex w-full justify-center rounded-xl bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3"
@@ -322,18 +445,22 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
         </Link>
 
         <div className="mt-4 text-xs text-blue-400 font-bold leading-relaxed text-center">
-          هذه الصفحة تعرض قائمة الامتحانات ومعاينة كل امتحان فقط — تقديم الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك.
+          هذه الصفحة تعرض قائمة الامتحانات ومعاينة كل امتحان فقط — تقديم
+          الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك.
           <br />
           لتفعيل الاشتراك اضغط على الزر (اشترك معنا الآن) وسنساعدك فورًا.
         </div>
 
-        {/* Long-tail SEO + Related Links */}
+        {/* ✅ Long-tail SEO + Related Links */}
         <section className="mt-8 bg-gray-800/50 border border-yellow-500/10 rounded-2xl p-5 sm:p-6">
           <h2 className="text-base sm:text-lg font-extrabold text-yellow-300">
-            امتحانات {subjectLabel} توجيهي 2009 {termLabel} — بنك أسئلة مرتب حسب الوحدات
+            امتحانات {subjectLabel} توجيهي 2009 {termLabel} — بنك أسئلة مرتب حسب
+            الوحدات
           </h2>
 
-          <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed whitespace-pre-line">{seoIntro}</p>
+          <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed whitespace-pre-line">
+            {seoIntro}
+          </p>
 
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
             {relatedLinks.map((l, idx) => (
@@ -345,32 +472,50 @@ export default function JordanHistoryTerm1({ exams, usedFallback }) {
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <div className="text-sm sm:text-base font-extrabold text-yellow-200">{l.label}</div>
-                    <div className="mt-1 text-xs sm:text-sm text-gray-300 leading-relaxed">{l.desc}</div>
+                    <div className="text-sm sm:text-base font-extrabold text-yellow-200">
+                      {l.label}
+                    </div>
+                    <div className="mt-1 text-xs sm:text-sm text-gray-300 leading-relaxed">
+                      {l.desc}
+                    </div>
                   </div>
-                  <span className="text-yellow-300 group-hover:translate-x-1 transition">←</span>
+                  <span className="text-yellow-300 group-hover:translate-x-1 transition">
+                    ←
+                  </span>
                 </div>
               </Link>
             ))}
           </div>
         </section>
 
-        {/* FAQ */}
+        {/* ✅ FAQ */}
         <section className="mt-8 bg-gray-800/50 border border-yellow-500/10 rounded-2xl p-5 sm:p-6">
-          <h2 className="text-base sm:text-lg font-extrabold text-yellow-300">أسئلة شائعة عن امتحانات تاريخ الأردن توجيهي 2009</h2>
+          <h2 className="text-base sm:text-lg font-extrabold text-yellow-300">
+            أسئلة شائعة عن امتحانات تاريخ الأردن توجيهي 2009
+          </h2>
 
           <div className="mt-4 space-y-3">
             {faqItems.map((item, idx) => (
-              <details key={idx} className="bg-gray-900/40 border border-yellow-500/10 rounded-xl p-4">
-                <summary className="cursor-pointer text-sm sm:text-base font-bold text-gray-100">{item.q}</summary>
-                <p className="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed">{item.a}</p>
+              <details
+                key={idx}
+                className="bg-gray-900/40 border border-yellow-500/10 rounded-xl p-4"
+              >
+                <summary className="cursor-pointer text-sm sm:text-base font-bold text-gray-100">
+                  {item.q}
+                </summary>
+                <p className="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed">
+                  {item.a}
+                </p>
               </details>
             ))}
           </div>
         </section>
 
         <div className="sr-only">
-          <img src={ogImage} alt={`امتحانات ${subjectLabel} توجيهي 2009 ${termLabel}`} />
+          <img
+            src={ogImage}
+            alt={`امتحانات ${subjectLabel} توجيهي 2009 ${termLabel}`}
+          />
           <img src={defaultOgImage} alt="GhostExams" />
         </div>
       </main>
