@@ -332,7 +332,7 @@ export default function ArabicTerm1ExamSEO({ exam }) {
           </h1>
 
           <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed">
-            هذه صفحة معلومات مفهرسة لتوضيح بيانات الامتحان . تقديم الامتحان يتم
+            هذه صفحة معلومات لتوضيح بيانات الامتحان . تقديم الامتحان يتم
             من داخل حساب الطالب بعد تفعيل الاشتراك.
           </p>
 

@@ -15,7 +15,7 @@ export default function Register() {
     password: "",
     phone: "", // ✅ رقم الهاتف (للطلاب والمعلمين)
     grade: "", // ✅ للطلاب
-    subject: "", // ✅ للمعلمين
+    subject: "2009", // ✅ للمعلمين
     role: "student", // 🔹 تحديد الدور افتراضيًا كطالب
   });
   const { login } = useAuth(); // ✅ صحيح
@@ -277,22 +277,24 @@ export default function Register() {
             </select>
           </div>
 
-          {/* ✅ الصف الدراسي (للطالب فقط) */}
-          {formData.role === "student" && (
-            <div>
-              <label className="block text-gray-700">📚 الصف الدراسي:</label>
+         {/* ✅ الصف الدراسي (للطالب فقط) */}
+{formData.role === "student" && (
+  <div>
+    <label className="block text-gray-700">📚 الصف الدراسي:</label>
 
-              <select
-                name="grade"
-                value={formData.grade}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-              >
-                <option value="2009">طالب 2009</option>
-              </select>
-            </div>
-          )}
+    <select
+      name="grade"
+      value={formData.grade || "2009"}
+      onChange={handleChange}
+      required
+      className="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+    >
+      <option value="2009">طالب 2009</option>
+      <option value="2008">طالب 2008</option>
+    </select>
+  </div>
+)}
+
 
           {/* ✅ المادة التي يدرسها المعلم (للمعلم فقط) */}
           {formData.role === "teacher" && (
