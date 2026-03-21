@@ -275,7 +275,9 @@ export default function StudentDashboard() {
     }
 
     try {
-      const res = await axios.get(`${EXAM_API_BASE}/exams/custom-exams/${examId}`);
+      const res = await axios.get(
+        `${EXAM_API_BASE}/exams/custom-exams/${examId}`,
+      );
       const exam = res?.data?.exam || null;
       examCacheRef.current.set(examId, exam);
       return exam;
@@ -369,7 +371,9 @@ export default function StudentDashboard() {
       setPerformance(Array.isArray(performanceData) ? performanceData : []);
 
       const examsFromTeachers = await fetchTeacherCustomExams();
-      setTeacherExams(Array.isArray(examsFromTeachers) ? examsFromTeachers : []);
+      setTeacherExams(
+        Array.isArray(examsFromTeachers) ? examsFromTeachers : [],
+      );
     } catch (err) {
       console.error("❌ خطأ أثناء تحميل البيانات:", err);
 
@@ -551,6 +555,10 @@ export default function StudentDashboard() {
                       ⭐ أفضل باقة لمعظم الطلاب: باقة 7
                     </div>
 
+                    <div className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-full bg-white text-blue-700 font-extrabold text-sm md:text-base">
+                      ⭐ عدد الطلاب الان : اكثر من 6000 طالب مشترك
+                    </div>
+
                     <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
                       <Link href={SUBSCRIPTION_PATH}>
                         <button className="rounded-xl bg-white px-6 py-3 text-blue-700 font-extrabold hover:bg-gray-100 transition shadow-sm">
@@ -574,7 +582,8 @@ export default function StudentDashboard() {
               {!subLoading && !isSubscribed && !!subStatus.pending && (
                 <div className="rounded-2xl bg-yellow-50 border border-yellow-200 p-4 text-yellow-900">
                   <div className="font-extrabold text-center">
-                    ⏳ طلب اشتراكك قيد المراجعة — بنفعّله بعد تأكيد الدفع خلال 24 ساعة
+                    ⏳ طلب اشتراكك قيد المراجعة — بنفعّله بعد تأكيد الدفع خلال
+                    24 ساعة
                   </div>
                 </div>
               )}
@@ -600,8 +609,8 @@ export default function StudentDashboard() {
                   ⏳ تم إرسال طلب الاشتراك بحزمة <b>{pendingPlanName}</b>.
                   <div className="text-sm text-yellow-800 mt-1 leading-7">
                     سيتم التفعيل بعد تأكيد الدفع خلال <b>24 ساعة</b>. تواصل معنا
-                    على واتساب <b>{WHATSAPP_NUMBER}</b> لتفعيل الحساب، وأرسل قيمة
-                    الاشتراك كليك للحساب (المعرّف: <b>GHOSTEXAMS</b>).
+                    على واتساب <b>{WHATSAPP_NUMBER}</b> لتفعيل الحساب، وأرسل
+                    قيمة الاشتراك كليك للحساب (المعرّف: <b>GHOSTEXAMS</b>).
                   </div>
                 </div>
               ) : null}
@@ -644,7 +653,9 @@ export default function StudentDashboard() {
                 <StatCard
                   title="آخر نتيجة"
                   value={
-                    latestExamResult ? `${latestExamResult?._percent ?? 0}%` : "—"
+                    latestExamResult
+                      ? `${latestExamResult?._percent ?? 0}%`
+                      : "—"
                   }
                   note={latestExamTitle}
                   valueClassName="text-gray-900"
@@ -671,16 +682,19 @@ export default function StudentDashboard() {
                     </h2>
 
                     <p className="text-sm md:text-base text-gray-600 mt-2 leading-8">
-                      إذا كنت تريد أفضل توازن بين السعر والمزايا، فاختيارك الأفضل
-                      الآن هو <span className="font-extrabold text-gray-900">باقة 7</span>.
+                      إذا كنت تريد أفضل توازن بين السعر والمزايا، فاختيارك
+                      الأفضل الآن هو{" "}
+                      <span className="font-extrabold text-gray-900">
+                        باقة 7
+                      </span>
+                      .
                     </p>
 
                     <div className="mt-3 text-gray-700 text-sm md:text-base leading-8">
                       ✅ مناسبة لمعظم الطلاب
-                      <span className="mx-2">•</span>
-                      ✅ تفتح لك تجربة أوسع
-                      <span className="mx-2">•</span>
-                      ✅ أفضل خيار للانتقال من المجاني إلى الكامل
+                      <span className="mx-2">•</span>✅ تفتح لك تجربة أوسع
+                      <span className="mx-2">•</span>✅ أفضل خيار للانتقال من
+                      المجاني إلى الكامل
                     </div>
                   </div>
 
@@ -734,14 +748,13 @@ export default function StudentDashboard() {
                         </div>
 
                         <div className="text-sm text-gray-700 mt-1">
-                          📚 {exam?.subject || "—"} • 🧪 {exam?.grade || "—"} • 📅{" "}
-                          {exam?.term || "—"}
+                          📚 {exam?.subject || "—"} • 🧪 {exam?.grade || "—"} •
+                          📅 {exam?.term || "—"}
                         </div>
 
                         <div className="text-sm text-gray-600 mt-1">
-                          🕒 المدة: <b>{exam?.duration || 0}</b> دقيقة • عدد الأسئلة:
-                          {" "}
-                          <b>{exam?.questions?.length || 0}</b>
+                          🕒 المدة: <b>{exam?.duration || 0}</b> دقيقة • عدد
+                          الأسئلة: <b>{exam?.questions?.length || 0}</b>
                         </div>
 
                         <div className="mt-3">
@@ -829,7 +842,9 @@ export default function StudentDashboard() {
                   <>
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
                       <div className="rounded-xl bg-gray-50 border p-3">
-                        <div className="text-sm text-gray-500">اسم الامتحان</div>
+                        <div className="text-sm text-gray-500">
+                          اسم الامتحان
+                        </div>
                         <div className="font-bold text-gray-900">
                           {latestExamTitle}
                         </div>
@@ -866,7 +881,9 @@ export default function StudentDashboard() {
 
                         {latestExamResult?._examId ? (
                           <button
-                            onClick={() => handleRetake(latestExamResult?._examId)}
+                            onClick={() =>
+                              handleRetake(latestExamResult?._examId)
+                            }
                             className="rounded-xl bg-white px-6 py-3 text-blue-700 font-extrabold border border-blue-200 hover:bg-blue-100 transition"
                           >
                             🔁 أعد هذا الامتحان
@@ -943,7 +960,8 @@ export default function StudentDashboard() {
 
                   <p className="text-sm md:text-base mt-3 leading-8 text-blue-50">
                     فعّل الآن وابدأ الدراسة بشكل أوضح وأقوى. الحساب المجاني مجرد
-                    بداية، أما التفعيل فهو الذي يفتح لك الوصول الحقيقي الذي تحتاجه.
+                    بداية، أما التفعيل فهو الذي يفتح لك الوصول الحقيقي الذي
+                    تحتاجه.
                   </p>
 
                   <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center">
@@ -1012,7 +1030,9 @@ export default function StudentDashboard() {
                 <StatCard
                   title="آخر نتيجة"
                   value={
-                    latestExamResult ? `${latestExamResult?._percent ?? 0}%` : "—"
+                    latestExamResult
+                      ? `${latestExamResult?._percent ?? 0}%`
+                      : "—"
                   }
                   note={latestExamTitle}
                   valueClassName="text-gray-900"
@@ -1055,7 +1075,9 @@ export default function StudentDashboard() {
                         🔁 أعد الامتحان
                       </button>
                       <button
-                        onClick={() => handleOpenExam(latestExamResult?._examId)}
+                        onClick={() =>
+                          handleOpenExam(latestExamResult?._examId)
+                        }
                         className="px-4 py-2 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition font-bold"
                       >
                         👀 عرض
@@ -1178,14 +1200,17 @@ export default function StudentDashboard() {
                   📊 تطور أدائك
                 </h2>
                 <p className="text-sm text-gray-600 mb-4">
-                  هذا الرسم يعرض آخر 10 نتائج (كلما زادت الامتحانات، تطلع صورتك أوضح)
+                  هذا الرسم يعرض آخر 10 نتائج (كلما زادت الامتحانات، تطلع صورتك
+                  أوضح)
                 </p>
 
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart
                     data={examHistory.slice(-10).map((exam) => ({
                       name:
-                        exam?._exam?.subject || exam?._exam?.examName || "امتحان",
+                        exam?._exam?.subject ||
+                        exam?._exam?.examName ||
+                        "امتحان",
                       performancePercentage: exam?._percent ?? 0,
                     }))}
                   >
