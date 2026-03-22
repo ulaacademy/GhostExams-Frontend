@@ -557,6 +557,7 @@ export default function StudentDashboard() {
 
                     <div className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-full bg-white text-blue-700 font-extrabold text-sm md:text-base">
                       ⭐ عدد الطلاب الان : اكثر من 6000 طالب مشترك
+        
                     </div>
 
                     <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
