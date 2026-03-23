@@ -130,7 +130,7 @@ const SIDEBAR_ACTIVE_ITEMS = [
     label: "تاريخ",
     icon: "🏛️",
   },
-];
+  ];
 
 const SIDEBAR_FREE_ITEMS = [
   {

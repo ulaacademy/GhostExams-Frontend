@@ -501,6 +501,11 @@ export default function StudentDashboard() {
               <div className="flex gap-2 flex-wrap">
                 {!subLoading && !isSubscribed ? (
                   <>
+                   <Link href="/dashboard/subscribed-teachers/6925950db9f708163dd423a7/exams">
+                      <Button className="px-5 py-2.5 bg-yellow-700 text-black rounded-x2 hover:bg-yellow-400 transition font-extrabold">
+                        ⭐ امتحانات مجانية للتجربة  
+                      </Button>
+                    </Link>
                     <Link href={SUBSCRIPTION_PATH}>
                       <Button className="px-5 py-2.5 bg-yellow-500 text-black rounded-xl hover:bg-yellow-400 transition font-extrabold">
                         ⭐ فعّل الوصول الكامل
@@ -717,71 +722,81 @@ export default function StudentDashboard() {
                 </div>
               </div>
 
-              {/* Free exams */}
-              {freeExamPreview.length > 0 && (
-                <div className="bg-white rounded-2xl shadow-md p-4 md:p-6 border border-gray-100">
-                  <div className="flex items-center justify-between flex-wrap gap-2">
-                    <div>
-                      <h2 className="text-xl font-extrabold text-blue-700">
-                        🎁 امتحانات مجانية للتجربة
-                      </h2>
-                      <p className="text-sm text-gray-500 mt-1">
-                        هذه الامتحانات للتجربة فقط قبل التفعيل
-                      </p>
-                    </div>
+             {/* Free exams */}
+{freeExamPreview.length > 0 && (
+  <div className="bg-white rounded-2xl shadow-md p-4 md:p-6 border border-gray-100">
+    <div className="flex items-center justify-between flex-wrap gap-2">
+      <div>
+        <h2 className="text-xl font-extrabold text-blue-700">
+          🎁 امتحانات مجانية للتجربة
+        </h2>
+        <p className="text-sm text-gray-500 mt-1">
+          هذه الامتحانات للتجربة فقط قبل التفعيل
+        </p>
+      </div>
 
-                    <Link href={SUBSCRIPTION_PATH}>
-                      <Button className="px-4 py-2 bg-yellow-500 text-black rounded-xl hover:bg-yellow-400 transition font-extrabold">
-                        ⭐ فعّل وافتح المزيد
-                      </Button>
-                    </Link>
-                  </div>
+      <Link href={SUBSCRIPTION_PATH}>
+        <Button className="px-4 py-2 bg-yellow-500 text-black rounded-xl hover:bg-yellow-400 transition font-extrabold">
+          ⭐ فعّل وافتح المزيد
+        </Button>
+      </Link>
+    </div>
 
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {freeExamPreview.map((exam, index) => (
-                      <div
-                        key={exam?._id || index}
-                        className="border rounded-2xl p-4 hover:shadow-md transition cursor-pointer bg-blue-50"
-                        onClick={() => handleOpenExam(exam?._id)}
-                      >
-                        <div className="font-extrabold text-gray-900 text-lg">
-                          {exam?.examName || "امتحان"}
-                        </div>
+    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+      {teacherExams.slice(0, 6).map((exam, index) => (
+        <div
+          key={exam?._id || index}
+          className="border rounded-2xl p-4 hover:shadow-md transition cursor-pointer bg-blue-50"
+          onClick={() => handleOpenExam(exam?._id)}
+        >
+          <div className="font-extrabold text-gray-900 text-lg">
+            {exam?.examName || "امتحان"}
+          </div>
 
-                        <div className="text-sm text-gray-700 mt-1">
-                          📚 {exam?.subject || "—"} • 🧪 {exam?.grade || "—"} •
-                          📅 {exam?.term || "—"}
-                        </div>
+          <div className="text-sm text-gray-700 mt-1">
+            📚 {exam?.subject || "—"} • 🧪 {exam?.grade || "—"} •
+            📅 {exam?.term || "—"}
+          </div>
 
-                        <div className="text-sm text-gray-600 mt-1">
-                          🕒 المدة: <b>{exam?.duration || 0}</b> دقيقة • عدد
-                          الأسئلة: <b>{exam?.questions?.length || 0}</b>
-                        </div>
+          <div className="text-sm text-gray-600 mt-1">
+            🕒 المدة: <b>{exam?.duration || 0}</b> دقيقة • عدد
+            الأسئلة: <b>{exam?.questions?.length || 0}</b>
+          </div>
 
-                        <div className="mt-3">
-                          <div className="inline-block px-4 py-2 rounded-xl bg-blue-600 text-white font-extrabold">
-                            ▶️ ابدأ الآن
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+          <div className="mt-3">
+            <div className="inline-block px-4 py-2 rounded-xl bg-blue-600 text-white font-extrabold">
+              ▶️ ابدأ الآن
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
 
-                  <div className="mt-4 rounded-2xl bg-yellow-50 border border-yellow-200 p-4 text-center">
-                    <div className="font-extrabold text-yellow-900">
-                      هذه مجرد تجربة مجانية — بعد التفعيل سيفتح لك المزيد من
-                      الامتحانات والمواد
-                    </div>
-                    <div className="mt-3">
-                      <Link href={SUBSCRIPTION_PATH}>
-                        <button className="rounded-xl bg-yellow-500 px-6 py-3 text-black font-extrabold hover:bg-yellow-400 transition">
-                          📦 شاهد الأسعار والباقات
-                        </button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              )}
+    {teacherExams.length > 6 && (
+      <div className="mt-4 flex justify-center">
+        <Link href="/dashboard/subscribed-teachers/6925950db9f708163dd423a7/exams">
+          <Button className="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+            📌 شاهد كل الامتحانات المجانية
+          </Button>
+        </Link>
+      </div>
+    )}
+
+    <div className="mt-4 rounded-2xl bg-yellow-50 border border-yellow-200 p-4 text-center">
+      <div className="font-extrabold text-yellow-900">
+        هذه مجرد تجربة مجانية — بعد التفعيل سيفتح لك المزيد من
+        الامتحانات والمواد
+      </div>
+      <div className="mt-3">
+        <Link href={SUBSCRIPTION_PATH}>
+          <button className="rounded-xl bg-yellow-500 px-6 py-3 text-black font-extrabold hover:bg-yellow-400 transition">
+            📦 شاهد الأسعار والباقات
+          </button>
+        </Link>
+      </div>
+    </div>
+  </div>
+)}
 
               {/* Locked value preview */}
               <div className="bg-white rounded-2xl shadow-md p-4 md:p-6 border border-gray-100">
