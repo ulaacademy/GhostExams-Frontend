@@ -60,7 +60,7 @@ export default function ArabicTerm1ExamSEO({ exam }) {
 
   // ✅ Meta
   const title = `${safeExamName} | امتحان ${subjectLabel} توجيهي 2009 ${termLabel} - GhostExams`;
-  const description = `صفحة معلومات امتحان ${safeExamName} لمادة ${subjectLabel} (توجيهي الأردن 2009 - ${termLabel}). مدة الامتحان: ${durationText} دقيقة، وعدد الأسئلة: ${questionsCountText}. هذه صفحة مفهرسة لشرح تفاصيل الامتحان، وتقديم الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك.`;
+  const description = `${safeExamName} لمادة ${subjectLabel} (توجيهي 2009 - ${termLabel}). مدة الامتحان: ${durationText} دقيقة، وعدد الأسئلة: ${questionsCountText}. هذه صفحة لشرح تفاصيل الامتحان، وتقديم الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك.`;
 
   const keywords = [
     `امتحان ${subjectLabel} توجيهي 2009 ${termLabel}`,
