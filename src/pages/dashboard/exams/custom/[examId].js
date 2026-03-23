@@ -1407,7 +1407,7 @@ function ResultsScreen({ examData, score, correctCount, router, onRetry }) {
           </button>
 
           <button
-            onClick={() => router.push("/dashboard/subscribed-teachers")}
+            onClick={() => router.push("/dashboard/")}
             className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
           >
             الرجوع
