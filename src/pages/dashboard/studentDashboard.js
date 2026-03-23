@@ -209,7 +209,7 @@ export default function StudentDashboard() {
       },
       {
         q: "ما أفضل باقة لمعظم الطلاب؟",
-        a: "أفضل خيار لمعظم الطلاب حاليًا هو باقة 7 لأنها متوازنة جدًا بين السعر والمزايا.",
+        a: "أفضل خيار لمعظم الطلاب حاليًا هو باقة 12 لأنها متوازنة جدًا بين السعر والمزايا.",
       },
       {
         q: "ماذا يفتح لي الاشتراك؟",
@@ -702,7 +702,7 @@ export default function StudentDashboard() {
                   <div className="min-w-[220px] bg-yellow-50 rounded-2xl p-5 border border-yellow-200 text-center">
                     <div className="text-sm text-gray-600">أفضل عرض الآن</div>
                     <div className="text-5xl font-extrabold text-yellow-600 mt-2">
-                      12 دينار اربع مواد 
+                      12 اربع مواد 
                     </div>
                     <div className="text-base font-bold text-gray-800 mt-1">
                       دينار
