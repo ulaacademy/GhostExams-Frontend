@@ -395,7 +395,7 @@ const Home = () => {
             <div className="flex flex-col lg:flex-row items-center justify-between gap-4 text-center lg:text-right">
               <div>
                 <h2 className="text-lg sm:text-xl font-extrabold text-white">
-                      ⭐ أفضل عرض للطلاب هو خطة الاربع مواد فصلين بسعر 7 دنانير                </h2>
+                      ⭐ أفضل عرض للطلاب هو خطة الاربع مواد فصلين بسعر 12 دنانير                </h2>
                 <p className="text-gray-300 text-sm sm:text-base mt-1">
                   خيار متوازن جدًا بين السعر والمزايا ومناسب لمعظم الطلاب.
                 </p>

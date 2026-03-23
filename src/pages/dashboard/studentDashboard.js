@@ -541,10 +541,10 @@ export default function StudentDashboard() {
                     </div>
 
                     <div className="text-sm md:text-base mt-3 leading-8">
-                      جرّبت الامتحانات المفتوحة، لكن التفعيل يفتح لك تجربة أقوى:
+                      جرّبت الامتحانات المفتوحة، التفعيل يفتح لك تجربة أقوى:
                       <span className="font-extrabold"> 8000+ سؤال </span>
                       <span className="mx-1">•</span>
-                      <span className="font-extrabold"> 120+ امتحان </span>
+                      <span className="font-extrabold"> 120+ امتحان</span>
                       <span className="mx-1">•</span>
                       امتحانات أكثر وأقوى
                       <span className="mx-1">•</span>
@@ -552,11 +552,11 @@ export default function StudentDashboard() {
                     </div>
 
                     <div className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-full bg-white text-blue-700 font-extrabold text-sm md:text-base">
-                      ⭐ أفضل باقة لمعظم الطلاب: باقة 7
+                      ⭐ أفضل باقة لمعظم الطلاب: باقة 12 دينار
                     </div>
 
                     <div className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-full bg-white text-blue-700 font-extrabold text-sm md:text-base">
-                      ⭐ عدد الطلاب الان : اكثر من 6000 طالب مشترك
+                      ⭐ عدد الطلاب الان : اكثر من +6000 طالب مشترك
         
                     </div>
 
@@ -686,7 +686,7 @@ export default function StudentDashboard() {
                       إذا كنت تريد أفضل توازن بين السعر والمزايا، فاختيارك
                       الأفضل الآن هو{" "}
                       <span className="font-extrabold text-gray-900">
-                        باقة 7
+                        باقة 12 دينار
                       </span>
                       .
                     </p>
@@ -702,7 +702,7 @@ export default function StudentDashboard() {
                   <div className="min-w-[220px] bg-yellow-50 rounded-2xl p-5 border border-yellow-200 text-center">
                     <div className="text-sm text-gray-600">أفضل عرض الآن</div>
                     <div className="text-5xl font-extrabold text-yellow-600 mt-2">
-                      7
+                      12 دينار اربع مواد 
                     </div>
                     <div className="text-base font-bold text-gray-800 mt-1">
                       دينار
@@ -710,7 +710,7 @@ export default function StudentDashboard() {
 
                     <Link href={SUBSCRIPTION_PATH}>
                       <button className="w-full mt-4 rounded-xl bg-yellow-500 px-5 py-3 text-black font-extrabold hover:bg-yellow-400 transition">
-                        اختر باقة 7 الآن
+                        اختر باقة 12 الآن
                       </button>
                     </Link>
                   </div>
