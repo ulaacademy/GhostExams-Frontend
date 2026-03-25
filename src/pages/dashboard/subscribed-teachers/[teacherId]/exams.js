@@ -6,6 +6,8 @@ import { useAuth } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import {
   fetchTeacherExamsByStudent,
+  fetchSubscribedTeachers,
+  fetchMyStudentSubscriptionStatus,
   createShareLink,
 } from "@/services/api";
 import { showToast } from "@/components/Toast";
@@ -14,10 +16,11 @@ export default function TeacherExamsPage() {
   const router = useRouter();
   const { teacherId } = router.query;
   const { user } = useAuth();
-  
+
   const [exams, setExams] = useState([]);
   const [filteredExams, setFilteredExams] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [checkingAccess, setCheckingAccess] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,91 +34,131 @@ export default function TeacherExamsPage() {
     term: "",
   });
 
-  // ✅ جلب امتحانات المعلم
-  const loadTeacherExams = useCallback(async () => {
+  // ✅ تحقق الوصول قبل تحميل أي امتحانات
+  const checkAccessAndLoad = useCallback(async () => {
     if (!teacherId) return;
 
     try {
+      setCheckingAccess(true);
       setLoading(true);
       setError(null);
+
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+      if (!token) {
+        router.replace("/auth/Login");
+        return;
+      }
+
+      // 1) تحقق من الاشتراك الفعّال
+      const subData = await fetchMyStudentSubscriptionStatus();
+      const activeSubscription = subData?.activeSubscription || null;
+
+      if (!activeSubscription) {
+        router.replace("/dashboard/studentDashboard?upgrade=required");
+        return;
+      }
+
+      // 2) تحقق أن هذا المعلم ضمن البنوك المشترك معها الطالب
+      const subscribedTeachers = await fetchSubscribedTeachers();
+      const allowedTeachers = Array.isArray(subscribedTeachers)
+        ? subscribedTeachers
+        : [];
+
+      const hasAccessToTeacher = allowedTeachers.some(
+        (teacher) => String(teacher?._id) === String(teacherId),
+      );
+
+      if (!hasAccessToTeacher) {
+        router.replace("/dashboard/subscribed-teachers?forbidden=1");
+        return;
+      }
+
+      // 3) إذا التحقق نجح، حمّل الامتحانات
       const data = await fetchTeacherExamsByStudent(teacherId);
       console.log(`📊 Exams data for teacher ${teacherId}:`, data);
-      
-      // Extract exams array and teacher info
+
       const examsList = data.exams || data || [];
       if (data.teacher) {
         setTeacherInfo(data.teacher);
       }
-      
+
       setExams(examsList);
       setFilteredExams(examsList);
     } catch (err) {
-      console.error(`❌ فشل في جلب امتحانات المعلم ${teacherId}:`, err);
-      const errorMessage = err.response?.data?.message || 
-                         err.message || 
-                         "فشل في تحميل الامتحانات";
+      console.error(`❌ فشل في التحقق/جلب امتحانات المعلم ${teacherId}:`, err);
+
+      if (err?.response?.status === 401) {
+        router.replace("/auth/Login");
+        return;
+      }
+
+      if (err?.response?.status === 403) {
+        router.replace("/dashboard/studentDashboard?upgrade=required");
+        return;
+      }
+
+      const errorMessage =
+        err?.response?.data?.message || err?.message || "فشل في تحميل الامتحانات";
       setError(errorMessage);
       setExams([]);
       setFilteredExams([]);
     } finally {
+      setCheckingAccess(false);
       setLoading(false);
     }
-  }, [teacherId]);
+  }, [teacherId, router]);
 
   useEffect(() => {
     if (teacherId) {
-      loadTeacherExams();
+      checkAccessAndLoad();
     }
-  }, [teacherId, loadTeacherExams]);
+  }, [teacherId, checkAccessAndLoad]);
 
   // ✅ فلترة الامتحانات
   useEffect(() => {
     let filtered = [...exams];
 
-    // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       filtered = filtered.filter((exam) => {
         const examName = String(exam.examName || exam.title || "").toLowerCase();
         const subject = String(exam.subject || "").toLowerCase();
         const grade = String(exam.grade || "").toLowerCase();
-        return examName.includes(query) || 
-               subject.includes(query) || 
-               grade.includes(query);
+        return (
+          examName.includes(query) ||
+          subject.includes(query) ||
+          grade.includes(query)
+        );
       });
     }
 
-    // Subject filter
     if (filters.subject) {
       filtered = filtered.filter((exam) => exam.subject === filters.subject);
     }
 
-    // Grade filter
     if (filters.grade) {
       filtered = filtered.filter((exam) => exam.grade === filters.grade);
     }
 
-    // Term filter
     if (filters.term) {
       filtered = filtered.filter((exam) => exam.term === filters.term);
     }
 
     setFilteredExams(filtered);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   }, [exams, searchQuery, filters]);
 
-  // ✅ Pagination calculations
   const indexOfLastExam = currentPage * examsPerPage;
   const indexOfFirstExam = indexOfLastExam - examsPerPage;
   const currentExams = filteredExams.slice(indexOfFirstExam, indexOfLastExam);
   const totalPages = Math.ceil(filteredExams.length / examsPerPage);
 
-  // ✅ Get unique values for filters
   const uniqueSubjects = [...new Set(exams.map((exam) => exam.subject).filter(Boolean))];
   const uniqueGrades = [...new Set(exams.map((exam) => exam.grade).filter(Boolean))];
   const uniqueTerms = [...new Set(exams.map((exam) => exam.term).filter(Boolean))];
 
-  // ✅ الانتقال إلى صفحة الامتحان
   const handleExamClick = (examId, isGhostExam = false) => {
     if (isGhostExam) {
       router.push(`/dashboard/exams/view/GhostExamView?examId=${examId}`);
@@ -124,25 +167,23 @@ export default function TeacherExamsPage() {
     }
   };
 
-  // ✅ مشاركة امتحان
   const handleShareExam = async (examId, e) => {
     e.stopPropagation();
-    
+
     try {
       const result = await createShareLink({
         shareType: "exam",
         resourceId: examId,
-        expiresInDays: 30
+        expiresInDays: 30,
       });
-      
-      setShareUrls(prev => ({ ...prev, [examId]: result.share.url }));
-      setShareModals(prev => ({ ...prev, [examId]: true }));
+
+      setShareUrls((prev) => ({ ...prev, [examId]: result.share.url }));
+      setShareModals((prev) => ({ ...prev, [examId]: true }));
     } catch (error) {
       console.error("❌ فشل في إنشاء رابط المشاركة:", error);
     }
   };
 
-  // ✅ نسخ الرابط
   const copyToClipboard = (url) => {
     if (url) {
       navigator.clipboard.writeText(url);
@@ -150,13 +191,11 @@ export default function TeacherExamsPage() {
     }
   };
 
-  // ✅ Change page
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // ✅ Reset filters
   const resetFilters = () => {
     setSearchQuery("");
     setFilters({ subject: "", grade: "", term: "" });
@@ -213,7 +252,12 @@ export default function TeacherExamsPage() {
             </div>
           </div>
 
-          {loading ? (
+          {checkingAccess ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">🔐 جاري التحقق من الصلاحية...</p>
+            </div>
+          ) : loading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
               <p className="text-gray-600">⏳ جاري تحميل الامتحانات...</p>
@@ -222,7 +266,7 @@ export default function TeacherExamsPage() {
             <div className="text-center py-12">
               <p className="text-red-500 mb-4">{error}</p>
               <button
-                onClick={loadTeacherExams}
+                onClick={checkAccessAndLoad}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
               >
                 إعادة المحاولة
@@ -232,7 +276,6 @@ export default function TeacherExamsPage() {
             <>
               {/* ✅ Search and Filters */}
               <div className="mb-6 space-y-4">
-                {/* Search Bar */}
                 <div className="relative">
                   <input
                     type="text"
@@ -251,11 +294,12 @@ export default function TeacherExamsPage() {
                   )}
                 </div>
 
-                {/* Filter Dropdowns */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <select
                     value={filters.subject}
-                    onChange={(e) => setFilters(prev => ({ ...prev, subject: e.target.value }))}
+                    onChange={(e) =>
+                      setFilters((prev) => ({ ...prev, subject: e.target.value }))
+                    }
                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="">كل المواد</option>
@@ -268,7 +312,9 @@ export default function TeacherExamsPage() {
 
                   <select
                     value={filters.grade}
-                    onChange={(e) => setFilters(prev => ({ ...prev, grade: e.target.value }))}
+                    onChange={(e) =>
+                      setFilters((prev) => ({ ...prev, grade: e.target.value }))
+                    }
                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="">كل الصفوف</option>
@@ -281,7 +327,9 @@ export default function TeacherExamsPage() {
 
                   <select
                     value={filters.term}
-                    onChange={(e) => setFilters(prev => ({ ...prev, term: e.target.value }))}
+                    onChange={(e) =>
+                      setFilters((prev) => ({ ...prev, term: e.target.value }))
+                    }
                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="">كل الفصول</option>
@@ -300,7 +348,6 @@ export default function TeacherExamsPage() {
                   </button>
                 </div>
 
-                {/* Results Count */}
                 <div className="text-sm text-gray-600">
                   عرض {currentExams.length} من {filteredExams.length} امتحان
                   {filteredExams.length !== exams.length && (
@@ -362,9 +409,7 @@ export default function TeacherExamsPage() {
                           </p>
                           <p>📅 الفصل: {exam.term}</p>
                           <p>🕒 المدة: {exam.duration} دقيقة</p>
-                          {exam.questions && (
-                            <p>❓ عدد الأسئلة: {exam.questions.length}</p>
-                          )}
+                          {exam.questions && <p>❓ عدد الأسئلة: {exam.questions.length}</p>}
                           {exam.createdAt && (
                             <p className="text-xs text-gray-500 mt-2">
                               📆 {new Date(exam.createdAt).toLocaleDateString("ar-SA")}
@@ -382,7 +427,6 @@ export default function TeacherExamsPage() {
                     ))}
                   </div>
 
-                  {/* ✅ Pagination */}
                   {totalPages > 1 && (
                     <div className="flex justify-center items-center gap-2 mt-6">
                       <button
@@ -392,10 +436,9 @@ export default function TeacherExamsPage() {
                       >
                         ← السابق
                       </button>
-                      
+
                       <div className="flex gap-1">
                         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                          // Show first page, last page, current page, and pages around current
                           if (
                             page === 1 ||
                             page === totalPages ||
@@ -468,7 +511,9 @@ export default function TeacherExamsPage() {
                     </div>
                   </div>
                   <button
-                    onClick={() => setShareModals(prev => ({ ...prev, [key]: false }))}
+                    onClick={() =>
+                      setShareModals((prev) => ({ ...prev, [key]: false }))
+                    }
                     className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
                   >
                     إغلاق
@@ -482,4 +527,3 @@ export default function TeacherExamsPage() {
     </ProtectedRoute>
   );
 }
-
