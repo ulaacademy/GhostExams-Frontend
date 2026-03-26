@@ -35,27 +35,23 @@ export default function TeacherExamsPage() {
   });
 
   // ✅ تحقق الوصول قبل تحميل أي امتحانات
- const checkAccessAndLoad = useCallback(async () => {
-  if (!teacherId) return;
+  const checkAccessAndLoad = useCallback(async () => {
+    if (!teacherId) return;
 
-  try {
-    setCheckingAccess(true);
-    setLoading(true);
-    setError(null);
+    try {
+      setCheckingAccess(true);
+      setLoading(true);
+      setError(null);
 
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-    if (!token) {
-      router.replace("/auth/Login");
-      return;
-    }
+      if (!token) {
+        router.replace("/auth/Login");
+        return;
+      }
 
-    const isGhostTeacher = String(teacherId) === String(GHOST_TEACHER_ID);
-
-    // ✅ المعلم الافتراضي: يكفي تسجيل الدخول فقط
-    if (!isGhostTeacher) {
-      // 1) تحقق من الاشتراك الفعّال فقط للمعلمين العاديين
+      // 1) تحقق من الاشتراك الفعّال
       const subData = await fetchMyStudentSubscriptionStatus();
       const activeSubscription = subData?.activeSubscription || null;
 
@@ -78,41 +74,41 @@ export default function TeacherExamsPage() {
         router.replace("/dashboard/subscribed-teachers?forbidden=1");
         return;
       }
+
+      // 3) إذا التحقق نجح، حمّل الامتحانات
+      const data = await fetchTeacherExamsByStudent(teacherId);
+      console.log(`📊 Exams data for teacher ${teacherId}:`, data);
+
+      const examsList = data.exams || data || [];
+      if (data.teacher) {
+        setTeacherInfo(data.teacher);
+      }
+
+      setExams(examsList);
+      setFilteredExams(examsList);
+    } catch (err) {
+      console.error(`❌ فشل في التحقق/جلب امتحانات المعلم ${teacherId}:`, err);
+
+      if (err?.response?.status === 401) {
+        router.replace("/auth/Login");
+        return;
+      }
+
+      if (err?.response?.status === 403) {
+        router.replace("/dashboard/studentDashboard?upgrade=required");
+        return;
+      }
+
+      const errorMessage =
+        err?.response?.data?.message || err?.message || "فشل في تحميل الامتحانات";
+      setError(errorMessage);
+      setExams([]);
+      setFilteredExams([]);
+    } finally {
+      setCheckingAccess(false);
+      setLoading(false);
     }
-
-    // ✅ إذا التحقق نجح، حمّل الامتحانات
-    const data = await fetchTeacherExamsByStudent(teacherId);
-
-    const examsList = data.exams || data || [];
-    if (data.teacher) {
-      setTeacherInfo(data.teacher);
-    }
-
-    setExams(examsList);
-    setFilteredExams(examsList);
-  } catch (err) {
-    console.error(`❌ فشل في التحقق/جلب امتحانات المعلم ${teacherId}:`, err);
-
-    if (err?.response?.status === 401) {
-      router.replace("/auth/Login");
-      return;
-    }
-
-    if (err?.response?.status === 403) {
-      router.replace("/dashboard/studentDashboard?upgrade=required");
-      return;
-    }
-
-    const errorMessage =
-      err?.response?.data?.message || err?.message || "فشل في تحميل الامتحانات";
-    setError(errorMessage);
-    setExams([]);
-    setFilteredExams([]);
-  } finally {
-    setCheckingAccess(false);
-    setLoading(false);
-  }
-}, [teacherId, router]);
+  }, [teacherId, router]);
 
   useEffect(() => {
     if (teacherId) {
