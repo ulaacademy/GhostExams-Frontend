@@ -12,6 +12,8 @@ import {
 } from "@/services/api";
 import { showToast } from "@/components/Toast";
 
+const GHOST_TEACHER_ID = "6925950db9f708163dd423a7";
+
 export default function TeacherExamsPage() {
   const router = useRouter();
   const { teacherId } = router.query;
@@ -51,28 +53,34 @@ export default function TeacherExamsPage() {
         return;
       }
 
-      // 1) تحقق من الاشتراك الفعّال
-      const subData = await fetchMyStudentSubscriptionStatus();
-      const activeSubscription = subData?.activeSubscription || null;
+      const isGhostTeacher =
+        String(teacherId) === String(GHOST_TEACHER_ID);
 
-      if (!activeSubscription) {
-        router.replace("/dashboard/studentDashboard?upgrade=required");
-        return;
-      }
+      // ✅ المعلم الافتراضي مفتوح لأي طالب مسجل دخول
+      if (!isGhostTeacher) {
+        // 1) تحقق من الاشتراك الفعّال للمعلمين العاديين فقط
+        const subData = await fetchMyStudentSubscriptionStatus();
+        const activeSubscription = subData?.activeSubscription || null;
 
-      // 2) تحقق أن هذا المعلم ضمن البنوك المشترك معها الطالب
-      const subscribedTeachers = await fetchSubscribedTeachers();
-      const allowedTeachers = Array.isArray(subscribedTeachers)
-        ? subscribedTeachers
-        : [];
+        if (!activeSubscription) {
+          router.replace("/dashboard/studentDashboard?upgrade=required");
+          return;
+        }
 
-      const hasAccessToTeacher = allowedTeachers.some(
-        (teacher) => String(teacher?._id) === String(teacherId),
-      );
+        // 2) تحقق أن هذا المعلم ضمن البنوك المشترك معها الطالب
+        const subscribedTeachers = await fetchSubscribedTeachers();
+        const allowedTeachers = Array.isArray(subscribedTeachers)
+          ? subscribedTeachers
+          : [];
 
-      if (!hasAccessToTeacher) {
-        router.replace("/dashboard/subscribed-teachers?forbidden=1");
-        return;
+        const hasAccessToTeacher = allowedTeachers.some(
+          (teacher) => String(teacher?._id) === String(teacherId),
+        );
+
+        if (!hasAccessToTeacher) {
+          router.replace("/dashboard/subscribed-teachers?forbidden=1");
+          return;
+        }
       }
 
       // 3) إذا التحقق نجح، حمّل الامتحانات
@@ -95,6 +103,14 @@ export default function TeacherExamsPage() {
       }
 
       if (err?.response?.status === 403) {
+        const isGhostTeacher =
+          String(teacherId) === String(GHOST_TEACHER_ID);
+
+        if (isGhostTeacher) {
+          setError("❌ تعذر فتح امتحانات المعلم الافتراضي حاليًا");
+          return;
+        }
+
         router.replace("/dashboard/studentDashboard?upgrade=required");
         return;
       }
