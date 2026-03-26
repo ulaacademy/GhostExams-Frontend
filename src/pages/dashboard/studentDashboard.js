@@ -503,18 +503,18 @@ export default function StudentDashboard() {
                   <>
                    <Link href="/dashboard/subscribed-teachers/6925950db9f708163dd423a7/exams">
                       <Button className="px-5 py-2.5 bg-yellow-700 text-black rounded-x2 hover:bg-yellow-400 transition font-extrabold">
-                        ⭐ امتحانات مجانية للتجربة  
+                        ⭐ اضغط هنا لتجربة 36 امتحان مجاني    
                       </Button>
                     </Link>
                     <Link href={SUBSCRIPTION_PATH}>
                       <Button className="px-5 py-2.5 bg-yellow-500 text-black rounded-xl hover:bg-yellow-400 transition font-extrabold">
-                        ⭐ فعّل الوصول الكامل
+                        ⭐ فعّل حسابك لكل الامتحانات
                       </Button>
                     </Link>
 
                     <Link href={SUBSCRIPTION_PATH}>
                       <Button className="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-bold">
-                        📦 شاهد الباقات
+                        📦 شاهد البكجات والاسعار
                       </Button>
                     </Link>
                   </>
@@ -546,18 +546,18 @@ export default function StudentDashboard() {
                     </div>
 
                     <div className="text-sm md:text-base mt-3 leading-8">
-                      جرّبت الامتحانات المفتوحة، التفعيل يفتح لك تجربة أقوى:
+                      جرّبت الامتحانات المجانية ؟ التفعيل يفتح لك تجربة أقوى:
                       <span className="font-extrabold"> 8000+ سؤال </span>
                       <span className="mx-1">•</span>
                       <span className="font-extrabold"> 120+ امتحان</span>
                       <span className="mx-1">•</span>
-                      امتحانات أكثر وأقوى
+                      امتحانات كاملة أكثر وأقوى
                       <span className="mx-1">•</span>
-                      وصول أوسع للفصلين
+                      وصول أوسع للفصلين ولكل الامتحانات
                     </div>
 
                     <div className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-full bg-white text-blue-700 font-extrabold text-sm md:text-base">
-                      ⭐ أفضل باقة لمعظم الطلاب: باقة 12 دينار
+                      ⭐ أفضل باقة لمعظم الطلاب: باقة اربع مواد فصلين
                     </div>
 
                     <div className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-full bg-white text-blue-700 font-extrabold text-sm md:text-base">
@@ -568,7 +568,7 @@ export default function StudentDashboard() {
                     <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
                       <Link href={SUBSCRIPTION_PATH}>
                         <button className="rounded-xl bg-white px-6 py-3 text-blue-700 font-extrabold hover:bg-gray-100 transition shadow-sm">
-                          🚀 فعّل اشتراكك الآن
+                          🚀 فعّل حسابك الآن من هنا
                         </button>
                       </Link>
 
@@ -578,7 +578,7 @@ export default function StudentDashboard() {
                         rel="noopener noreferrer"
                         className="rounded-xl bg-blue-700 px-6 py-3 text-white font-extrabold hover:bg-blue-800 transition"
                       >
-                        💬 واتساب التفعيل: {WHATSAPP_NUMBER}
+                        💬 واتساب تفعيل الحساب من هنا : {WHATSAPP_NUMBER}
                       </a>
                     </div>
                   </div>
