@@ -6,7 +6,6 @@ import { useAuth } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import {
   fetchTeacherExamsByStudent,
-  fetchSubscribedTeachers,
   fetchMyStudentSubscriptionStatus,
   createShareLink,
 } from "@/services/api";
@@ -56,9 +55,8 @@ export default function TeacherExamsPage() {
       const isGhostTeacher =
         String(teacherId) === String(GHOST_TEACHER_ID);
 
-      // ✅ المعلم الافتراضي مفتوح لأي طالب مسجل دخول
+      // ✅ فقط للمعلمين العاديين نتحقق من الاشتراك الفعّال العام
       if (!isGhostTeacher) {
-        // 1) تحقق من الاشتراك الفعّال للمعلمين العاديين فقط
         const subData = await fetchMyStudentSubscriptionStatus();
         const activeSubscription = subData?.activeSubscription || null;
 
@@ -66,24 +64,9 @@ export default function TeacherExamsPage() {
           router.replace("/dashboard/studentDashboard?upgrade=required");
           return;
         }
-
-        // 2) تحقق أن هذا المعلم ضمن البنوك المشترك معها الطالب
-        const subscribedTeachers = await fetchSubscribedTeachers();
-        const allowedTeachers = Array.isArray(subscribedTeachers)
-          ? subscribedTeachers
-          : [];
-
-        const hasAccessToTeacher = allowedTeachers.some(
-          (teacher) => String(teacher?._id) === String(teacherId),
-        );
-
-        if (!hasAccessToTeacher) {
-          router.replace("/dashboard/subscribed-teachers?forbidden=1");
-          return;
-        }
       }
 
-      // 3) إذا التحقق نجح، حمّل الامتحانات
+      // ✅ الباك إند هو الذي يحسم السماحية النهائية
       const data = await fetchTeacherExamsByStudent(teacherId);
       console.log(`📊 Exams data for teacher ${teacherId}:`, data);
 
