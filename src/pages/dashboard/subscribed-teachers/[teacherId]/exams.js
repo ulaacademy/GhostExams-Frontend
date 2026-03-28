@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import DashboardNavbar from "@/components/DashboardNavbar";
@@ -6,12 +7,9 @@ import { useAuth } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import {
   fetchTeacherExamsByStudent,
-  fetchMyStudentSubscriptionStatus,
   createShareLink,
 } from "@/services/api";
 import { showToast } from "@/components/Toast";
-
-const GHOST_TEACHER_ID = "6925950db9f708163dd423a7";
 
 export default function TeacherExamsPage() {
   const router = useRouter();
@@ -21,7 +19,6 @@ export default function TeacherExamsPage() {
   const [exams, setExams] = useState([]);
   const [filteredExams, setFilteredExams] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [checkingAccess, setCheckingAccess] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,41 +32,18 @@ export default function TeacherExamsPage() {
     term: "",
   });
 
-  // ✅ تحقق الوصول قبل تحميل أي امتحانات
-  const checkAccessAndLoad = useCallback(async () => {
+  // ✅ جلب امتحانات المعلم
+  const loadTeacherExams = useCallback(async () => {
     if (!teacherId) return;
 
     try {
-      setCheckingAccess(true);
       setLoading(true);
       setError(null);
 
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
-      if (!token) {
-        router.replace("/auth/Login");
-        return;
-      }
-
-      const isGhostTeacher =
-        String(teacherId) === String(GHOST_TEACHER_ID);
-
-      // ✅ فقط للمعلمين العاديين نتحقق من الاشتراك الفعّال العام
-      if (!isGhostTeacher) {
-        const subData = await fetchMyStudentSubscriptionStatus();
-        const activeSubscription = subData?.activeSubscription || null;
-
-        if (!activeSubscription) {
-          router.replace("/dashboard/studentDashboard?upgrade=required");
-          return;
-        }
-      }
-
-      // ✅ الباك إند هو الذي يحسم السماحية النهائية
       const data = await fetchTeacherExamsByStudent(teacherId);
       console.log(`📊 Exams data for teacher ${teacherId}:`, data);
 
+      // Extract exams array and teacher info
       const examsList = data.exams || data || [];
       if (data.teacher) {
         setTeacherInfo(data.teacher);
@@ -78,51 +52,36 @@ export default function TeacherExamsPage() {
       setExams(examsList);
       setFilteredExams(examsList);
     } catch (err) {
-      console.error(`❌ فشل في التحقق/جلب امتحانات المعلم ${teacherId}:`, err);
-
-      if (err?.response?.status === 401) {
-        router.replace("/auth/Login");
-        return;
-      }
-
-      if (err?.response?.status === 403) {
-        const isGhostTeacher =
-          String(teacherId) === String(GHOST_TEACHER_ID);
-
-        if (isGhostTeacher) {
-          setError("❌ تعذر فتح امتحانات المعلم الافتراضي حاليًا");
-          return;
-        }
-
-        router.replace("/dashboard/studentDashboard?upgrade=required");
-        return;
-      }
-
+      console.error(`❌ فشل في جلب امتحانات المعلم ${teacherId}:`, err);
       const errorMessage =
-        err?.response?.data?.message || err?.message || "فشل في تحميل الامتحانات";
+        err.response?.data?.message ||
+        err.message ||
+        "فشل في تحميل الامتحانات";
       setError(errorMessage);
       setExams([]);
       setFilteredExams([]);
     } finally {
-      setCheckingAccess(false);
       setLoading(false);
     }
-  }, [teacherId, router]);
+  }, [teacherId]);
 
   useEffect(() => {
     if (teacherId) {
-      checkAccessAndLoad();
+      loadTeacherExams();
     }
-  }, [teacherId, checkAccessAndLoad]);
+  }, [teacherId, loadTeacherExams]);
 
   // ✅ فلترة الامتحانات
   useEffect(() => {
     let filtered = [...exams];
 
+    // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       filtered = filtered.filter((exam) => {
-        const examName = String(exam.examName || exam.title || "").toLowerCase();
+        const examName = String(
+          exam.examName || exam.title || ""
+        ).toLowerCase();
         const subject = String(exam.subject || "").toLowerCase();
         const grade = String(exam.grade || "").toLowerCase();
         return (
@@ -133,31 +92,43 @@ export default function TeacherExamsPage() {
       });
     }
 
+    // Subject filter
     if (filters.subject) {
       filtered = filtered.filter((exam) => exam.subject === filters.subject);
     }
 
+    // Grade filter
     if (filters.grade) {
       filtered = filtered.filter((exam) => exam.grade === filters.grade);
     }
 
+    // Term filter
     if (filters.term) {
       filtered = filtered.filter((exam) => exam.term === filters.term);
     }
 
     setFilteredExams(filtered);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to first page when filters change
   }, [exams, searchQuery, filters]);
 
+  // ✅ Pagination calculations
   const indexOfLastExam = currentPage * examsPerPage;
   const indexOfFirstExam = indexOfLastExam - examsPerPage;
   const currentExams = filteredExams.slice(indexOfFirstExam, indexOfLastExam);
   const totalPages = Math.ceil(filteredExams.length / examsPerPage);
 
-  const uniqueSubjects = [...new Set(exams.map((exam) => exam.subject).filter(Boolean))];
-  const uniqueGrades = [...new Set(exams.map((exam) => exam.grade).filter(Boolean))];
-  const uniqueTerms = [...new Set(exams.map((exam) => exam.term).filter(Boolean))];
+  // ✅ Get unique values for filters
+  const uniqueSubjects = [
+    ...new Set(exams.map((exam) => exam.subject).filter(Boolean)),
+  ];
+  const uniqueGrades = [
+    ...new Set(exams.map((exam) => exam.grade).filter(Boolean)),
+  ];
+  const uniqueTerms = [
+    ...new Set(exams.map((exam) => exam.term).filter(Boolean)),
+  ];
 
+  // ✅ الانتقال إلى صفحة الامتحان
   const handleExamClick = (examId, isGhostExam = false) => {
     if (isGhostExam) {
       router.push(`/dashboard/exams/view/GhostExamView?examId=${examId}`);
@@ -166,6 +137,7 @@ export default function TeacherExamsPage() {
     }
   };
 
+  // ✅ مشاركة امتحان
   const handleShareExam = async (examId, e) => {
     e.stopPropagation();
 
@@ -183,6 +155,7 @@ export default function TeacherExamsPage() {
     }
   };
 
+  // ✅ نسخ الرابط
   const copyToClipboard = (url) => {
     if (url) {
       navigator.clipboard.writeText(url);
@@ -190,11 +163,13 @@ export default function TeacherExamsPage() {
     }
   };
 
+  // ✅ Change page
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // ✅ Reset filters
   const resetFilters = () => {
     setSearchQuery("");
     setFilters({ subject: "", grade: "", term: "" });
@@ -208,7 +183,10 @@ export default function TeacherExamsPage() {
   return (
     <ProtectedRoute requiredRole="student">
       <DashboardNavbar student={studentDetails}>
-        <div className="max-w-7xl mx-auto bg-white p-6 shadow-md rounded-lg" dir="rtl">
+        <div
+          className="max-w-7xl mx-auto bg-white p-6 shadow-md rounded-lg"
+          dir="rtl"
+        >
           {/* ✅ Header */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
@@ -233,11 +211,12 @@ export default function TeacherExamsPage() {
                       <h2 className="text-lg font-semibold text-gray-800">
                         {teacherInfo.name}
                       </h2>
-                      {teacherInfo.subjects && teacherInfo.subjects.length > 0 && (
-                        <p className="text-sm text-gray-600">
-                          {teacherInfo.subjects.join("، ")}
-                        </p>
-                      )}
+                      {teacherInfo.subjects &&
+                        teacherInfo.subjects.length > 0 && (
+                          <p className="text-sm text-gray-600">
+                            {teacherInfo.subjects.join("، ")}
+                          </p>
+                        )}
                     </div>
                   </div>
                 )}
@@ -251,12 +230,7 @@ export default function TeacherExamsPage() {
             </div>
           </div>
 
-          {checkingAccess ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">🔐 جاري التحقق من الصلاحية...</p>
-            </div>
-          ) : loading ? (
+          {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
               <p className="text-gray-600">⏳ جاري تحميل الامتحانات...</p>
@@ -265,7 +239,7 @@ export default function TeacherExamsPage() {
             <div className="text-center py-12">
               <p className="text-red-500 mb-4">{error}</p>
               <button
-                onClick={checkAccessAndLoad}
+                onClick={loadTeacherExams}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
               >
                 إعادة المحاولة
@@ -275,6 +249,7 @@ export default function TeacherExamsPage() {
             <>
               {/* ✅ Search and Filters */}
               <div className="mb-6 space-y-4">
+                {/* Search Bar */}
                 <div className="relative">
                   <input
                     type="text"
@@ -293,11 +268,15 @@ export default function TeacherExamsPage() {
                   )}
                 </div>
 
+                {/* Filter Dropdowns */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <select
                     value={filters.subject}
                     onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, subject: e.target.value }))
+                      setFilters((prev) => ({
+                        ...prev,
+                        subject: e.target.value,
+                      }))
                     }
                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
@@ -312,7 +291,10 @@ export default function TeacherExamsPage() {
                   <select
                     value={filters.grade}
                     onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, grade: e.target.value }))
+                      setFilters((prev) => ({
+                        ...prev,
+                        grade: e.target.value,
+                      }))
                     }
                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
@@ -327,7 +309,10 @@ export default function TeacherExamsPage() {
                   <select
                     value={filters.term}
                     onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, term: e.target.value }))
+                      setFilters((prev) => ({
+                        ...prev,
+                        term: e.target.value,
+                      }))
                     }
                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
@@ -347,11 +332,13 @@ export default function TeacherExamsPage() {
                   </button>
                 </div>
 
+                {/* Results Count */}
                 <div className="text-sm text-gray-600">
                   عرض {currentExams.length} من {filteredExams.length} امتحان
                   {filteredExams.length !== exams.length && (
                     <span className="text-blue-600">
-                      {" "}(تمت الفلترة من {exams.length} امتحان)
+                      {" "}
+                      (تمت الفلترة من {exams.length} امتحان)
                     </span>
                   )}
                 </div>
@@ -401,22 +388,31 @@ export default function TeacherExamsPage() {
                         </div>
                         <div className="text-sm text-gray-600 space-y-2 flex-1">
                           <p>
-                            📚 المادة: <span className="font-semibold">{exam.subject}</span>
+                            📚 المادة:{" "}
+                            <span className="font-semibold">{exam.subject}</span>
                           </p>
                           <p>
-                            🧪 الصف: <span className="font-semibold">{exam.grade}</span>
+                            🧪 الصف:{" "}
+                            <span className="font-semibold">{exam.grade}</span>
                           </p>
                           <p>📅 الفصل: {exam.term}</p>
                           <p>🕒 المدة: {exam.duration} دقيقة</p>
-                          {exam.questions && <p>❓ عدد الأسئلة: {exam.questions.length}</p>}
+                          {exam.questions && (
+                            <p>❓ عدد الأسئلة: {exam.questions.length}</p>
+                          )}
                           {exam.createdAt && (
                             <p className="text-xs text-gray-500 mt-2">
-                              📆 {new Date(exam.createdAt).toLocaleDateString("ar-SA")}
+                              📆{" "}
+                              {new Date(exam.createdAt).toLocaleDateString(
+                                "ar-SA"
+                              )}
                             </p>
                           )}
                         </div>
                         <button
-                          onClick={() => handleExamClick(exam._id, exam.isGhostExam)}
+                          onClick={() =>
+                            handleExamClick(exam._id, exam.isGhostExam)
+                          }
                           className="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold flex items-center justify-center gap-2"
                         >
                           <span>👁️ عرض الامتحان</span>
@@ -426,6 +422,7 @@ export default function TeacherExamsPage() {
                     ))}
                   </div>
 
+                  {/* ✅ Pagination */}
                   {totalPages > 1 && (
                     <div className="flex justify-center items-center gap-2 mt-6">
                       <button
@@ -437,11 +434,16 @@ export default function TeacherExamsPage() {
                       </button>
 
                       <div className="flex gap-1">
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                        {Array.from(
+                          { length: totalPages },
+                          (_, i) => i + 1
+                        ).map((page) => {
+                          // Show first page, last page, current page, and pages around current
                           if (
                             page === 1 ||
                             page === totalPages ||
-                            (page >= currentPage - 1 && page <= currentPage + 1)
+                            (page >= currentPage - 1 &&
+                              page <= currentPage + 1)
                           ) {
                             return (
                               <button
@@ -460,7 +462,11 @@ export default function TeacherExamsPage() {
                             page === currentPage - 2 ||
                             page === currentPage + 2
                           ) {
-                            return <span key={page} className="px-2">...</span>;
+                            return (
+                              <span key={page} className="px-2">
+                                ...
+                              </span>
+                            );
                           }
                           return null;
                         })}
@@ -493,7 +499,9 @@ export default function TeacherExamsPage() {
                 <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
                   <h3 className="text-xl font-bold mb-4">🔗 رابط المشاركة</h3>
                   <div className="mb-4">
-                    <p className="text-sm text-gray-600 mb-2">انسخ الرابط وشاركه:</p>
+                    <p className="text-sm text-gray-600 mb-2">
+                      انسخ الرابط وشاركه:
+                    </p>
                     <div className="flex gap-2">
                       <input
                         type="text"
