@@ -189,10 +189,34 @@ const StudentSubscription = ({ embedded = false }) => {
 
       <div dir="rtl" className={embedded ? "p-0" : "p-6 text-right pt-24"}>
         <div className="container mx-auto max-w-6xl">
-          <h1 className="text-3xl font-bold text-center mb-8 text-yellow-400">
-                      📦 اختر البكج المناسب 🎯 ثم ارسل طلب الاشتراك - او تواصل على واتس
-                                  اب 0791515106 للمساعدة{" "}
-          </h1>
+         <h1 className="text-3xl font-bold text-center mb-8 text-yellow-400">
+  📦الخطوة الاخيرة اختيار البكج المناسب 🎯
+</h1>
+
+<div className="max-w-4xl mx-auto text-center mb-10 space-y-5">
+  <p className="text-lg md:text-xl font-bold text-white">
+    📌 من هنا تبدأ أفضل نهاية للعام الدراسي الطويل والدراسة المكثفة
+  </p>
+
+  <p className="text-base md:text-lg text-gray-100 leading-8">
+    ✅ اختبر نفسك وتأكد أنك في أمان - امتحانات وأسئلة في أكبر بنك أسئلة في
+    الأردن، أكثر من <span className="text-yellow-400 font-bold">8000+ سؤال</span>!
+    <br />
+    و{" "}
+    <span className="text-yellow-400 font-bold">120+ امتحان حقيقي</span>{" "}
+    يحاكي النمط الوزاري من المنهاج المعتمد
+  </p>
+
+  <p className="text-base md:text-lg text-yellow-300 font-semibold leading-8">
+    افتح كامل المحتوى والامتحانات باشتراك سهل وواضح يناسبك.
+    <br />
+    أسئلة قوية، فائدة حقيقية، وتجربة أفضل تساعدك تستعد بثقة للامتحان.
+  </p>
+
+    <p className="text-sm md:text-base text-green-400 font-bold">
+    📲 للمساعدة أو تفعيل الاشتراك عبر واتس اب: 0791515106
+  </p>
+</div>
 
           {/* ✅ عرض خطط الطلاب */}
           <div className="mb-8">

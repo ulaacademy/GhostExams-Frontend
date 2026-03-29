@@ -209,7 +209,7 @@ export default function StudentDashboard() {
       },
       {
         q: "ما أفضل باقة لمعظم الطلاب؟",
-        a: "أفضل خيار لمعظم الطلاب حاليًا هو باقة 12 لأنها متوازنة جدًا بين السعر والمزايا.",
+        a: "أفضل خيار لمعظم الطلاب حاليًا هو باقة 7  لأنها متوازنة جدًا بين السعر والمزايا.",
       },
       {
         q: "ماذا يفتح لي الاشتراك؟",
@@ -503,7 +503,7 @@ export default function StudentDashboard() {
                   <>
                     <Link href="/dashboard/subscribed-teachers/6925950db9f708163dd423a7/exams">
                       <Button className="px-5 py-2.5 bg-yellow-700 text-black rounded-x2 hover:bg-yellow-400 transition font-extrabold">
-                        ⭐ اضغط هنا لتجربة 36 امتحان مجاني
+                        ⭐ اضغط هنا لتجربة 38 امتحان مجاني
                       </Button>
                     </Link>
                     <Link href={SUBSCRIPTION_PATH}>
@@ -710,16 +710,16 @@ export default function StudentDashboard() {
 
                   <div className="min-w-[220px] bg-yellow-50 rounded-2xl p-5 border border-yellow-200 text-center">
                     <div className="text-sm text-gray-600">أفضل عرض الآن</div>
-                    <div className="text-5xl font-extrabold text-yellow-600 mt-2">
-                      7 اربع مواد وزارية
+                    <div className="text-4xl font-extrabold text-yellow-600 mt-2">
+                      اربع مواد وزارية فصلين
                     </div>
                     <div className="text-base font-bold text-gray-800 mt-1">
-                      دينار
+                      بــ 7 دنانير فقط
                     </div>
 
                     <Link href={SUBSCRIPTION_PATH}>
                       <button className="w-full mt-4 rounded-xl bg-yellow-500 px-5 py-3 text-black font-extrabold hover:bg-yellow-400 transition">
-                        اختر العرض الذهبي بــ 7 الآن
+                        اختر العرض الذهبي من هنا الآن
                       </button>
                     </Link>
                   </div>
