@@ -501,9 +501,9 @@ export default function StudentDashboard() {
               <div className="flex gap-2 flex-wrap">
                 {!subLoading && !isSubscribed ? (
                   <>
-                   <Link href="/dashboard/subscribed-teachers/6925950db9f708163dd423a7/exams">
+                    <Link href="/dashboard/subscribed-teachers/6925950db9f708163dd423a7/exams">
                       <Button className="px-5 py-2.5 bg-yellow-700 text-black rounded-x2 hover:bg-yellow-400 transition font-extrabold">
-                        ⭐ اضغط هنا لتجربة 36 امتحان مجاني    
+                        ⭐ اضغط هنا لتجربة 36 امتحان مجاني
                       </Button>
                     </Link>
                     <Link href={SUBSCRIPTION_PATH}>
@@ -547,9 +547,15 @@ export default function StudentDashboard() {
 
                     <div className="text-sm md:text-base mt-3 leading-8">
                       جرّبت الامتحانات المجانية ؟ التفعيل يفتح لك تجربة أقوى:
-                      <span className="font-extrabold"> 8000+ سؤال </span>
+                      <span className="font-extrabold">
+                        {" "}
+                        اكثر من 8000+ سؤال{" "}
+                      </span>
                       <span className="mx-1">•</span>
-                      <span className="font-extrabold"> 120+ امتحان</span>
+                      <span className="font-extrabold">
+                        {" "}
+                        اكثر من 120+ امتحان
+                      </span>
                       <span className="mx-1">•</span>
                       امتحانات كاملة أكثر وأقوى
                       <span className="mx-1">•</span>
@@ -562,7 +568,6 @@ export default function StudentDashboard() {
 
                     <div className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-full bg-white text-blue-700 font-extrabold text-sm md:text-base">
                       ⭐ عدد الطلاب الان : اكثر من +6000 طالب مشترك
-        
                     </div>
 
                     <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
@@ -588,8 +593,7 @@ export default function StudentDashboard() {
               {!subLoading && !isSubscribed && !!subStatus.pending && (
                 <div className="rounded-2xl bg-yellow-50 border border-yellow-200 p-4 text-yellow-900">
                   <div className="font-extrabold text-center">
-                    ⏳ طلب اشتراكك قيد المراجعة — بنفعّله بعد تأكيد الدفع خلال
-                    24 ساعة
+                    ⏳ طلب اشتراكك قيد المراجعة — بنفعّله بعد تأكيد الدفع  
                   </div>
                 </div>
               )}
@@ -691,14 +695,14 @@ export default function StudentDashboard() {
                       إذا كنت تريد أفضل توازن بين السعر والمزايا، فاختيارك
                       الأفضل الآن هو{" "}
                       <span className="font-extrabold text-gray-900">
-                        باقة 12 دينار
+                        البكج الذهبي بسعر 7 دنانير
                       </span>
                       .
                     </p>
 
                     <div className="mt-3 text-gray-700 text-sm md:text-base leading-8">
-                      ✅ مناسبة لمعظم الطلاب
-                      <span className="mx-2">•</span>✅ تفتح لك تجربة أوسع
+                      ✅ مناسبة لكل الطلاب
+                      <span className="mx-2">•</span>✅ تفتح لك كل الامتحانات
                       <span className="mx-2">•</span>✅ أفضل خيار للانتقال من
                       المجاني إلى الكامل
                     </div>
@@ -707,7 +711,7 @@ export default function StudentDashboard() {
                   <div className="min-w-[220px] bg-yellow-50 rounded-2xl p-5 border border-yellow-200 text-center">
                     <div className="text-sm text-gray-600">أفضل عرض الآن</div>
                     <div className="text-5xl font-extrabold text-yellow-600 mt-2">
-                      12 اربع مواد 
+                      7 اربع مواد وزارية
                     </div>
                     <div className="text-base font-bold text-gray-800 mt-1">
                       دينار
@@ -715,88 +719,89 @@ export default function StudentDashboard() {
 
                     <Link href={SUBSCRIPTION_PATH}>
                       <button className="w-full mt-4 rounded-xl bg-yellow-500 px-5 py-3 text-black font-extrabold hover:bg-yellow-400 transition">
-                        اختر باقة 12 الآن
+                        اختر العرض الذهبي بــ 7 الآن
                       </button>
                     </Link>
                   </div>
                 </div>
               </div>
 
-             {/* Free exams */}
-{freeExamPreview.length > 0 && (
-  <div className="bg-white rounded-2xl shadow-md p-4 md:p-6 border border-gray-100">
-    <div className="flex items-center justify-between flex-wrap gap-2">
-      <div>
-        <h2 className="text-xl font-extrabold text-blue-700">
-          🎁 امتحانات مجانية للتجربة - 36 امتحان
-        </h2>
-        <p className="text-sm text-gray-500 mt-1">
-          هذه الامتحانات للتجربة فقط قبل التفعيل
-        </p>
-      </div>
+              {/* Free exams */}
+              {freeExamPreview.length > 0 && (
+                <div className="bg-white rounded-2xl shadow-md p-4 md:p-6 border border-gray-100">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div>
+                      <h2 className="text-xl font-extrabold text-blue-700">
+                        🎁 امتحانات مجانية للتجربة - 38 امتحان
+                      </h2>
+                      <p className="text-sm text-gray-500 mt-1">
+                        هذه الامتحانات للتجربة فقط بعد تفعيل الاشتراك سيفتح كل
+                        الامتحانات بشكل كامل
+                      </p>
+                    </div>
 
-      <Link href={SUBSCRIPTION_PATH}>
-        <Button className="px-4 py-2 bg-yellow-500 text-black rounded-xl hover:bg-yellow-400 transition font-extrabold">
-          ⭐ فعّل وافتح المزيد
-        </Button>
-      </Link>
-    </div>
+                    <Link href={SUBSCRIPTION_PATH}>
+                      <Button className="px-4 py-2 bg-yellow-500 text-black rounded-xl hover:bg-yellow-400 transition font-extrabold">
+                        ⭐ فعّل حسابك وافتح المزيد
+                      </Button>
+                    </Link>
+                  </div>
 
-    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-      {teacherExams.slice(0, 6).map((exam, index) => (
-        <div
-          key={exam?._id || index}
-          className="border rounded-2xl p-4 hover:shadow-md transition cursor-pointer bg-blue-50"
-          onClick={() => handleOpenExam(exam?._id)}
-        >
-          <div className="font-extrabold text-gray-900 text-lg">
-            {exam?.examName || "امتحان"}
-          </div>
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {teacherExams.slice(0, 6).map((exam, index) => (
+                      <div
+                        key={exam?._id || index}
+                        className="border rounded-2xl p-4 hover:shadow-md transition cursor-pointer bg-blue-50"
+                        onClick={() => handleOpenExam(exam?._id)}
+                      >
+                        <div className="font-extrabold text-gray-900 text-lg">
+                          {exam?.examName || "امتحان"}
+                        </div>
 
-          <div className="text-sm text-gray-700 mt-1">
-            📚 {exam?.subject || "—"} • 🧪 {exam?.grade || "—"} •
-            📅 {exam?.term || "—"}
-          </div>
+                        <div className="text-sm text-gray-700 mt-1">
+                          📚 {exam?.subject || "—"} • 🧪 {exam?.grade || "—"} •
+                          📅 {exam?.term || "—"}
+                        </div>
 
-          <div className="text-sm text-gray-600 mt-1">
-            🕒 المدة: <b>{exam?.duration || 0}</b> دقيقة • عدد
-            الأسئلة: <b>{exam?.questions?.length || 0}</b>
-          </div>
+                        <div className="text-sm text-gray-600 mt-1">
+                          🕒 المدة: <b>{exam?.duration || 0}</b> دقيقة • عدد
+                          الأسئلة: <b>{exam?.questions?.length || 0}</b>
+                        </div>
 
-          <div className="mt-3">
-            <div className="inline-block px-4 py-2 rounded-xl bg-blue-600 text-white font-extrabold">
-              ▶️ ابدأ الآن
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
+                        <div className="mt-3">
+                          <div className="inline-block px-4 py-2 rounded-xl bg-blue-600 text-white font-extrabold">
+                            ▶️ بلش الدراسة الآن
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
-    {teacherExams.length > 6 && (
-      <div className="mt-4 flex justify-center">
-        <Link href="/dashboard/subscribed-teachers/6925950db9f708163dd423a7/exams">
-          <Button className="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
-            📌 شاهد كل الامتحانات المجانية
-          </Button>
-        </Link>
-      </div>
-    )}
+                  {teacherExams.length > 6 && (
+                    <div className="mt-4 flex justify-center">
+                      <Link href="/dashboard/subscribed-teachers/6925950db9f708163dd423a7/exams">
+                        <Button className="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+                          📌 جرب كل الامتحانات المجانية
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
 
-    <div className="mt-4 rounded-2xl bg-yellow-50 border border-yellow-200 p-4 text-center">
-      <div className="font-extrabold text-yellow-900">
-        هذه مجرد تجربة مجانية — بعد التفعيل سيفتح لك المزيد من
-        الامتحانات والمواد
-      </div>
-      <div className="mt-3">
-        <Link href={SUBSCRIPTION_PATH}>
-          <button className="rounded-xl bg-yellow-500 px-6 py-3 text-black font-extrabold hover:bg-yellow-400 transition">
-            📦 شاهد الأسعار والباقات
-          </button>
-        </Link>
-      </div>
-    </div>
-  </div>
-)}
+                  <div className="mt-4 rounded-2xl bg-yellow-50 border border-yellow-200 p-4 text-center">
+                    <div className="font-extrabold text-yellow-900">
+                      هذه مجرد تجربة مجانية — بعد التفعيل سيفتح لك المزيد من
+                      الامتحانات والمواد
+                    </div>
+                    <div className="mt-3">
+                      <Link href={SUBSCRIPTION_PATH}>
+                        <button className="rounded-xl bg-yellow-500 px-6 py-3 text-black font-extrabold hover:bg-yellow-400 transition">
+                          📦 شاهد الأسعار والباقات
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Locked value preview */}
               <div className="bg-white rounded-2xl shadow-md p-4 md:p-6 border border-gray-100">
@@ -891,7 +896,7 @@ export default function StudentDashboard() {
                       <div className="mt-3 flex flex-col sm:flex-row gap-3">
                         <Link href={SUBSCRIPTION_PATH}>
                           <button className="rounded-xl bg-blue-700 px-6 py-3 text-white font-extrabold hover:bg-blue-800 transition">
-                            🚀 فعّل للوصول الكامل
+                            🚀 فعّل حسابك للوصول الكامل
                           </button>
                         </Link>
 

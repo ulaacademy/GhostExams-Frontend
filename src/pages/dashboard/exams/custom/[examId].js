@@ -1350,11 +1350,11 @@ export default function CustomTeacherExamPage() {
         >
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
             <h3 className="text-2xl font-bold text-gray-800 mb-4">
-              ⚠️ تأكيد إنهاء الامتحان
+             فعل حسابك لكامل الامتحان ⚠️ تأكيد إنهاء الامتحان
             </h3>
             <p className="text-gray-600 mb-6">
-              هل أنت متأكد من إنهاء الامتحان؟ لن تتمكن من تعديل إجاباتك بعد
-              الإرسال.
+              هل أنت متأكد من إنهاء الامتحان؟    
+              .
               <br />
               <span className="font-semibold text-blue-600">
                 تم إنهاء {attemptedCount} من {totalQuestions} سؤال
