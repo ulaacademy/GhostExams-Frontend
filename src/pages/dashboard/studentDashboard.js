@@ -553,9 +553,13 @@ export default function StudentDashboard() {
                    ✅ فعل حسابك بــ 1 دينار فقط للمادة فصلين - تواصل معنا واتس اب للتفعيل  
 
                     </div>
+                     <div className="text-lg md:text-2xl font-extrabold leading-9">
+                   ✅ العرض لفترة محدودة جدا والعدد محدود - سجل بكير واكسب العرض   
+
+                    </div>
 
                     <div className="text-sm md:text-base mt-3 leading-8">
-                      جرّبت الامتحانات المجانية ؟ التفعيل يفتح لك تجربة أقوى:
+                      جرّبت الامتحانات المجانية ؟ التفعيل يفتح لك تجربةأقوى:
                       <span className="font-extrabold">
                         {" "}
                         اكثر من 8000+ سؤال{" "}
