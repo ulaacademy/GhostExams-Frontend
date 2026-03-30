@@ -164,9 +164,9 @@ const Home = () => {
   const getPlanCta = (plan) => {
     const price = Number(plan?.price || 0);
 
-    if (price === 7) return "ابدأ بأفضل عرض الآن";
-    if (price < 7) return "ابدأ بالخطة الأساسية";
-    return "اختر الخطة المتقدمة";
+    if (price === 7) return "جرب مجانا";
+    if (price < 7) return "جرب مجانا";
+    return "جرب مجانا";
   };
 
   const jsonLdWebSite = {
@@ -710,7 +710,7 @@ const Home = () => {
                 تجارب جميلة وواضحة من طلاب المنصة
               </h2>
               <p className="text-gray-300 mt-3 text-sm sm:text-base">
-                شهادات حقيقية من طلابنا - اكثر من 3000 طالب مشترك 
+                شهادات حقيقية من طلابنا - اكثر من 6000 طالب مشترك 
                               </p>
             </div>
 

@@ -732,7 +732,7 @@ export default function StudentDashboard() {
                   <div className="flex items-center justify-between flex-wrap gap-2">
                     <div>
                       <h2 className="text-xl font-extrabold text-blue-700">
-                        🎁 امتحانات مجانية للتجربة - 38 امتحان
+                        🎁 امتحانات مجانية قصيرة للتجربة - 38 امتحان
                       </h2>
                       <p className="text-sm text-gray-500 mt-1">
                         هذه الامتحانات للتجربة فقط بعد تفعيل الاشتراك سيفتح كل
