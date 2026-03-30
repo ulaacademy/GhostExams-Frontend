@@ -355,8 +355,12 @@ const Home = () => {
                     <div className="space-y-3">
                       <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 hover:bg-white/[0.06] transition">
                         <div className="flex items-center justify-between text-sm sm:text-base">
-                          <span className="text-gray-300">تحليل أداء الطالب</span>
-                          <span className="font-bold text-emerald-400">نشط</span>
+                          <span className="text-gray-300">
+                            تحليل أداء الطالب
+                          </span>
+                          <span className="font-bold text-emerald-400">
+                            نشط
+                          </span>
                         </div>
                       </div>
 
@@ -373,7 +377,10 @@ const Home = () => {
 
                       <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 hover:bg-white/[0.06] transition">
                         <div className="flex items-center justify-between text-sm sm:text-base">
-                          <span className="text-gray-300"> إعادة غير محدودة لأي امتحان</span>
+                          <span className="text-gray-300">
+                            {" "}
+                            إعادة غير محدودة لأي امتحان
+                          </span>
                           <span className="font-bold text-sky-400">نعم</span>
                         </div>
                       </div>
@@ -395,7 +402,8 @@ const Home = () => {
             <div className="flex flex-col lg:flex-row items-center justify-between gap-4 text-center lg:text-right">
               <div>
                 <h2 className="text-lg sm:text-xl font-extrabold text-white">
-                      ⭐ أفضل عرض للطلاب هو خطة الاربع مواد فصلين بسعر 4 دنانير                </h2>
+                  ⭐ أفضل عرض للطلاب هو خطة الاربع مواد فصلين بسعر 4 دنانير{" "}
+                </h2>
                 <p className="text-gray-300 text-sm sm:text-base mt-1">
                   خيار متوازن جدًا بين السعر والمزايا ومناسب لمعظم الطلاب.
                 </p>
@@ -405,7 +413,7 @@ const Home = () => {
                 href="#pricing"
                 className="shrink-0 rounded-2xl bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-extrabold py-3 px-6 transition duration-300 hover:-translate-y-0.5"
               >
-أشترك الان من هنا 
+                أشترك الان من هنا
               </a>
             </div>
           </div>
@@ -506,7 +514,9 @@ const Home = () => {
                   <div className="mx-auto mb-4 h-10 w-10 rounded-full bg-yellow-400 text-slate-900 font-extrabold flex items-center justify-center">
                     {item.n}
                   </div>
-                  <h3 className="text-lg sm:text-xl font-extrabold">{item.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-extrabold">
+                    {item.title}
+                  </h3>
                   <p className="text-gray-300 leading-7 text-sm sm:text-base mt-3">
                     {item.text}
                   </p>
@@ -561,7 +571,7 @@ const Home = () => {
                 اختر الخطة المناسبة لك
               </h2>
               <p className="text-gray-300 mt-3 text-sm sm:text-base leading-7 max-w-2xl mx-auto">
-                إذا كنت تبحث عن أفضل توازن بين السعر والمزايا، فخطة 7 هي الخيار
+                إذا كنت تبحث عن أفضل توازن بين السعر والمزايا، فخطة 4 هي الخيار
                 الأفضل لمعظم الطلاب.
               </p>
             </div>
@@ -569,10 +579,12 @@ const Home = () => {
             {loading ? (
               <div className="text-center text-xl">جاري التحميل...</div>
             ) : sortedPlans.length === 0 ? (
-              <div className="text-center text-xl">لا توجد خطط متاحة حالياً</div>
+              <div className="text-center text-xl">
+                لا توجد خطط متاحة حالياً
+              </div>
             ) : (
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6 max-w-6xl mx-auto">
-                {sortedPlans.map((plan,) => {
+                {sortedPlans.map((plan) => {
                   const best = isBestPlan(plan);
 
                   return (
@@ -664,15 +676,15 @@ const Home = () => {
                         )}
 
                         <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
-                          ✅ عدد امتحانات مفتوح
+                          ✅ عدد امتحانات : مفتوح
                         </div>
 
                         <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
-                          ✅ عدد مرات الإعادة مفتوحة
+                          ✅ عدد مرات الإعادة: مفتوحة
                         </div>
 
                         <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
-                          ✅ عدد الأسئلة مفتوح
+                          ✅ عدد الأسئلة: مفتوح
                         </div>
                       </div>
 
@@ -690,7 +702,7 @@ const Home = () => {
 
                       {best && (
                         <p className="text-xs text-yellow-100/90 text-center mt-3">
-                          هذا هو العرض الذي أنصح به لمعظم الطلاب
+                          هذا هو العرض الذي أنصح به لكل الطلاب
                         </p>
                       )}
                     </div>
@@ -710,8 +722,8 @@ const Home = () => {
                 تجارب جميلة وواضحة من طلاب المنصة
               </h2>
               <p className="text-gray-300 mt-3 text-sm sm:text-base">
-                شهادات حقيقية من طلابنا - اكثر من 6000 طالب مشترك 
-                              </p>
+                شهادات حقيقية من طلابنا - اكثر من 6000 طالب مشترك
+              </p>
             </div>
 
             <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
