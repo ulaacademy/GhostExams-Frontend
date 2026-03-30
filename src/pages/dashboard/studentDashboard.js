@@ -478,7 +478,7 @@ export default function StudentDashboard() {
 
                   {!subLoading && !isSubscribed && (
                     <span className="px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-extrabold border border-yellow-200">
-                      حساب مجاني
+                      حساب مجاني التفعيل فقط من الواتس اب 
                     </span>
                   )}
 
@@ -511,6 +511,14 @@ export default function StudentDashboard() {
                         ⭐ فعّل حسابك لكل الامتحانات
                       </Button>
                     </Link>
+                    <a
+                      href={`https://wa.me/962${WHATSAPP_NUMBER.replace(/^0/, "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-xl bg-blue-700 px-6 py-3 text-white font-extrabold hover:bg-blue-800 transition"
+                    >
+                      💬 أضغط هنا لتفعيل الحساب   : {WHATSAPP_NUMBER}
+                    </a>
 
                     <Link href={SUBSCRIPTION_PATH}>
                       <Button className="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-bold">
@@ -542,7 +550,8 @@ export default function StudentDashboard() {
                 <div className="rounded-2xl bg-gradient-to-l from-yellow-500 to-amber-500 text-white p-5 shadow-lg">
                   <div className="text-center max-w-4xl mx-auto">
                     <div className="text-lg md:text-2xl font-extrabold leading-9">
-                      أنت الآن على الحساب المجاني ✅
+                   ✅ فعل حسابك بــ 1 دينار فقط للمادة فصلين - تواصل معنا واتس اب للتفعيل  
+
                     </div>
 
                     <div className="text-sm md:text-base mt-3 leading-8">
@@ -569,23 +578,6 @@ export default function StudentDashboard() {
                     <div className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-full bg-white text-blue-700 font-extrabold text-sm md:text-base">
                       ⭐ عدد الطلاب الان : اكثر من +6000 طالب مشترك
                     </div>
-
-                    <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
-                      <Link href={SUBSCRIPTION_PATH}>
-                        <button className="rounded-xl bg-white px-6 py-3 text-blue-700 font-extrabold hover:bg-gray-100 transition shadow-sm">
-                          🚀 فعّل حسابك الآن من هنا
-                        </button>
-                      </Link>
-
-                      <a
-                        href={`https://wa.me/962${WHATSAPP_NUMBER.replace(/^0/, "")}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-xl bg-blue-700 px-6 py-3 text-white font-extrabold hover:bg-blue-800 transition"
-                      >
-                        💬 واتساب تفعيل الحساب من هنا : {WHATSAPP_NUMBER}
-                      </a>
-                    </div>
                   </div>
                 </div>
               )}
@@ -593,7 +585,7 @@ export default function StudentDashboard() {
               {!subLoading && !isSubscribed && !!subStatus.pending && (
                 <div className="rounded-2xl bg-yellow-50 border border-yellow-200 p-4 text-yellow-900">
                   <div className="font-extrabold text-center">
-                    ⏳ طلب اشتراكك قيد المراجعة — بنفعّله بعد تأكيد الدفع  
+                    ⏳ طلب اشتراكك قيد المراجعة — بنفعّله بعد تأكيد الدفع
                   </div>
                 </div>
               )}
@@ -688,14 +680,15 @@ export default function StudentDashboard() {
                     </div>
 
                     <h2 className="text-2xl font-extrabold text-gray-900 mt-3">
-                      الباقة الأنسب لمعظم الطلاب
+                      الباقة الأنسب للطلاب ⭐ وفــر : فعل حسابك مقابل 1.00 دينار
+                      للمادة فصلين
                     </h2>
 
                     <p className="text-sm md:text-base text-gray-600 mt-2 leading-8">
                       إذا كنت تريد أفضل توازن بين السعر والمزايا، فاختيارك
                       الأفضل الآن هو{" "}
                       <span className="font-extrabold text-gray-900">
-                        البكج الذهبي بسعر 7 دنانير
+                        البكج الذهبي ب 4 دنانير فقط 
                       </span>
                       .
                     </p>
@@ -714,7 +707,7 @@ export default function StudentDashboard() {
                       اربع مواد وزارية فصلين
                     </div>
                     <div className="text-base font-bold text-gray-800 mt-1">
-                      بــ 7 دنانير فقط
+                      بــ 4 دنانير فقط
                     </div>
 
                     <Link href={SUBSCRIPTION_PATH}>

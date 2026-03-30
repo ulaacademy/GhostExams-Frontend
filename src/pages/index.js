@@ -145,16 +145,16 @@ const Home = () => {
     return cloned.sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
   }, [plans]);
 
-  const isBestPlan = (plan) => Number(plan?.price || 0) === 7;
+  const isBestPlan = (plan) => Number(plan?.price || 0) === 4;
 
   const getPlanMessage = (plan) => {
     const price = Number(plan?.price || 0);
 
-    if (price === 7) {
+    if (price === 4) {
       return "أفضل عرض للطلاب ⭐ الأكثر توازنًا بين السعر والمزايا";
     }
 
-    if (price < 7) {
+    if (price < 4) {
       return "مناسب للبدء والتجربة الأولى";
     }
 
@@ -164,8 +164,8 @@ const Home = () => {
   const getPlanCta = (plan) => {
     const price = Number(plan?.price || 0);
 
-    if (price === 7) return "جرب مجانا";
-    if (price < 7) return "جرب مجانا";
+    if (price === 4) return "جرب مجانا";
+    if (price < 4) return "جرب مجانا";
     return "جرب مجانا";
   };
 
@@ -395,7 +395,7 @@ const Home = () => {
             <div className="flex flex-col lg:flex-row items-center justify-between gap-4 text-center lg:text-right">
               <div>
                 <h2 className="text-lg sm:text-xl font-extrabold text-white">
-                      ⭐ أفضل عرض للطلاب هو خطة الاربع مواد فصلين بسعر 7 دنانير                </h2>
+                      ⭐ أفضل عرض للطلاب هو خطة الاربع مواد فصلين بسعر 4 دنانير                </h2>
                 <p className="text-gray-300 text-sm sm:text-base mt-1">
                   خيار متوازن جدًا بين السعر والمزايا ومناسب لمعظم الطلاب.
                 </p>
@@ -405,7 +405,7 @@ const Home = () => {
                 href="#pricing"
                 className="shrink-0 rounded-2xl bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-extrabold py-3 px-6 transition duration-300 hover:-translate-y-0.5"
               >
-                شاهد الخطة الأفضل
+أشترك الان من هنا 
               </a>
             </div>
           </div>
