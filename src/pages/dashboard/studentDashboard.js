@@ -614,10 +614,8 @@ export default function StudentDashboard() {
                 <div className="rounded-2xl bg-yellow-50 border border-yellow-200 p-4 text-yellow-900">
                   ⏳ تم إرسال طلب الاشتراك بحزمة <b>{pendingPlanName}</b>.
                   <div className="text-sm text-yellow-800 mt-1 leading-7">
-                    سيتم التفعيل بعد تأكيد الدفع خلال <b>24 ساعة</b>. تواصل معنا
-                    على واتساب <b>{WHATSAPP_NUMBER}</b> لتفعيل الحساب، وأرسل
-                    قيمة الاشتراك كليك للحساب (المعرّف: <b>GHOSTEXAMS</b>).
-                  </div>
+                    سيتم التفعيل بعد تأكيد الدفع . تواصل معنا
+                    على واتساب <b>{WHATSAPP_NUMBER}</b> لتفعيل الحساب،                   </div>
                 </div>
               ) : null}
             </div>

@@ -189,39 +189,36 @@ const StudentSubscription = ({ embedded = false }) => {
 
       <div dir="rtl" className={embedded ? "p-0" : "p-6 text-right pt-24"}>
         <div className="container mx-auto max-w-6xl">
-         <h1 className="text-3xl font-bold text-center mb-8 text-yellow-400">
-  📦الخطوة الاخيرة اختيار البكج المناسب 🎯
-</h1>
+          <h1 className="text-3xl font-bold text-center mb-8 text-yellow-400">
+            📦الخطوة الاخيرة اختيار البكج المناسب 🎯
+          </h1>
 
-<div className="max-w-4xl mx-auto text-center mb-10 space-y-5">
-  <p className="text-lg md:text-xl font-bold text-white">
-    📌 من هنا تبدأ أفضل نهاية للعام الدراسي الطويل والدراسة المكثفة
-  </p>
+          <div className="max-w-4xl mx-auto text-center mb-10 space-y-5">
+            <p className="text-base md:text-lg text-gray-100 leading-8">
+              ✅ امتحانات وأسئلة في أكبر بنك أسئلة في الأردن، أكثر من{" "}
+              <span className="text-yellow-400 font-bold">8000+ سؤال</span>! و{" "}
+              <span className="text-yellow-400 font-bold">
+                120+ امتحان حقيقي
+              </span>{" "}
+              يحاكي النمط الوزاري من المنهاج المعتمد
+            </p>
 
-  <p className="text-base md:text-lg text-gray-100 leading-8">
-    ✅ اختبر نفسك وتأكد أنك في أمان - امتحانات وأسئلة في أكبر بنك أسئلة في
-    الأردن، أكثر من <span className="text-yellow-400 font-bold">8000+ سؤال</span>!
-    <br />
-    و{" "}
-    <span className="text-yellow-400 font-bold">120+ امتحان حقيقي</span>{" "}
-    يحاكي النمط الوزاري من المنهاج المعتمد
-  </p>
+            <p className="text-base md:text-lg text-yellow-300 font-semibold leading-8">
+              افتح كامل المحتوى والامتحانات باشتراك سهل وواضح يناسبك. أسئلة
+              قوية، فائدة حقيقية، وتجربة أفضل تساعدك تستعد بثقة للامتحان.
+            </p>
 
-  <p className="text-base md:text-lg text-yellow-300 font-semibold leading-8">
-    افتح كامل المحتوى والامتحانات باشتراك سهل وواضح يناسبك.
-    <br />
-    أسئلة قوية، فائدة حقيقية، وتجربة أفضل تساعدك تستعد بثقة للامتحان.
-  </p>
-
-    <p className="text-sm md:text-base text-green-400 font-bold">
-    📲 للمساعدة أو تفعيل الاشتراك عبر واتس اب: 0791515106
-  </p>
-</div>
+            <p className="text-sm md:text-base text-green-400 font-bold">
+              📲 تفعيل الاشتراك عبر واتس اب فقط: 0791515106
+            </p>
+          </div>
 
           {/* ✅ عرض خطط الطلاب */}
           <div className="mb-8">
             <h2 className="text-2xl font-bold mb-4 text-center">
-              اختر البكج - اضغط عليه - ثم اضغط زر ارسال طلب الاشتراك من الاسفل            </h2>
+              اختر البكج - اضغط عليه - ثم اضغط زر ارسال طلب الاشتراك من
+              الاسفل{" "}
+            </h2>
 
             {plans.length === 0 ? (
               <div className="text-center text-gray-300">
@@ -276,38 +273,26 @@ const StudentSubscription = ({ embedded = false }) => {
 
                         {plan.maxTeachers != null && (
                           <li>
-                            يمكن إضافة <span dir="ltr">{plan.maxTeachers}</span>{" "}
-                            معلمين
+                            <span dir="ltr">{plan.maxTeachers}</span> مواد
+                            وزارية عربي دين انجليزي تاريخ
                           </li>
                         )}
 
                         {plan.teacherType != null && (
                           <li>
-                            نوع المعلم:{" "}
+                             المعلم:{" "}
                             {plan.teacherType === "platform"
                               ? "معلم أساسي"
                               : plan.teacherType === "ghost"
-                                ? "معلم Ai"
-                                : "معلم أساسي / معلم Ai "}
+                                ? "معلم منصة"
+                                : "معلم أساسي / معلم منصة "}
                           </li>
                         )}
 
-                        {plan.duration != null && (
-                          <li>
-                            مدة <span dir="ltr">{plan.duration}</span>{" "}
-                            {plan.durationUnit === "days"
-                              ? "يوم"
-                              : plan.durationUnit === "months"
-                                ? "شهر"
-                                : plan.durationUnit === "years"
-                                  ? "سنة"
-                                  : plan.durationUnit || "days"}
-                          </li>
-                        )}
-
-                        <li>عدد امتحانات مفتوح</li>
+                        <li>  عدد امتحانات : 120+ امتحان تفاعلي</li>
+                        <li>عدد الأسئلة : +8000 سؤال</li>
+                        <li> الاشتراك فعال لاخر امتحان وزاري</li>
                         <li>عدد مرات الإعادة مفتوحة</li>
-                        <li>عدد الأسئلة مفتوح</li>
                       </ul>
 
                       <p
@@ -315,6 +300,9 @@ const StudentSubscription = ({ embedded = false }) => {
                       >
                         {plan.price} {plan.currency || "JOD"}
                       </p>
+                      <p className={`text-2xl font-bold mb-2 text-center`}>   اضغط هنا لارسال الاشتراك</p>
+
+
                     </div>
                   );
                 })}
