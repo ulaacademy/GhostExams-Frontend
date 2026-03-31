@@ -194,20 +194,7 @@ const StudentSubscription = ({ embedded = false }) => {
           </h1>
 
           <div className="max-w-4xl mx-auto text-center mb-10 space-y-5">
-            <p className="text-base md:text-lg text-gray-100 leading-8">
-              ✅ امتحانات وأسئلة في أكبر بنك أسئلة في الأردن، أكثر من{" "}
-              <span className="text-yellow-400 font-bold">8000+ سؤال</span>! و{" "}
-              <span className="text-yellow-400 font-bold">
-                120+ امتحان حقيقي
-              </span>{" "}
-              يحاكي النمط الوزاري من المنهاج المعتمد
-            </p>
-
-            <p className="text-base md:text-lg text-yellow-300 font-semibold leading-8">
-              افتح كامل المحتوى والامتحانات باشتراك سهل وواضح يناسبك. أسئلة
-              قوية، فائدة حقيقية، وتجربة أفضل تساعدك تستعد بثقة للامتحان.
-            </p>
-
+                      
             <p className="text-sm md:text-base text-green-400 font-bold">
               📲 تفعيل الاشتراك عبر واتس اب فقط: 0791515106
             </p>
