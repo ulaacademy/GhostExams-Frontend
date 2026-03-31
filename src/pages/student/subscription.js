@@ -189,21 +189,19 @@ const StudentSubscription = ({ embedded = false }) => {
 
       <div dir="rtl" className={embedded ? "p-0" : "p-6 text-right pt-24"}>
         <div className="container mx-auto max-w-6xl">
-          <h1 className="text-3xl font-bold text-center mb-8 text-yellow-400">
-            📦الخطوة الاخيرة اختيار البكج المناسب 🎯
-          </h1>
-
-          <div className="max-w-4xl mx-auto text-center mb-10 space-y-5">
-                      
-            <p className="text-sm md:text-base text-green-400 font-bold">
+          <h2 className="text-3xl font-bold text-center mb-8 text-yellow-400">
+            📦الخطوة الاخيرة لتفعيل حسابك 🎯
+          </h2>
+               
+            <p className="text-3xl md:text-base text-green-400 font-bold">
               📲 تفعيل الاشتراك عبر واتس اب فقط: 0791515106
             </p>
           </div>
 
           {/* ✅ عرض خطط الطلاب */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-4 text-center">
-              اختر البكج - اضغط عليه - ثم اضغط زر ارسال طلب الاشتراك من
+            <h2 className="text-1xl font-bold mb-4 text-center">
+              اختر البكج - اضغط عليه - ثم زر ارسال طلب الاشتراك من
               الاسفل{" "}
             </h2>
 
@@ -400,7 +398,6 @@ const StudentSubscription = ({ embedded = false }) => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
