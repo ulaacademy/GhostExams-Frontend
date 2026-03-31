@@ -197,6 +197,7 @@ const StudentSubscription = ({ embedded = false }) => {
               📲 تفعيل الاشتراك عبر واتس اب فقط: 0791515106
             </p>
           </div>
+          <br/>
 
           {/* ✅ عرض خطط الطلاب */}
           <div className="mb-8">
