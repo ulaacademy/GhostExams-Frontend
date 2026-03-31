@@ -193,7 +193,7 @@ const StudentSubscription = ({ embedded = false }) => {
             📦الخطوة الاخيرة لتفعيل حسابك 🎯
           </h2>
                
-            <p className="text-2xl md:text-base text-green-400 font-bold">
+            <p className="text-1xl md:text-base text-green-400 font-bold">
               📲 تفعيل الاشتراك عبر واتس اب فقط: 0791515106
             </p>
           </div>
