@@ -501,7 +501,7 @@ export default function StudentDashboard() {
               <div className="flex gap-2 flex-wrap">
                 {!subLoading && !isSubscribed ? (
                   <>
-                    <Link href="/dashboard/subscribed-teachers/6925950db9f708163dd423a7/exams">
+                    <Link href="/dashboard/subscribed-teachers/69d10a027f5781b88148972b/exams">
                       <Button className="px-5 py-2.5 bg-yellow-700 text-black rounded-x2 hover:bg-yellow-400 transition font-extrabold">
                         ⭐ اضغط هنا لتجربة 38 امتحان مجاني
                       </Button>
@@ -774,7 +774,7 @@ export default function StudentDashboard() {
 
                   {teacherExams.length > 6 && (
                     <div className="mt-4 flex justify-center">
-                      <Link href="/dashboard/subscribed-teachers/6925950db9f708163dd423a7/exams">
+                      <Link href="/dashboard/subscribed-teachers/69d10a027f5781b88148972b/exams">
                         <Button className="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
                           📌 جرب كل الامتحانات المجانية
                         </Button>
