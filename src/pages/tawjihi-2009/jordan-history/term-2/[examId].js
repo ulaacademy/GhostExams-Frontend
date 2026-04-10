@@ -11,14 +11,35 @@ export async function getServerSideProps({ params }) {
     const { examId } = params;
 
     const res = await fetch(`${API_URL}/public/exams/${examId}`);
-    if (!res.ok) return { notFound: true };
+
+    if (!res.ok) {
+      return {
+        redirect: {
+          destination: "/tawjihi-2009/jordan-history/term-2",
+          permanent: true,
+        },
+      };
+    }
 
     const json = await res.json();
-    if (!json?.success || !json?.data) return { notFound: true };
+
+    if (!json?.success || !json?.data) {
+      return {
+        redirect: {
+          destination: "/tawjihi-2009/jordan-history/term-2",
+          permanent: true,
+        },
+      };
+    }
 
     return { props: { exam: json.data } };
   } catch {
-    return { notFound: true };
+    return {
+      redirect: {
+        destination: "/tawjihi-2009/jordan-history/term-2",
+        permanent: true,
+      },
+    };
   }
 }
 
@@ -345,8 +366,8 @@ export default function JordanHistoryTerm2ExamSEO({ exam }) {
           </h1>
 
           <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed">
-            هذه صفحة معلومات لتوضيح بيانات الامتحان . تقديم الامتحان يتم
-            من داخل حساب الطالب بعد تفعيل الاشتراك.
+            هذه صفحة معلومات لتوضيح بيانات الامتحان . تقديم الامتحان يتم من داخل
+            حساب الطالب بعد تفعيل الاشتراك.
           </p>
 
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-gray-200">

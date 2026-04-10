@@ -11,14 +11,35 @@ export async function getServerSideProps({ params }) {
     const { examId } = params;
 
     const res = await fetch(`${API_URL}/public/exams/${examId}`);
-    if (!res.ok) return { notFound: true };
+
+    if (!res.ok) {
+      return {
+        redirect: {
+          destination: "/tawjihi-2009/english/term-2",
+          permanent: true,
+        },
+      };
+    }
 
     const json = await res.json();
-    if (!json?.success || !json?.data) return { notFound: true };
+
+    if (!json?.success || !json?.data) {
+      return {
+        redirect: {
+          destination: "/tawjihi-2009/english/term-2",
+          permanent: true,
+        },
+      };
+    }
 
     return { props: { exam: json.data } };
   } catch {
-    return { notFound: true };
+    return {
+      redirect: {
+        destination: "/tawjihi-2009/english/term-2",
+        permanent: true,
+      },
+    };
   }
 }
 
@@ -118,7 +139,7 @@ export default function EnglishTerm2ExamSEO({ exam }) {
         a: "اضغط زر (اشترك معنا الآن) للتواصل معنا على واتساب، وسنساعدك بتفعيل الاشتراك بسرعة.",
       },
     ],
-    [],
+    []
   );
 
   const faqJsonLd = useMemo(
@@ -134,7 +155,7 @@ export default function EnglishTerm2ExamSEO({ exam }) {
         },
       })),
     }),
-    [faqItems],
+    [faqItems]
   );
 
   // ✅ Breadcrumbs JSON-LD

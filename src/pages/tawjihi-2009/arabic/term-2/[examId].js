@@ -11,14 +11,35 @@ export async function getServerSideProps({ params }) {
     const { examId } = params;
 
     const res = await fetch(`${API_URL}/public/exams/${examId}`);
-    if (!res.ok) return { notFound: true };
+
+    if (!res.ok) {
+      return {
+        redirect: {
+          destination: "/tawjihi-2009/arabic/term-2",
+          permanent: true,
+        },
+      };
+    }
 
     const json = await res.json();
-    if (!json?.success || !json?.data) return { notFound: true };
+
+    if (!json?.success || !json?.data) {
+      return {
+        redirect: {
+          destination: "/tawjihi-2009/arabic/term-2",
+          permanent: true,
+        },
+      };
+    }
 
     return { props: { exam: json.data } };
   } catch {
-    return { notFound: true };
+    return {
+      redirect: {
+        destination: "/tawjihi-2009/arabic/term-2",
+        permanent: true,
+      },
+    };
   }
 }
 
@@ -115,7 +136,7 @@ export default function ArabicTerm2ExamSEO({ exam }) {
         a: "اضغط زر (اشترك معنا الآن) للتواصل معنا على واتساب، وسنساعدك بتفعيل الاشتراك بسرعة.",
       },
     ],
-    []
+    [],
   );
 
   const faqJsonLd = useMemo(
@@ -131,7 +152,7 @@ export default function ArabicTerm2ExamSEO({ exam }) {
         },
       })),
     }),
-    [faqItems]
+    [faqItems],
   );
 
   // ✅ Breadcrumbs JSON-LD
@@ -322,7 +343,10 @@ export default function ArabicTerm2ExamSEO({ exam }) {
           <ol className="flex flex-wrap gap-2 text-xs sm:text-sm text-gray-300">
             {crumb.map((c, idx) => (
               <li key={idx} className="flex items-center gap-2">
-                <Link href={c.href} className="hover:text-yellow-300 transition">
+                <Link
+                  href={c.href}
+                  className="hover:text-yellow-300 transition"
+                >
                   {c.label}
                 </Link>
                 {idx < crumb.length - 1 && (
@@ -340,8 +364,8 @@ export default function ArabicTerm2ExamSEO({ exam }) {
           </h1>
 
           <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed">
-            هذه صفحة معلومات لتوضيح بيانات الامتحان . تقديم الامتحان يتم
-            من داخل حساب الطالب بعد تفعيل الاشتراك.
+            هذه صفحة معلومات لتوضيح بيانات الامتحان . تقديم الامتحان يتم من داخل
+            حساب الطالب بعد تفعيل الاشتراك.
           </p>
 
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-gray-200">
@@ -373,7 +397,9 @@ export default function ArabicTerm2ExamSEO({ exam }) {
 
           <div className="mt-4 bg-gray-900/40 border border-yellow-500/10 rounded-xl p-4 text-gray-200">
             ❓ عدد الأسئلة:{" "}
-            <span className="text-yellow-300 font-bold">{questionsCountText}</span>
+            <span className="text-yellow-300 font-bold">
+              {questionsCountText}
+            </span>
           </div>
 
           {teacherName && (

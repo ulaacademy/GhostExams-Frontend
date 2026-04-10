@@ -11,35 +11,52 @@ export async function getServerSideProps({ params }) {
     const { examId } = params;
 
     const res = await fetch(`${API_URL}/public/exams/${examId}`);
-    if (!res.ok) return { notFound: true };
+
+    if (!res.ok) {
+      return {
+        redirect: {
+          destination: "/tawjihi-2009/arabic/term-1",
+          permanent: true,
+        },
+      };
+    }
 
     const json = await res.json();
-    if (!json?.success || !json?.data) return { notFound: true };
+
+    if (!json?.success || !json?.data) {
+      return {
+        redirect: {
+          destination: "/tawjihi-2009/arabic/term-1",
+          permanent: true,
+        },
+      };
+    }
 
     return { props: { exam: json.data } };
   } catch {
-    return { notFound: true };
+    return {
+      redirect: {
+        destination: "/tawjihi-2009/arabic/term-1",
+        permanent: true,
+      },
+    };
   }
 }
 
 export default function ArabicTerm1ExamSEO({ exam }) {
-  // ✅ ثوابت الصفحة
   const siteUrl = "https://ghostexams.com";
   const subjectLabel = "اللغة العربية";
   const subjectSlug = "arabic";
   const termNumber = 1;
   const termLabel = "الفصل الأول";
 
-  // ✅ Paths
   const listPagePath = `/tawjihi-2009/${subjectSlug}/term-${termNumber}`;
   const subjectHubPath = `/tawjihi-2009/${subjectSlug}`;
   const tawjihi2009Path = `/tawjihi-2009`;
 
-  // ✅ Canonical
   const examId = exam?._id || "";
   const canonicalUrl = `${siteUrl}${listPagePath}/${examId}`;
 
-  // ✅ Safe values
   const safeExamName = (exam?.examName || "امتحان عربي توجيهي 2009").trim();
   const durationVal = exam?.duration;
   const questionsCountVal = exam?.questionsCount;
@@ -58,7 +75,6 @@ export default function ArabicTerm1ExamSEO({ exam }) {
       ? String(questionsCountVal).trim()
       : "غير محدد";
 
-  // ✅ Meta
   const title = `${safeExamName} | امتحان ${subjectLabel} توجيهي 2009 ${termLabel} - GhostExams`;
   const description = `${safeExamName} لمادة ${subjectLabel} (توجيهي 2009 - ${termLabel}). مدة الامتحان: ${durationText} دقيقة، وعدد الأسئلة: ${questionsCountText}. هذه صفحة لشرح تفاصيل الامتحان، وتقديم الامتحان يتم من داخل حساب الطالب بعد تفعيل الاشتراك.`;
 
@@ -73,11 +89,9 @@ export default function ArabicTerm1ExamSEO({ exam }) {
     "GhostExams",
   ].join(", ");
 
-  // ✅ OG Image
   const ogImage = `${siteUrl}/og/${subjectSlug}-term-${termNumber}-2009.jpg`;
   const defaultOgImage = `${siteUrl}/og/default.jpg`;
 
-  // ✅ Visible Breadcrumb links
   const crumb = [
     { label: "توجيهي 2009", href: tawjihi2009Path },
     { label: subjectLabel, href: subjectHubPath },
@@ -85,7 +99,6 @@ export default function ArabicTerm1ExamSEO({ exam }) {
     { label: "معلومات الامتحان", href: `${listPagePath}/${examId}` },
   ];
 
-  // ✅ FAQ (Visible) + FAQ Schema
   const faqItems = useMemo(
     () => [
       {
@@ -113,7 +126,7 @@ export default function ArabicTerm1ExamSEO({ exam }) {
         a: "اضغط زر (اشترك معنا الآن) للتواصل معنا على واتساب، وسنساعدك بتفعيل الاشتراك بسرعة.",
       },
     ],
-    []
+    [],
   );
 
   const faqJsonLd = useMemo(
@@ -129,10 +142,9 @@ export default function ArabicTerm1ExamSEO({ exam }) {
         },
       })),
     }),
-    [faqItems]
+    [faqItems],
   );
 
-  // ✅ Breadcrumbs JSON-LD
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -164,7 +176,6 @@ export default function ArabicTerm1ExamSEO({ exam }) {
     ],
   };
 
-  // ✅ Article JSON-LD (متوافق مع og:type=article)
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -188,11 +199,9 @@ export default function ArabicTerm1ExamSEO({ exam }) {
     },
   };
 
-  // ✅ Long-tail SEO content
   const seoIntro = `هذا الامتحان ضمن مادة ${subjectLabel} لتوجيهي الأردن 2009 (${termLabel})، وهو جزء من نظام GhostExams الذي يوفّر بنك أسئلة وبنوك أسئلة وامتحانات إلكترونية بطريقة وزاري تفاعلي قريبة من النمط الوزاري المعتمد.
 إذا كنت تبحث عن "امتحانات عربي توجيهي 2009 فصل أول" أو "امتحان وزاري عربي 2009" فهذه الصفحة توضّح معلومات الامتحان، بينما التقديم الفعلي يتم من داخل حساب الطالب بعد تفعيل الاشتراك.`;
 
-  // ✅ Related links (internal linking)
   const relatedLinks = [
     {
       label: `صفحة ${subjectLabel}`,
@@ -216,16 +225,11 @@ export default function ArabicTerm1ExamSEO({ exam }) {
     },
   ];
 
-  /**
-   * ✅ حل Duplicate FAQPage:
-   * - بنعرض FAQ JSON-LD مرة واحدة فقط حتى لو كان موجود بكومبوننت آخر.
-   */
   const [renderFaqJsonLd, setRenderFaqJsonLd] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // مميز للعربي Term 1 حتى ما يصير تعارض
     const KEY = "__GE_FAQ_JSONLD_AR_T1__";
 
     if (window[KEY]) {
@@ -247,11 +251,9 @@ export default function ArabicTerm1ExamSEO({ exam }) {
         <meta name="robots" content="index, follow" />
         <meta httpEquiv="content-language" content="ar-JO" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* ❌ لا تضع <html lang="ar" /> داخل Head */}
 
         <link rel="canonical" href={canonicalUrl} />
 
-        {/* ✅ Open Graph */}
         <meta property="og:type" content="article" />
         <meta property="og:locale" content="ar_JO" />
         <meta property="og:site_name" content="GhostExams" />
@@ -262,13 +264,11 @@ export default function ArabicTerm1ExamSEO({ exam }) {
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
 
-        {/* ✅ Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
 
-        {/* ✅ JSON-LD */}
         <script
           id="breadcrumb-jsonld-ar-t1"
           key="breadcrumb-jsonld-ar-t1"
@@ -294,7 +294,6 @@ export default function ArabicTerm1ExamSEO({ exam }) {
       <Navbar />
 
       <main className="pt-24 pb-16 px-4 sm:px-6 max-w-4xl mx-auto" dir="rtl">
-        {/* ✅ Top bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
           <Link
             href={listPagePath}
@@ -309,12 +308,14 @@ export default function ArabicTerm1ExamSEO({ exam }) {
           </div>
         </div>
 
-        {/* ✅ Visible Breadcrumbs */}
         <nav aria-label="Breadcrumb" className="mb-5">
           <ol className="flex flex-wrap gap-2 text-xs sm:text-sm text-gray-300">
             {crumb.map((c, idx) => (
               <li key={idx} className="flex items-center gap-2">
-                <Link href={c.href} className="hover:text-yellow-300 transition">
+                <Link
+                  href={c.href}
+                  className="hover:text-yellow-300 transition"
+                >
                   {c.label}
                 </Link>
                 {idx < crumb.length - 1 && (
@@ -325,15 +326,14 @@ export default function ArabicTerm1ExamSEO({ exam }) {
           </ol>
         </nav>
 
-        {/* ✅ Main Card */}
         <div className="bg-gray-800/70 border border-yellow-500/15 rounded-2xl p-5 sm:p-6">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-yellow-400 leading-snug">
             {safeExamName}
           </h1>
 
           <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed">
-            هذه صفحة معلومات لتوضيح بيانات الامتحان . تقديم الامتحان يتم
-            من داخل حساب الطالب بعد تفعيل الاشتراك.
+            هذه صفحة معلومات لتوضيح بيانات الامتحان . تقديم الامتحان يتم من داخل
+            حساب الطالب بعد تفعيل الاشتراك.
           </p>
 
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-gray-200">
@@ -365,10 +365,11 @@ export default function ArabicTerm1ExamSEO({ exam }) {
 
           <div className="mt-4 bg-gray-900/40 border border-yellow-500/10 rounded-xl p-4 text-gray-200">
             ❓ عدد الأسئلة:{" "}
-            <span className="text-yellow-300 font-bold">{questionsCountText}</span>
+            <span className="text-yellow-300 font-bold">
+              {questionsCountText}
+            </span>
           </div>
 
-          {/* ✅ CTA */}
           <Link
             href="/auth/Register"
             className="mt-6 inline-flex w-full justify-center rounded-xl bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3"
@@ -384,7 +385,6 @@ export default function ArabicTerm1ExamSEO({ exam }) {
           </div>
         </div>
 
-        {/* ✅ Long-tail SEO Content */}
         <section className="mt-8 bg-gray-800/50 border border-yellow-500/10 rounded-2xl p-5 sm:p-6">
           <h2 className="text-base sm:text-lg font-extrabold text-yellow-300">
             امتحان {subjectLabel} توجيهي 2009 {termLabel} — وزاري تفاعلي
@@ -420,7 +420,6 @@ export default function ArabicTerm1ExamSEO({ exam }) {
           </div>
         </section>
 
-        {/* ✅ FAQ Section (Visible فقط - والـ JSON-LD صار guarded بالأعلى) */}
         <section className="mt-8 bg-gray-800/50 border border-yellow-500/10 rounded-2xl p-5 sm:p-6">
           <h2 className="text-base sm:text-lg font-extrabold text-yellow-300">
             أسئلة شائعة عن امتحانات {subjectLabel} توجيهي 2009
