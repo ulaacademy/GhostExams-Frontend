@@ -133,7 +133,7 @@ export default function SubscribedTeachersPage() {
 
               {/* CTA سريع */}
               <button
-                onClick={() => router.push("/")}
+                onClick={() => router.push("/dashboard/studentDashboard")}
                 className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition text-sm font-semibold w-full md:w-auto"
               >
                 ➕ إضافة معلم جديد
