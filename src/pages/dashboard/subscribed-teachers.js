@@ -123,9 +123,8 @@ export default function SubscribedTeachersPage() {
   return (
     <ProtectedRoute requiredRole="student">
       <DashboardNavbar student={studentDetails}>
-<div dir="rtl" className="max-w-6xl mx-auto">
-  
-            {/* ✅ Header Card */}
+        <div dir="rtl" className="max-w-6xl mx-auto">
+          {/* ✅ Header Card */}
           <div className="bg-white p-5 md:p-6 shadow-md rounded-xl">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
               <h1 className="text-xl md:text-2xl font-bold text-blue-600">
@@ -134,7 +133,7 @@ export default function SubscribedTeachersPage() {
 
               {/* CTA سريع */}
               <button
-                onClick={() => router.push("/ourteachers")}
+                onClick={() => router.push("/")}
                 className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition text-sm font-semibold w-full md:w-auto"
               >
                 ➕ إضافة معلم جديد
